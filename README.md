@@ -153,8 +153,20 @@ falls back to a navy/red `ClutchClicks` wordmark, so it never renders broken.
 - `/privacy` and `/terms` pages — the footer links to them
 - `hello@clutchclicks.com` in the `<noscript>` fallback, if that isn't the right inbox
 
-### Local preview
+### Running it locally
 
 ```sh
-python3 -m http.server 8000
+./serve.sh          # http://localhost:8000
+./serve.sh 3000     # or any other port
 ```
+
+Use this rather than opening `index.html` by double-clicking it. A `file://` URL
+gives the page the `null` origin, which changes how the browser treats the
+GoHighLevel POST — so a form test from `file://` tells you nothing useful about
+what will happen on a real domain. `http://localhost` is a normal origin and
+behaves the same way your live domain will.
+
+To check the webhook end to end: submit the form with a qualifying revenue, then
+open DevTools → Network → filter `webhook-trigger`. A `200` means CORS is fine. A
+CORS error there still means the POST went out — check GoHighLevel, and if the lead
+landed, the page is behaving correctly.
