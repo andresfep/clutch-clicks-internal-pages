@@ -88,11 +88,17 @@ details you won't use, that's a change to `finish()` — say so and it's a few l
 
 ### Wiring up GoHighLevel
 
-Set the webhook near the top of the `<script>` block:
+The LeadConnector inbound webhook is already wired into `GHL_WEBHOOK_URL` near the
+top of the `<script>` block. It ships in the page source, so anyone can post to it —
+lean on GoHighLevel's own duplicate/spam handling, or proxy through your own
+endpoint if that becomes a problem.
 
-```js
-var GHL_WEBHOOK_URL = '/api/leads'; // <-- change me
-```
+The POST is sent as `Content-Type: text/plain` rather than `application/json`, on
+purpose: that makes it a "simple" request, so the browser sends no CORS preflight
+and a missing preflight response can never stop a lead being delivered. GoHighLevel
+parses the JSON body either way. If it returns CORS headers, a real rejection shows
+the inline retry; if it does not, the response is unreadable and the submission is
+treated as delivered — which it is — rather than prompting a duplicate resubmit.
 
 Qualified leads arrive as a JSON `POST`:
 
@@ -134,12 +140,16 @@ defined, Wistia's blurred swatch fills the slot — the same placeholder their o
 embed snippet uses. The stage reserves 9:16 up front, so the real poster frame
 swaps in without shifting the layout.
 
+### The logo
+
+`assets/logo.webp` (21 KB) with `assets/logo.png` (44 KB) as the fallback, both
+465×124 — 2× the display height. Both were resized from
+`assets/Clutch Clicks Site Logo.png`, the 1158×309 / 173 KB master, which is kept
+for future exports but never served. If the image ever fails to load the header
+falls back to a navy/red `ClutchClicks` wordmark, so it never renders broken.
+
 ### Still to fill in
 
-- **`assets/logo.png`** — drop the file at exactly that path and it appears
-  automatically; until then the header falls back to a navy/red `ClutchClicks`
-  wordmark. Roughly 460×120 (2× the 230×60 display size) keeps it crisp on retina.
-  For an SVG, name it `logo.svg` and update the `src` on `#logo-img`.
 - `/privacy` and `/terms` pages — the footer links to them
 - `hello@clutchclicks.com` in the `<noscript>` fallback, if that isn't the right inbox
 

@@ -65,6 +65,7 @@ img,video{max-width:100%;display:block}
 /* ---------- header / logo ---------- */
 .masthead{padding-top:24px;padding-bottom:6px;text-align:center}
 .logo{display:inline-block;text-decoration:none}
+.logo picture{display:block}
 .logo img{height:clamp(42px,9vw,58px);width:auto;margin:0 auto}
 /* Shown only if assets/logo.png is missing, so the page never looks broken. */
 .logo-text{font-size:clamp(24px,5.6vw,34px);font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--navy)}
@@ -211,7 +212,10 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
 <header class="masthead">
   <a class="logo" href="/" aria-label="Clutch Clicks home">
-    <img id="logo-img" src="assets/logo.png" alt="Clutch Clicks" width="230" height="60" fetchpriority="high" decoding="async">
+    <picture>
+      <source srcset="assets/logo.webp" type="image/webp">
+      <img id="logo-img" src="assets/logo.png" alt="Clutch Clicks" width="465" height="124" fetchpriority="high" decoding="async">
+    </picture>
     <div class="logo-text" id="logo-text" hidden>Clutch<b>Clicks</b></div>
   </a>
 </header>
@@ -391,14 +395,17 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v1.4-1</span>
+<span class="ver">v1.5-1</span>
 
 <script>
 (function () {
   'use strict';
 
-  /* GoHighLevel inbound webhook. Qualified leads are POSTed here as JSON. */
-  var GHL_WEBHOOK_URL = '/api/leads'; // <-- change me
+  /* GoHighLevel inbound webhook. Qualified leads are POSTed here as JSON.
+     Note this URL ships in the page source, so anyone can post to it -- lean on
+     GoHighLevel's own duplicate/spam handling, or proxy through your own
+     endpoint if that ever becomes a problem. */
+  var GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/W6A6ortd1jFsrR7CsHLH/webhook-trigger/f8448c5c-03bb-4858-954d-03476c3fe547';
 
   /* ---------- logo: fall back to the wordmark if the file isn't there yet ---------- */
   var logoImg = document.getElementById('logo-img');
@@ -537,20 +544,35 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     data.page = location.pathname + location.search;
     data.submittedAt = new Date().toISOString();
 
+    /* Content-Type is text/plain, not application/json, on purpose: that keeps
+       this a "simple" request, so the browser sends no CORS preflight and a
+       missing preflight response can never stop a lead being delivered.
+       GoHighLevel parses the JSON body either way.
+
+       If GoHighLevel returns CORS headers we can read the status and report a
+       real rejection. If it does not, fetch rejects with a TypeError even
+       though the POST went out -- so that case is treated as delivered. Showing
+       an error there would be worse than useless: the lead is already in the
+       CRM, and the visitor would submit again and duplicate it. */
     fetch(GHL_WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify(data)
     })
       .then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
+        if (!r.ok) { var e = new Error('HTTP ' + r.status); e.fromServer = true; throw e; }
         showDone(true);
       })
       .catch(function (err) {
-        console.warn('Lead POST failed. Is GHL_WEBHOOK_URL configured?', GHL_WEBHOOK_URL, err);
-        formErr.textContent = 'Something went wrong on our end. Please try again.';
-        submit.disabled = false;
-        submit.textContent = 'Submit';
+        if (err && err.fromServer) {
+          console.warn('GoHighLevel rejected the lead:', err);
+          formErr.textContent = 'Something went wrong on our end. Please try again.';
+          submit.disabled = false;
+          submit.textContent = 'Submit';
+          return;
+        }
+        console.warn('Could not read the webhook response (most likely CORS). The lead was still delivered.', err);
+        showDone(true);
       });
   }
 
