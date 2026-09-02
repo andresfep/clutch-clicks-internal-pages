@@ -230,6 +230,24 @@ artwork compresses, should still land well under the old 21 KB.
 If the image ever fails to load the header falls back to a navy/red `ClutchClicks`
 wordmark, so it never renders broken.
 
+## Meta Pixel
+
+Pixel `1945577459646581` is on all four pages. The snippet sits in `<head>` right
+after the font preloads, so the fonts are still discovered first while the pixel
+fires as early as Meta wants it to.
+
+The `<noscript>` tracking image is at the top of `<body>`, not in `<head>`. Inside
+`<head>` a `<noscript>` may only contain `link`, `style` and `meta`, so an `<img>`
+there is invalid and browsers relocate it anyway — this is the same behaviour,
+spelled correctly.
+
+`fbevents.js` is roughly 90 KB and competes for bandwidth with everything else on
+the page. It is fetched async so it never blocks rendering, and the fonts outrank
+it because they are preloaded. If pixel latency ever matters less than the last few
+points of PageSpeed, the snippet can be moved behind the same load-plus-idle gate
+the videos use — at the cost of losing PageView events from visitors who leave
+within the first second.
+
 ## Performance notes
 
 Three things were fixed after a PageSpeed run scored 60 on mobile:
