@@ -165,11 +165,31 @@ Qualified leads arrive as a JSON `POST`:
   "business": "Miami HVAC Co",
   "email": "andres@miamihvac.com",
   "phone": "(305) 555-1234",
+  "first_name": "Andres",
+  "last_name": "Perez",
   "qualified": true,
   "page": "/?service=hvac",
   "submittedAt": "2026-09-02T12:57:11.814Z"
 }
 ```
+
+`first_name` / `last_name` are split from `name` in the page so the GoHighLevel
+workflow doesn't have to. A single-word name leaves `last_name` empty.
+
+### Mapping it in GoHighLevel
+
+The webhook URL is only the trigger. Receiving a payload does not create a contact
+on its own — the workflow needs a **Create/Update Contact** action with the fields
+mapped, or leads arrive and vanish.
+
+1. Automation → Workflows → the workflow holding this Inbound Webhook trigger.
+2. Open the trigger and use its sample-payload capture, then send one submission so
+   GoHighLevel learns the field names.
+3. Add **Create/Update Contact** and map `first_name`, `last_name`, `email`,
+   `phone`, and `business` → Company Name.
+4. `city`, `revenue`, `service` and `page` need custom fields; create them first,
+   then map. `service` and `page` tell you which campaign produced the lead.
+5. Publish the workflow. A saved-but-unpublished workflow silently drops everything.
 
 Any non-2xx response shows an inline retry rather than a false success.
 

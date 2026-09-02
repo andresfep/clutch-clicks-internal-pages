@@ -396,7 +396,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v1.6-1</span>
+<span class="ver">v1.7-1</span>
 
 <script>
 (function () {
@@ -551,6 +551,14 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
     var data = {};
     new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
+
+    /* GoHighLevel stores first and last name separately, so send both alongside
+       the full name rather than making the workflow split it. A single-word
+       name leaves last_name empty, which GHL accepts. */
+    var parts = data.name.split(/\s+/);
+    data.first_name = parts.shift();
+    data.last_name = parts.join(' ');
+
     data.qualified = true;
     data.page = location.pathname + location.search;
     data.submittedAt = new Date().toISOString();
