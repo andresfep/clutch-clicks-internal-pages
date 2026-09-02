@@ -7,10 +7,10 @@ Static, dependency-free landing pages. No build step, no framework, no package m
 Modeled on the Titans Media Group `/more-jobs` layout: hero + 3-step qualifying
 form, video testimonial wall, sticky CTA, compliance footer.
 
-**Performance:** CSS and JS are inlined, so the page itself is one ~28 KB request
-(7.8 KB brotli) plus 23.5 KB of self-hosted font. Wistia's player (~150 KB of JS)
-is fetched *only after someone clicks a testimonial* — scrolling past the videos
-costs nothing but three tiny lazy-loaded swatch images.
+**Performance:** CSS and JS are inlined, so the page itself is one ~27 KB request
+(7.6 KB brotli) plus 23.5 KB of self-hosted font. Wistia's player (~150 KB of JS)
+loads asynchronously as the testimonials come into view, so it never blocks the
+headline from painting.
 
 ## Type
 
@@ -81,7 +81,8 @@ Any non-2xx response shows an inline retry message rather than a false success.
 
 ### Testimonials
 
-Three Wistia videos, each behind a click-to-load facade:
+Three Wistia videos, embedded normally so their poster frames show as previews —
+no click needed to see who is on screen:
 
 | Card | Wistia media ID |
 | --- | --- |
@@ -89,13 +90,15 @@ Three Wistia videos, each behind a click-to-load facade:
 | Rick from Smart Prep Auto | `ej7z3e8y1b` |
 | Jesus from Midwest Auto | `b1az1gc7z2` |
 
-To add or swap one, change `data-media` on the `.facade` button and the swatch
-`src` next to it, then update the `.quote` and `.who` text.
+To add or swap one, change the `media-id` on the `<wistia-player>`, add a matching
+`wistia-player[media-id='…']:not(:defined)` swatch rule in the CSS, add the id to
+the `MEDIA` array in the script, then update the `.quote` and `.who` text.
 
-Posters default to Wistia's swatch image, which is a small blur-up placeholder —
-deliberately blurred here so it reads as intentional rather than low-res. For a
-crisp frame, drop a JPG in `assets/` and add `data-poster="assets/andrea.jpg"` to
-that card's button; the blur is dropped automatically.
+The player script is fetched as the testimonial section comes into view rather
+than on page load, so it stays off the critical path. Until the custom element is
+defined, Wistia's blurred swatch fills the slot — the same placeholder their own
+embed snippet uses. The stage reserves 9:16 up front, so the real poster frame
+swaps in without shifting the layout.
 
 ### Still to fill in
 

@@ -35,8 +35,9 @@
 
 /* ---------------------------------------------------------------------------
    Clutch Clicks — offer page.
-   CSS + JS are inlined on purpose: the initial load is ONE request.
-   Wistia's player (~150 KB) is only fetched after a testimonial is clicked.
+   CSS + JS are inlined on purpose, so the page itself is one request.
+   Wistia's player (~150 KB) is fetched as the testimonials come into view,
+   keeping it off the critical path while still showing real poster frames.
 --------------------------------------------------------------------------- */
 :root{
   --red:#de2a24; --red-dark:#b4211c; --red-glow:rgba(222,42,36,.45);
@@ -142,25 +143,18 @@ h2.section{font-size:clamp(26px,5.6vw,44px);font-weight:800;letter-spacing:-.02e
 
 .tcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
 .stage{position:relative;width:100%;aspect-ratio:9/16;background:#12151a;overflow:hidden}
-.facade{
-  position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;margin:0;
-  background:transparent;cursor:pointer;display:block;
+.stage wistia-player{display:block;width:100%;height:100%}
+/* Wistia's own placeholder treatment: the swatch, blurred, shown only while the
+   custom element is still undefined. The moment the player script defines it the
+   rule stops matching and the real poster frame takes over. The stage already
+   reserves 9:16, so nothing shifts. */
+wistia-player:not(:defined){
+  display:block;width:100%;height:100%;filter:blur(6px);
+  background-position:center;background-size:cover;background-repeat:no-repeat;
 }
-.poster{width:100%;height:100%;object-fit:cover}
-/* Wistia's swatch is a tiny blur-up placeholder, so lean into the blur rather
-   than showing it upscaled and mushy. Drop a real poster in assets/ and set
-   data-poster to get a crisp frame instead. */
-.poster.swatch{filter:blur(7px);transform:scale(1.08)}
-.facade::after{content:"";position:absolute;inset:0;background:radial-gradient(62% 46% at 50% 50%,rgba(0,0,0,.12),rgba(0,0,0,.44))}
-.play{
-  position:absolute;left:50%;top:50%;translate:-50% -50%;z-index:1;
-  width:66px;height:66px;border-radius:50%;background:var(--red);
-  display:grid;place-items:center;box-shadow:0 6px 22px rgba(0,0,0,.35);
-  transition:scale .15s,background-color .15s;
-}
-.facade:hover .play{scale:1.07;background:var(--red-dark)}
-.play svg{width:24px;height:24px;fill:#fff;margin-left:3px}
-.stage wistia-player{width:100%;height:100%;display:block}
+wistia-player[media-id='n86r5cqxqh']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/n86r5cqxqh/swatch')}
+wistia-player[media-id='ej7z3e8y1b']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/ej7z3e8y1b/swatch')}
+wistia-player[media-id='b1az1gc7z2']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/b1az1gc7z2/swatch')}
 
 .tbody{padding:14px 15px 16px;background:var(--panel);flex:1}
 .quote{margin:0;font-size:15px;line-height:1.5;color:var(--ink-2)}
@@ -318,16 +312,13 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <section class="results wrap">
     <h2 class="section">Some of our marketing results&hellip;</h2>
 
-    <!-- Each card stays a facade until clicked; that is what keeps the Wistia
-         player off the initial load. Add data-poster="assets/x.jpg" to any
-         card to replace the blurred Wistia swatch with a crisp frame. -->
+    <!-- Real Wistia embeds. The player script is fetched as the section comes
+         into view rather than on page load, so the poster frames are already
+         there when you arrive without putting ~150 KB on the critical path. -->
     <div class="grid">
       <article class="tcard">
         <div class="stage">
-          <button class="facade" data-media="n86r5cqxqh" aria-label="Play video testimonial from Andrea of Bonafide Trucking">
-            <img class="poster swatch" src="https://fast.wistia.com/embed/medias/n86r5cqxqh/swatch" alt="" width="405" height="720" loading="lazy" decoding="async">
-            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          </button>
+          <wistia-player media-id="n86r5cqxqh" aspect="0.5625" title="Video testimonial: Andrea from Bonafide Trucking"></wistia-player>
         </div>
         <div class="tbody">
           <p class="quote">&ldquo;It&rsquo;s been amazing! A lot of our customers are calling in and they&rsquo;re letting us know that they&rsquo;re reaching out because of the website.&rdquo;</p>
@@ -338,10 +329,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
       <article class="tcard">
         <div class="stage">
-          <button class="facade" data-media="ej7z3e8y1b" aria-label="Play video testimonial from Rick of Smart Prep Auto">
-            <img class="poster swatch" src="https://fast.wistia.com/embed/medias/ej7z3e8y1b/swatch" alt="" width="405" height="720" loading="lazy" decoding="async">
-            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          </button>
+          <wistia-player media-id="ej7z3e8y1b" aspect="0.5625" title="Video testimonial: Rick from Smart Prep Auto"></wistia-player>
         </div>
         <div class="tbody">
           <p class="quote">&ldquo;New leads coming has been invaluable. Definitely quality leads. I would say that difference we&rsquo;ve seen pretty much out the gate.&rdquo;</p>
@@ -352,10 +340,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
       <article class="tcard">
         <div class="stage">
-          <button class="facade" data-media="b1az1gc7z2" aria-label="Play video testimonial from Jesus of Midwest Auto">
-            <img class="poster swatch" src="https://fast.wistia.com/embed/medias/b1az1gc7z2/swatch" alt="" width="405" height="720" loading="lazy" decoding="async">
-            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          </button>
+          <wistia-player media-id="b1az1gc7z2" aspect="0.5625" title="Video testimonial: Jesus from Midwest Auto"></wistia-player>
         </div>
         <div class="tbody">
           <p class="quote">&ldquo;The website looks phenomenal. We are getting a lot of traffic. Reviews are coming in left and right&hellip; For the price, you really can&rsquo;t beat what you guys are doing.&rdquo;</p>
@@ -377,7 +362,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v1.2-1</span>
+<span class="ver">v1.3-1</span>
 
 <script>
 (function () {
@@ -527,44 +512,37 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     sticky.dataset.hidden = 'false';
   }
 
-  /* ---------- Wistia: loaded only when a testimonial is actually clicked ---------- */
-  var playerLoaded = false;
-  function loadPlayer() {
-    if (playerLoaded) return;
-    playerLoaded = true;
-    var s = document.createElement('script');
-    s.src = 'https://fast.wistia.com/player.js';
-    s.async = true;
-    document.head.appendChild(s);
-  }
+  /* ---------- Wistia: fetched as the testimonials come into view ---------- */
+  var MEDIA = ['n86r5cqxqh', 'ej7z3e8y1b', 'b1az1gc7z2'];
+  var wistiaStarted = false;
 
-  document.querySelectorAll('.facade').forEach(function (btn) {
-    var custom = btn.dataset.poster;
-    if (custom) {
-      var img = btn.querySelector('.poster');
-      img.src = custom;
-      img.classList.remove('swatch');
-    }
+  function loadWistia() {
+    if (wistiaStarted) return;
+    wistiaStarted = true;
 
-    btn.addEventListener('click', function () {
-      var id = btn.dataset.media;
-      if (!id) return;
-      loadPlayer();
+    var player = document.createElement('script');
+    player.src = 'https://fast.wistia.com/player.js';
+    player.async = true;
+    document.head.appendChild(player);
 
-      // Per-video module, as in Wistia's own snippet.
+    MEDIA.forEach(function (id) {
       var s = document.createElement('script');
       s.src = 'https://fast.wistia.com/embed/' + id + '.js';
       s.async = true;
       s.type = 'module';
       document.head.appendChild(s);
-
-      var player = document.createElement('wistia-player');
-      player.setAttribute('media-id', id);
-      player.setAttribute('aspect', '0.5625');
-      player.setAttribute('autoplay', 'true');
-      btn.replaceWith(player);
     });
-  });
+  }
+
+  var results = document.querySelector('.results');
+  if ('IntersectionObserver' in window && results) {
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { io.disconnect(); loadWistia(); }
+    }, { rootMargin: '400px 0px' });
+    io.observe(results);
+  } else {
+    loadWistia();
+  }
 
   show(0);
 })();
