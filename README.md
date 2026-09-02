@@ -12,6 +12,7 @@ files automatically; `_redirects` also keeps `/booking` and `/typ` working.
 | Opt-in | `index.html` | Headline, 3-step qualifying form, testimonials |
 | Booking | `book.html` | Same shell, GoHighLevel calendar instead of the form |
 | Thank you | `thanks.html` | Pre-call video, next steps, what-to-do checklist (no testimonials) |
+| Opt-in (ROASForm) | `roasform.html` | Variant of the opt-in with a ROASForm embed instead of the built-in form |
 
 **Flow:** a qualifying lead submits the opt-in form → POSTed to GoHighLevel →
 redirected to `book.html` (any `?service=` carries over). A lead under $10K/mo is

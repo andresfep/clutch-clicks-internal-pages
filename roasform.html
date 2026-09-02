@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Get More Jobs For Your Shop | Clutch Clicks</title>
+<meta name="description" content="We help automotive shops get more jobs with AI, smart websites, and 5 star reviews for just $297/month. Check if your area is still available.">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta property="og:title" content="Get More Jobs For Your Shop | Clutch Clicks">
+<meta property="og:description" content="AI, smart websites, and 5 star reviews. Just $297/month.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
+<!-- All three weights render above the fold. Preloading only the headline weight
+     left 400 and 700 to be discovered at layout, ~300ms late, and the swap when
+     they landed was what shifted the form card on mobile. -->
+<link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Warms the TLS connection so a testimonial click starts playing fast. Costs no bytes. -->
+<link rel="preconnect" href="https://my.roasform.com" crossorigin>
+<link rel="preconnect" href="https://fast.wistia.com" crossorigin>
+
+<style>
+/* Poppins, self-hosted. Same origin means no third-party DNS/TLS handshake, and
+   unicode-range means latin-ext is only fetched if an accented character is
+   actually typed or shown. Latin total across all three weights: ~24 KB. */
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;
+  src:url('assets/fonts/poppins-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;
+  src:url('assets/fonts/poppins-400-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;
+  src:url('assets/fonts/poppins-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;
+  src:url('assets/fonts/poppins-700-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:800;font-display:swap;
+  src:url('assets/fonts/poppins-800-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:800;font-display:swap;
+  src:url('assets/fonts/poppins-800-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+
+/* Metric-matched fallback. Poppins is 14.26% wider than Arial per character, so
+   without these overrides the fallback text lays out at a different size and the
+   page reflows the moment Poppins arrives -- which was the whole of the mobile
+   CLS. Values computed from the shipped Poppins metrics against Arial's. */
+@font-face{font-family:'Poppins Fallback';src:local('Arial'),local('Helvetica'),local('Liberation Sans');
+  size-adjust:114.26%;ascent-override:91.89%;descent-override:30.63%;line-gap-override:8.75%;}
+
+/* ---------------------------------------------------------------------------
+   Clutch Clicks — offer page.
+   CSS + JS are inlined on purpose, so the page itself is one request.
+   Wistia's player (~150 KB) is fetched as the testimonials come into view,
+   keeping it off the critical path while still showing real poster frames.
+--------------------------------------------------------------------------- */
+:root{
+  --red:#de2a24; --red-dark:#b4211c; --red-glow:rgba(222,42,36,.45);
+  --navy:#17285a;
+  --ink:#0d1420; --ink-2:#3d4655; --ink-3:#6b7481;
+  --line:#e4e7eb; --panel:#f6f7f8; --bg:#fff;
+  --green:#22c55e; --green-track:#e8ebee; --field-line:#7cc86c; --err:#c8201a;
+  --radius:14px; --shadow:0 10px 34px rgba(16,24,40,.10),0 2px 6px rgba(16,24,40,.05);
+  --font:'Poppins','Poppins Fallback','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --sticky-h:96px;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+  font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-bottom:var(--sticky-h);
+}
+img,video{max-width:100%;display:block}
+:focus-visible{outline:3px solid var(--navy);outline-offset:2px;border-radius:6px}
+
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding-left:20px;padding-right:20px}
+
+/* ---------- header / logo ---------- */
+.masthead{padding-top:24px;padding-bottom:6px;text-align:center}
+.logo{display:inline-block;text-decoration:none}
+.logo img{height:clamp(42px,9vw,58px);width:auto;margin:0 auto}
+/* Shown only if assets/logo.png is missing, so the page never looks broken. */
+.logo-text{font-size:clamp(24px,5.6vw,34px);font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--navy)}
+.logo-text b{color:var(--red);font-weight:800}
+
+/* ---------- hero ---------- */
+.hero{padding-top:14px;padding-bottom:8px;text-align:center}
+h1{
+  font-size:clamp(27px,4.6vw,45px);line-height:1.2;font-weight:800;
+  letter-spacing:-.02em;color:var(--ink);margin:0 0 22px;text-wrap:balance;
+}
+h1 .u{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.09em}
+h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
+
+/* ---------- form card ---------- */
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:24px 20px;max-width:640px;margin:0 auto;
+  text-align:left;scroll-margin-top:18px;
+}
+.lede{font-size:clamp(16px,3.4vw,19px);font-weight:700;line-height:1.35;margin:0 0 16px;text-align:center;color:var(--ink)}
+.step-title{font-size:clamp(17px,3.6vw,21px);font-weight:800;line-height:1.3;margin:2px 0 18px;text-align:center;color:var(--ink);text-wrap:balance}
+
+.progress{height:28px;border-radius:8px;background:var(--green-track);overflow:hidden;margin-bottom:18px}
+.progress-fill{
+  height:100%;width:33%;border-radius:8px;background-color:var(--green);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(135deg,rgba(255,255,255,.3) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.3) 50%,rgba(255,255,255,.3) 75%,transparent 75%,transparent);
+  background-size:16px 16px;animation:stripes 1s linear infinite;
+  transition:width .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes stripes{from{background-position:0 0}to{background-position:16px 0}}
+
+.field+.field{margin-top:14px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.field label,.field legend{display:block;font-size:15px;font-weight:700;margin-bottom:8px;color:var(--ink);padding:0}
+.req{color:var(--ink-3)}
+
+/* Revenue choices double as the step's Continue: picking one advances. */
+.opts{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:520px){.opts{grid-template-columns:1fr 1fr}}
+.opt{
+  font:inherit;font-size:16px;font-weight:700;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:20px 14px;cursor:pointer;
+  box-shadow:0 1px 2px rgba(16,24,40,.05);
+  transition:border-color .15s,box-shadow .15s,transform .06s;
+}
+.opt:hover{border-color:var(--red);box-shadow:0 4px 14px rgba(222,42,36,.13)}
+.opt:active{transform:translateY(1px)}
+.opt[aria-pressed="true"]{border-color:var(--red);box-shadow:0 0 0 3px rgba(222,42,36,.16)}
+.req{color:var(--ink-3)}
+.field input{
+  width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
+  padding:14px 15px;border:2px solid var(--field-line);border-radius:10px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.field input::placeholder{color:#a8afb8}
+.field input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(23,40,90,.13)}
+
+.field input[aria-invalid="true"]{border-color:var(--err)}
+.err{display:block;font-size:13.5px;font-weight:700;color:var(--err);margin-top:6px}
+.err:empty{margin-top:0}
+
+.btn{
+  display:block;width:100%;font:inherit;font-size:17px;font-weight:700;color:#fff;
+  background:var(--red);border:0;border-radius:10px;padding:15px 20px;cursor:pointer;
+  transition:background-color .15s,transform .06s;
+}
+.btn:hover{background:var(--red-dark)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.65;cursor:progress}
+.actions{margin-top:18px}
+.back{
+  display:inline-flex;align-items:center;gap:8px;margin:0 0 10px;background:none;border:0;
+  padding:4px 2px;font:inherit;font-size:16px;font-weight:400;color:var(--ink-3);cursor:pointer;
+}
+.back:hover{color:var(--ink)}
+
+.done{text-align:center;padding:10px 0 4px}
+.done h2{font-size:22px;font-weight:800;margin:0 0 8px}
+.done p{color:var(--ink-2);margin:0}
+.tick{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;background:var(--green);display:grid;place-items:center}
+.tick svg{width:26px;height:26px;stroke:#fff;stroke-width:3.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+noscript .note{display:block;margin-top:14px;padding:12px 14px;border:2px solid var(--line);border-radius:10px;font-size:14px;color:var(--ink-2)}
+
+/* The embed draws its own background (inheritBackground:false), so this wrapper
+   only centres and constrains it rather than adding a second card around it. */
+.formwrap{max-width:640px;margin:0 auto;scroll-margin-top:18px}
+
+/* ---------- testimonials ---------- */
+.results{padding-top:52px;padding-bottom:8px}
+h2.section{font-size:clamp(26px,5.6vw,44px);font-weight:800;letter-spacing:-.02em;text-align:center;margin:0 0 26px;color:var(--ink)}
+.grid{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.tcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.stage{position:relative;width:100%;aspect-ratio:9/16;background:#12151a;overflow:hidden}
+.stage wistia-player{display:block;width:100%;height:100%}
+/* Wistia's own placeholder treatment: the swatch, blurred, shown only while the
+   custom element is still undefined. The moment the player script defines it the
+   rule stops matching and the real poster frame takes over. The stage already
+   reserves 9:16, so nothing shifts. */
+wistia-player:not(:defined){
+  display:block;width:100%;height:100%;filter:blur(6px);
+  background-position:center;background-size:cover;background-repeat:no-repeat;
+}
+wistia-player[media-id='n86r5cqxqh']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/n86r5cqxqh/swatch')}
+wistia-player[media-id='ej7z3e8y1b']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/ej7z3e8y1b/swatch')}
+wistia-player[media-id='b1az1gc7z2']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/b1az1gc7z2/swatch')}
+
+.tbody{padding:14px 15px 16px;background:var(--panel);flex:1}
+.quote{margin:0;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.stars{margin-top:8px;font-size:15px;letter-spacing:2px;color:#f5a623}
+.who{margin:6px 0 0;font-size:13.5px;font-weight:700;color:var(--ink)}
+
+/* Below the fold on phones the second and third testimonials sit roughly 1600px
+   and 2450px down. Skipping their rendering until they are approached also
+   defers their Wistia swatch background images, which loading="lazy" cannot
+   reach because they are CSS backgrounds rather than <img> elements. The auto
+   keyword makes the browser remember each card's real height after its first
+   render, so 820px is only an opening guess, never a lasting layout error.
+   Desktop lays the three cards side by side near the fold, so there is nothing
+   to defer there and the rule is scoped away from it. */
+@media(max-width:759px){
+  .tcard{content-visibility:auto;contain-intrinsic-size:auto 820px}
+}
+
+/* ---------- footer ---------- */
+footer{margin-top:56px;border-top:1px solid var(--line);padding-top:30px;padding-bottom:26px;text-align:center}
+footer p{margin:0 0 8px;font-size:14px;color:var(--ink-2);line-height:1.55}
+footer a{color:var(--ink-2)}
+footer .fine{font-size:13px;color:var(--ink-3)}
+.ver{position:fixed;right:10px;bottom:6px;font-size:11px;color:#c3c8cf;pointer-events:none;z-index:5}
+
+/* ---------- sticky CTA ---------- */
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:10;
+  padding:16px 20px calc(16px + env(safe-area-inset-bottom));
+  display:flex;justify-content:center;pointer-events:none;
+  background:linear-gradient(to top,rgba(255,255,255,.97) 55%,rgba(255,255,255,0));
+  transition:opacity .25s,translate .25s;
+}
+.sticky button{
+  pointer-events:auto;width:100%;max-width:700px;font:inherit;font-size:clamp(16px,3.6vw,19px);
+  font-weight:700;color:#fff;background:var(--red);border:0;border-radius:999px;
+  padding:18px 24px;cursor:pointer;box-shadow:0 0 0 6px rgba(222,42,36,.16),0 10px 28px var(--red-glow);
+  transition:background-color .15s;
+}
+.sticky button:hover{background:var(--red-dark)}
+.sticky[data-hidden="true"]{opacity:0;translate:0 100%;pointer-events:none}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+
+<body>
+
+<header class="masthead">
+  <a class="logo" href="/" aria-label="Clutch Clicks home">
+    <img id="logo-img" src="assets/logo.png" alt="Clutch Clicks" width="231" height="62" fetchpriority="high" decoding="async">
+        <div class="logo-text" id="logo-text" hidden>Clutch<b>Clicks</b></div>
+  </a>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1>
+      We Help <span id="svc">Automotive</span> Shops <span class="u">Get More Jobs</span> With AI, Smart Websites, and 5 Star Reviews for Just <span class="price">$297/month</span> <span aria-hidden="true">&#128071;</span>
+    </h1>
+
+    <p class="lede" id="form-title">Check If We Already Work With <span id="svc-article">An</span> <span id="svc-2">Automotive</span> Shop In Your Area Below</p>
+
+    <script>
+    /* ---------------------------------------------------------------------
+       ?service=  — swaps the trade named in the headline and the form title.
+       Runs here, inline and parser-blocking, so the swapped text is painted
+       on the first frame rather than flashing "Automotive" first.
+       The value is written with textContent and character-filtered, so a
+       crafted ?service= cannot inject markup.
+    --------------------------------------------------------------------- */
+    (function () {
+      var raw;
+      try { raw = new URLSearchParams(location.search).get('service') || ''; }
+      catch (e) { return; }
+
+      raw = raw.trim().replace(/\s+/g, ' ').slice(0, 28);
+      if (!raw) return;
+      if (!/^[\p{L}\p{N} &/'-]+$/u.test(raw)) return;   // letters, digits, space, & / ' -
+
+      // Trades that should always read as acronyms, however they're typed in the URL.
+      var ACRONYMS = ['HVAC','RV','AC','ATV','UTV','EV','ADAS','CDL','DOT','PDR','ASE','DPF','AG'];
+      function isInitialism(w) { return w.length <= 5 && w === w.toUpperCase() && /\p{L}/u.test(w); }
+
+      var svc = raw.split(' ').map(function (w) {
+        var up = w.toUpperCase();
+        if (ACRONYMS.indexOf(up) !== -1) return up;                       // hvac -> HVAC
+        if (w === up && w.length <= 4 && /\p{L}/u.test(w) && !/[AEIOU]/.test(up)) return up; // RV, DPF
+        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();      // ROOFING -> Roofing
+      }).join(' ');
+
+      // "An HVAC shop" (letter name starts with a vowel sound) vs "A Roofing shop".
+      var head = svc.split(' ')[0];
+      var an = isInitialism(head) ? /^[AEFHILMNORSX]/.test(head) : /^[AEIOU]/i.test(head);
+
+      function put(id, text) { var el = document.getElementById(id); if (el) el.textContent = text; }
+      put('svc', svc);
+      put('svc-2', svc);
+      put('svc-article', an ? 'An' : 'A');   // not present on the booking page
+      document.title = 'Get More Jobs For Your ' + svc + ' Shop | Clutch Clicks';
+      window.__service = svc;
+    })();
+    </script>
+
+    <!-- ROASForm. The 600px height is reserved up front by the embed's own
+         inline style, so nothing shifts when the form paints. -->
+    <div class="formwrap" id="apply">
+      <div id="roasform-886f12-80a4cf-c608d0" style="width: 100%; height: 600px"></div>
+      <script>
+      (function(w,d,o){w.ROASForm=w.ROASForm||{q:[]};w.ROASForm.q.push(o);if(!w.ROASForm._l){w.ROASForm._l=1;var s=d.createElement('script');s.src='https://my.roasform.com/roasform-embed.js';s.async=true;d.head.appendChild(s)}})(window,document,{formId:'886f12-80a4cf-c608d0',mode:'inline',inheritBackground:false,container:'#roasform-886f12-80a4cf-c608d0'});
+      </script>
+    </div>
+  </section>
+
+  <section class="results wrap">
+    <h2 class="section">Some of our marketing results&hellip;</h2>
+
+    <!-- Real Wistia embeds. The player script is fetched as the section comes
+         into view rather than on page load, so the poster frames are already
+         there when you arrive without putting ~150 KB on the critical path. -->
+    <div class="grid">
+      <article class="tcard">
+        <div class="stage">
+          <wistia-player media-id="n86r5cqxqh" aspect="0.5625" title="Video testimonial: Andrea from Bonafide Trucking"></wistia-player>
+        </div>
+        <div class="tbody">
+          <p class="quote">&ldquo;It&rsquo;s been amazing! A lot of our customers are calling in and they&rsquo;re letting us know that they&rsquo;re reaching out because of the website.&rdquo;</p>
+          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="who">Andrea from Bonafide Trucking</p>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <div class="stage">
+          <wistia-player media-id="ej7z3e8y1b" aspect="0.5625" title="Video testimonial: Rick from Smart Prep Auto"></wistia-player>
+        </div>
+        <div class="tbody">
+          <p class="quote">&ldquo;New leads coming has been invaluable. Definitely quality leads. I would say that difference we&rsquo;ve seen pretty much out the gate.&rdquo;</p>
+          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="who">Rick from Smart Prep Auto</p>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <div class="stage">
+          <wistia-player media-id="b1az1gc7z2" aspect="0.5625" title="Video testimonial: Jesus from Midwest Auto"></wistia-player>
+        </div>
+        <div class="tbody">
+          <p class="quote">&ldquo;The website looks phenomenal. We are getting a lot of traffic. Reviews are coming in left and right&hellip; For the price, you really can&rsquo;t beat what you guys are doing.&rdquo;</p>
+          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="who">Jesus from Midwest Auto</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p class="fine">This site is not a part of the Facebook&trade; website or Meta Platforms, Inc. This site is NOT endorsed by Facebook&trade; in any way.</p>
+  <p><a href="/privacy">Privacy Policy</a> &middot; <a href="/terms">Terms of Service</a></p>
+  <p class="fine">Copyright 2026 Clutch Clicks, LLC. All Rights Reserved.</p>
+</footer>
+
+<div class="sticky" id="sticky" data-hidden="true">
+  <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
+</div>
+
+<span class="ver">roasform v1.0-1</span>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- logo: fall back to the wordmark if the file isn't there yet ---------- */
+  var logoImg = document.getElementById('logo-img');
+  function useTextLogo() {
+    logoImg.hidden = true;
+    document.getElementById('logo-text').hidden = false;
+  }
+  logoImg.addEventListener('error', useTextLogo);
+  if (logoImg.complete && logoImg.naturalWidth === 0) useTextLogo();
+
+  /* ---------- sticky CTA: hide while the form is on screen ---------- */
+  var sticky = document.getElementById('sticky');
+  var formBox = document.getElementById('apply');
+
+  document.getElementById('sticky-cta').addEventListener('click', function () {
+    formBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) {
+      sticky.dataset.hidden = e[0].isIntersecting ? 'true' : 'false';
+    }, { threshold: 0.15 }).observe(formBox);
+  } else {
+    sticky.dataset.hidden = 'false';
+  }
+
+  /* ---------- Wistia: fetched as the testimonials come into view ---------- */
+  var MEDIA = ['n86r5cqxqh', 'ej7z3e8y1b', 'b1az1gc7z2'];
+  var wistiaStarted = false;
+
+  function loadWistia() {
+    if (wistiaStarted) return;
+    wistiaStarted = true;
+
+    var player = document.createElement('script');
+    player.src = 'https://fast.wistia.com/player.js';
+    player.async = true;
+    document.head.appendChild(player);
+
+    MEDIA.forEach(function (id) {
+      var s = document.createElement('script');
+      s.src = 'https://fast.wistia.com/embed/' + id + '.js';
+      s.async = true;
+      s.type = 'module';
+      document.head.appendChild(s);
+    });
+  }
+
+  /* Hold Wistia until the page has finished loading and the main thread is idle.
+     The testimonials sit within 400px of the fold, so the observer used to fire
+     during load and the player scripts competed with the fonts for bandwidth on
+     the critical path. Waiting costs nothing visible -- the posters are still
+     there well before anyone scrolls to them. */
+  function watchForVideos() {
+    var results = document.querySelector('.results');
+    if ('IntersectionObserver' in window && results) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { io.disconnect(); loadWistia(); }
+      }, { rootMargin: '400px 0px' });
+      io.observe(results);
+    } else {
+      loadWistia();
+    }
+  }
+
+  function afterLoad() {
+    if (window.requestIdleCallback) requestIdleCallback(watchForVideos, { timeout: 2000 });
+    else setTimeout(watchForVideos, 500);
+  }
+  if (document.readyState === 'complete') afterLoad();
+  else window.addEventListener('load', afterLoad);
+
+})();
+</script>
+
+</body>
+</html>
