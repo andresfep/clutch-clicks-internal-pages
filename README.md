@@ -11,7 +11,7 @@ files automatically; `_redirects` also keeps `/booking` and `/typ` working.
 | --- | --- | --- |
 | Opt-in | `index.html` | Headline, 3-step qualifying form, testimonials |
 | Booking | `book.html` | Same shell, GoHighLevel calendar instead of the form |
-| Thank you | `thanks.html` | Pre-call video, next steps, what-to-do checklist |
+| Thank you | `thanks.html` | Pre-call video, next steps, what-to-do checklist (no testimonials) |
 
 **Flow:** a qualifying lead submits the opt-in form → POSTed to GoHighLevel →
 redirected to `book.html` (any `?service=` carries over). A lead under $10K/mo is
@@ -27,10 +27,15 @@ headers. Loading `book.html` directly just skips the prefill.
 
 ### Placeholders on the thank-you page
 
+The testimonial wall is deliberately not on this page — by the time someone books,
+they are already sold, and the page's job is getting them to show up.
+
 Anything wearing a dashed amber **FILL THIS IN** badge is not real content:
 
 - **Two video slots** — the pre-call video and the call-agenda video. Add
-  `<wistia-player media-id="…">` and put the id in that file's `MEDIA` array.
+  `<wistia-player media-id="…">`, put the id in that file's `MEDIA` array (empty
+  right now, so nothing is fetched), and add a matching
+  `wistia-player[media-id='…']:not(:defined)` swatch rule for its placeholder.
 - **Proof block** — the reference page has a founder line and two stat tiles
   (companies served, revenue generated). Those are left out rather than invented;
   the tile markup is commented out ready for your real figures.

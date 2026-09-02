@@ -157,17 +157,13 @@ h2.section{font-size:clamp(26px,5.6vw,44px);font-weight:800;letter-spacing:-.02e
 .tcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
 .stage{position:relative;width:100%;aspect-ratio:9/16;background:#12151a;overflow:hidden}
 .stage wistia-player{display:block;width:100%;height:100%}
-/* Wistia's own placeholder treatment: the swatch, blurred, shown only while the
-   custom element is still undefined. The moment the player script defines it the
-   rule stops matching and the real poster frame takes over. The stage already
-   reserves 9:16, so nothing shifts. */
+/* Placeholder styling for any <wistia-player> added to this page later. The
+   per-media swatch rules were dropped with the testimonials; a new video needs
+   its own wistia-player[media-id='...'] background-image rule alongside this. */
 wistia-player:not(:defined){
   display:block;width:100%;height:100%;filter:blur(6px);
   background-position:center;background-size:cover;background-repeat:no-repeat;
 }
-wistia-player[media-id='n86r5cqxqh']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/n86r5cqxqh/swatch')}
-wistia-player[media-id='ej7z3e8y1b']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/ej7z3e8y1b/swatch')}
-wistia-player[media-id='b1az1gc7z2']:not(:defined){background-image:url('https://fast.wistia.com/embed/medias/b1az1gc7z2/swatch')}
 
 .tbody{padding:14px 15px 16px;background:var(--panel);flex:1}
 .quote{margin:0;font-size:15px;line-height:1.5;color:var(--ink-2)}
@@ -361,48 +357,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
       </div>
     </div>
   </section>
-
-  <section class="results wrap">
-    <h2 class="section">Some of our marketing results&hellip;</h2>
-
-    <!-- Real Wistia embeds. The player script is fetched as the section comes
-         into view rather than on page load, so the poster frames are already
-         there when you arrive without putting ~150 KB on the critical path. -->
-    <div class="grid">
-      <article class="tcard">
-        <div class="stage">
-          <wistia-player media-id="n86r5cqxqh" aspect="0.5625" title="Video testimonial: Andrea from Bonafide Trucking"></wistia-player>
-        </div>
-        <div class="tbody">
-          <p class="quote">&ldquo;It&rsquo;s been amazing! A lot of our customers are calling in and they&rsquo;re letting us know that they&rsquo;re reaching out because of the website.&rdquo;</p>
-          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="who">Andrea from Bonafide Trucking</p>
-        </div>
-      </article>
-
-      <article class="tcard">
-        <div class="stage">
-          <wistia-player media-id="ej7z3e8y1b" aspect="0.5625" title="Video testimonial: Rick from Smart Prep Auto"></wistia-player>
-        </div>
-        <div class="tbody">
-          <p class="quote">&ldquo;New leads coming has been invaluable. Definitely quality leads. I would say that difference we&rsquo;ve seen pretty much out the gate.&rdquo;</p>
-          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="who">Rick from Smart Prep Auto</p>
-        </div>
-      </article>
-
-      <article class="tcard">
-        <div class="stage">
-          <wistia-player media-id="b1az1gc7z2" aspect="0.5625" title="Video testimonial: Jesus from Midwest Auto"></wistia-player>
-        </div>
-        <div class="tbody">
-          <p class="quote">&ldquo;The website looks phenomenal. We are getting a lot of traffic. Reviews are coming in left and right&hellip; For the price, you really can&rsquo;t beat what you guys are doing.&rdquo;</p>
-          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="who">Jesus from Midwest Auto</p>
-        </div>
-      </article>
-    </div>
-  </section>
 </main>
 
 <footer class="wrap">
@@ -437,33 +391,37 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     document.getElementById('before').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  /* Wistia: fetched as the testimonials come into view. Add any pre-call video
-     ids to this array once their embeds are in place above. */
-  var MEDIA = ['n86r5cqxqh', 'ej7z3e8y1b', 'b1az1gc7z2'];
-  var wistiaStarted = false;
-  function loadWistia() {
-    if (wistiaStarted) return;
-    wistiaStarted = true;
-    var player = document.createElement('script');
-    player.src = 'https://fast.wistia.com/player.js';
-    player.async = true;
-    document.head.appendChild(player);
-    MEDIA.forEach(function (id) {
-      var s = document.createElement('script');
-      s.src = 'https://fast.wistia.com/embed/' + id + '.js';
-      s.async = true;
-      s.type = 'module';
-      document.head.appendChild(s);
-    });
-  }
-  var results = document.querySelector('.results');
-  if ('IntersectionObserver' in window && results) {
-    var io = new IntersectionObserver(function (e) {
-      if (e[0].isIntersecting) { io.disconnect(); loadWistia(); }
-    }, { rootMargin: '400px 0px' });
-    io.observe(results);
-  } else {
-    loadWistia();
+  /* Wistia. Empty on purpose: this page has no videos until the two slots above
+     are filled in. Add each media id here and the player is fetched only when the
+     video area comes into view. While the array is empty nothing is requested. */
+  var MEDIA = [];
+
+  if (MEDIA.length) {
+    var started = false;
+    var load = function () {
+      if (started) return;
+      started = true;
+      var player = document.createElement('script');
+      player.src = 'https://fast.wistia.com/player.js';
+      player.async = true;
+      document.head.appendChild(player);
+      MEDIA.forEach(function (id) {
+        var s = document.createElement('script');
+        s.src = 'https://fast.wistia.com/embed/' + id + '.js';
+        s.async = true;
+        s.type = 'module';
+        document.head.appendChild(s);
+      });
+    };
+    var target = document.querySelector('.vwrap');
+    if ('IntersectionObserver' in window && target) {
+      var io = new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting) { io.disconnect(); load(); }
+      }, { rootMargin: '400px 0px' });
+      io.observe(target);
+    } else {
+      load();
+    }
   }
 })();
 </script>
