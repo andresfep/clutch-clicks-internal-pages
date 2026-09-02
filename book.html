@@ -353,7 +353,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Pick Your Time</button>
 </div>
 
-<span class="ver">v1.9-1</span>
+<span class="ver">v2.0-1</span>
 
 <!-- GoHighLevel resizes the iframe to fit its content via postMessage. -->
 <script src="https://api.clutchclicks.com/js/form_embed.js" async></script>
@@ -405,39 +405,57 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     sticky.dataset.hidden = 'false';
   }
 
-  /* Wistia: fetched as the testimonials come into view */
-  var MEDIA = ['n86r5cqxqh', 'ej7z3e8y1b', 'b1az1gc7z2'];
-  var wistiaStarted = false;
-  function loadWistia() {
-    if (wistiaStarted) return;
-    wistiaStarted = true;
-    var player = document.createElement('script');
-    player.src = 'https://fast.wistia.com/player.js';
-    player.async = true;
-    document.head.appendChild(player);
-    MEDIA.forEach(function (id) {
-      var s = document.createElement('script');
-      s.src = 'https://fast.wistia.com/embed/' + id + '.js';
-      s.async = true;
-      s.type = 'module';
-      document.head.appendChild(s);
-    });
-  }
-  /* Hold Wistia until load + idle: the testimonials sit within 400px of the fold,
-     so the observer used to fire during load and compete with the fonts for
-     bandwidth on the critical path. */
-  function watchForVideos() {
-    var results = document.querySelector('.results');
-    if ('IntersectionObserver' in window && results) {
-      var io = new IntersectionObserver(function (e) {
-        if (e[0].isIntersecting) { io.disconnect(); loadWistia(); }
-      }, { rootMargin: '400px 0px' });
-      io.observe(results);
-    } else {
-      loadWistia();
-    }
+/* ---------- Wistia: one player per card, each on its own approach ----------
+     Wistia costs roughly 135 KB per player, and it pulls its own Sentry bundle on
+     top. Loading all three as soon as the section neared the viewport meant every
+     visitor paid ~400 KB for testimonials most of them never scroll to -- and on a
+     phone the section starts about 600px down, so it always triggered.
+
+     Each <wistia-player> is now observed individually and loads only as it comes
+     within 150px of the viewport. No click is needed: scroll to a testimonial and
+     it is already there. Media ids are read from the markup so there is no second
+     list to keep in sync. */
+  var runtimeRequested = false;
+
+  function loadRuntime() {
+    if (runtimeRequested) return;
+    runtimeRequested = true;
+    var s = document.createElement('script');
+    s.src = 'https://fast.wistia.com/player.js';
+    s.async = true;
+    document.head.appendChild(s);
   }
 
+  function loadMedia(id) {
+    loadRuntime();
+    var s = document.createElement('script');
+    s.src = 'https://fast.wistia.com/embed/' + id + '.js';
+    s.async = true;
+    s.type = 'module';
+    document.head.appendChild(s);
+  }
+
+  function watchForVideos() {
+    var players = document.querySelectorAll('wistia-player[media-id]');
+    if (!players.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(players, function (p) { loadMedia(p.getAttribute('media-id')); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        loadMedia(e.target.getAttribute('media-id'));
+      });
+    }, { rootMargin: '150px 0px' });
+
+    Array.prototype.forEach.call(players, function (p) { io.observe(p); });
+  }
+
+  /* Still held until load plus an idle slot, so nothing competes with the fonts. */
   function afterLoad() {
     if (window.requestIdleCallback) requestIdleCallback(watchForVideos, { timeout: 2000 });
     else setTimeout(watchForVideos, 500);

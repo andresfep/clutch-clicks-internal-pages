@@ -241,6 +241,16 @@ Three things were fixed after a PageSpeed run scored 60 on mobile:
   ascent/descent/line-gap overrides computed from the shipped Poppins metrics, so
   fallback text occupies the same space as the real thing and a late swap moves
   nothing.
+- **Unused JavaScript (~400 KB of Wistia).** The loader watched the whole
+  testimonial section and, on the first intersection, fetched all three players at
+  once. On a phone that section starts about 600 px down, so it always fired and
+  every visitor paid for three players — roughly 135 KB each, plus a Sentry bundle
+  Wistia loads on its own account — for testimonials most of them never scrolled
+  to. Each `<wistia-player>` is now observed individually and loads as it comes
+  within 150 px of the viewport. Measured on a 412 px viewport: one player before
+  any scroll instead of three, the rest arriving as you reach them. Desktop still
+  loads all three because all three are genuinely on screen. No click is involved
+  either way.
 - **Wistia on the critical path.** The testimonials sit within the observer's
   400 px margin, so the player scripts fetched during load and competed with the
   fonts. Loading now waits for `load` plus an idle callback. The posters are still
