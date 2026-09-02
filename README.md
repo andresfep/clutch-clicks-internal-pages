@@ -143,8 +143,8 @@ details you won't use, that's a change to `finish()` — say so and it's a few l
 
 ### Wiring up GoHighLevel
 
-The LeadConnector inbound webhook is already wired into `GHL_WEBHOOK_URL` near the
-top of the `<script>` block. It ships in the page source, so anyone can post to it —
+The LeadConnector inbound webhook is wired into `GHL_WEBHOOK_URL` near the top of
+the `<script>` block (trigger `9de36f13-8b64-4da5-ac30-e11d938ecb3b`). It ships in the page source, so anyone can post to it —
 lean on GoHighLevel's own duplicate/spam handling, or proxy through your own
 endpoint if that becomes a problem.
 
