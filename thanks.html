@@ -10,7 +10,7 @@
 <meta name="color-scheme" content="light">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
 <link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preconnect" href="https://fast.wistia.com" crossorigin>
+<link rel="preconnect" href="https://fast.vidalytics.com" crossorigin>
 
 <style>
 /* Poppins, self-hosted. Same origin means no third-party DNS/TLS handshake, and
@@ -32,8 +32,8 @@
 /* ---------------------------------------------------------------------------
    Clutch Clicks — offer page.
    CSS + JS are inlined on purpose, so the page itself is one request.
-   Wistia's player (~150 KB) is fetched as the testimonials come into view,
-   keeping it off the critical path while still showing real poster frames.
+   The only external resource is the Vidalytics pre-call video, embedded inline
+   below with the snippet Vidalytics supplies.
 --------------------------------------------------------------------------- */
 :root{
   --red:#de2a24; --red-dark:#b4211c; --red-glow:rgba(222,42,36,.45);
@@ -156,14 +156,6 @@ h2.section{font-size:clamp(26px,5.6vw,44px);font-weight:800;letter-spacing:-.02e
 
 .tcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
 .stage{position:relative;width:100%;aspect-ratio:9/16;background:#12151a;overflow:hidden}
-.stage wistia-player{display:block;width:100%;height:100%}
-/* Placeholder styling for any <wistia-player> added to this page later. The
-   per-media swatch rules were dropped with the testimonials; a new video needs
-   its own wistia-player[media-id='...'] background-image rule alongside this. */
-wistia-player:not(:defined){
-  display:block;width:100%;height:100%;filter:blur(6px);
-  background-position:center;background-size:cover;background-repeat:no-repeat;
-}
 
 .tbody{padding:14px 15px 16px;background:var(--panel);flex:1}
 .quote{margin:0;font-size:15px;line-height:1.5;color:var(--ink-2)}
@@ -207,11 +199,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 .sec-h{font-size:clamp(22px,4.4vw,34px);font-weight:800;letter-spacing:-.02em;margin:14px 0 24px;color:var(--ink);text-wrap:balance}
 .sec-h em{font-style:normal;color:var(--red)}
 .vwrap{max-width:840px;margin:0 auto}
-.vslot{aspect-ratio:16/9;border-radius:14px;background:#12151a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;color:#fff}
-.vslot .vplay{width:64px;height:64px;border-radius:50%;background:var(--red);display:grid;place-items:center}
-.vslot .vplay svg{width:22px;height:22px;fill:#fff;margin-left:3px}
-.vslot p{margin:0;font-size:14px;font-weight:700}
-.vslot span{display:block;font-weight:400;color:#9aa3af;font-size:12px;margin-top:4px}
 
 .steps{display:grid;gap:18px;grid-template-columns:1fr;text-align:left;margin-top:4px}
 @media(min-width:820px){.steps{grid-template-columns:repeat(3,1fr)}}
@@ -241,9 +228,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 .stat span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
 
 /* Anything still wearing this badge has placeholder copy in it. */
-.todo{position:relative;border:2px dashed #d99400;border-radius:12px;background:#fffdf4;padding:20px 14px 14px;color:#7a5600;font-size:14px;line-height:1.55;text-align:left;margin-top:14px}
-.todo::before{content:"FILL THIS IN";position:absolute;top:-9px;left:12px;background:#d99400;color:#fff;font-size:10px;font-weight:800;letter-spacing:.08em;padding:2px 7px;border-radius:4px}
-.todo code{background:#fff;border:1px solid #eadfc0;border-radius:4px;padding:1px 5px;font-size:13px}
 
 .bar-inner{pointer-events:auto;width:100%;max-width:900px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .bar-msg{font-size:14.5px;color:var(--ink-2);line-height:1.4}
@@ -271,15 +255,20 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     <h1 class="typ-h1">Watch The Short Video Below So Your Call Doesn&rsquo;t Get Cancelled</h1>
 
     <div class="vwrap">
-      <div class="vslot">
-          <div class="vplay" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>Your pre-call video<span>Drop the Wistia embed here</span></p>
-        </div>
-      <div class="todo">
-        <b>Pre-call video.</b> Replace this slot with a Wistia embed, the same way the
-        testimonials work on the opt-in page: add <code>&lt;wistia-player media-id="&hellip;"&gt;</code>
-        here and put the id in the <code>MEDIA</code> array at the bottom of this file.
-      </div>
+      <!-- Vidalytics pre-call video. The loader script must sit next to its own
+           div, which is why this block is inline rather than in the page script. -->
+      <div id="vidalytics_embed_wJuj0izxS9oVDl_H" style="width:100%;position:relative;padding-top:56.25%"></div>
+      <script type="text/javascript">
+      (function (v, i, d, a, l, y, t, c, s) {
+          y='_'+d.toLowerCase();c=d+'L';if(!v[d]){v[d]={};}if(!v[c]){v[c]={};}if(!v[y]){v[y]={};}var vl='Loader',vli=v[y][vl],vsl=v[c][vl + 'Script'],vlf=v[c][vl + 'Loaded'],ve='Embed';
+          if (!vsl){vsl=function(u,cb){
+              if(t){cb();return;}s=i.createElement("script");s.type="text/javascript";s.async=1;s.src=u;
+              if(s.readyState){s.onreadystatechange=function(){if(s.readyState==="loaded"||s.readyState=="complete"){s.onreadystatechange=null;vlf=1;cb();}};}else{s.onload=function(){vlf=1;cb();};}
+              i.getElementsByTagName("head")[0].appendChild(s);
+          };}
+          vsl(l+'loader.min.js',function(){if(!vli){var vlc=v[c][vl];vli=new vlc();}vli.loadScript(l+'player.min.js',function(){var vec=v[d][ve];t=new vec();t.run(a);});});
+      })(window, document, 'Vidalytics', 'vidalytics_embed_wJuj0izxS9oVDl_H', 'https://fast.vidalytics.com/embeds/WMno8S_4/wJuj0izxS9oVDl_H/');
+      </script>
     </div>
 
     <div style="margin-top:44px">
@@ -299,7 +288,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
         </article>
         <article class="stepc">
           <h3>Step <span>3</span></h3>
-          <p>Watch the video below for the agenda, what we do, and how we can help.</p>
+          <p>Watch the video above for the agenda, what we do, and how we can help.</p>
           <p class="hint">About 5 minutes. Worth it before we talk.</p>
         </article>
       </div>
@@ -307,15 +296,10 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
     <div class="panel" id="before">
       <span class="pill ok">&#9679; Your call is booked</span>
-      <h2 class="sec-h">Watch this <em>before we talk</em></h2>
+      <h2 class="sec-h">Here&rsquo;s what happens <em>before we talk</em></h2>
 
       <div class="panel-grid">
         <div>
-          <div class="vslot">
-          <div class="vplay" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-          <p>The agenda for our call<span>Drop the Wistia embed here</span></p>
-        </div>
-
           <div class="bg-card" style="margin-top:20px">
             <h3>Quick background on Clutch Clicks</h3>
             <ul>
@@ -323,12 +307,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
               <li>Everything runs for a flat $297/month &mdash; no setup fees, no long contract.</li>
               <li>We work with one shop per area, which is why we check availability first.</li>
             </ul>
-            <div class="todo">
-              <b>Add your proof.</b> The reference page carries a founder line and two
-              stat tiles here (companies served, revenue generated). I have left those
-              out rather than invent numbers &mdash; fill in your real figures and delete
-              this note. The markup for the tiles is commented out just below.
-            </div>
             <!-- Real numbers only. Uncomment and fill in:
             <div class="stats">
               <div class="stat"><b>000+</b><span>Shops served</span></div>
@@ -391,38 +369,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     document.getElementById('before').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  /* Wistia. Empty on purpose: this page has no videos until the two slots above
-     are filled in. Add each media id here and the player is fetched only when the
-     video area comes into view. While the array is empty nothing is requested. */
-  var MEDIA = [];
-
-  if (MEDIA.length) {
-    var started = false;
-    var load = function () {
-      if (started) return;
-      started = true;
-      var player = document.createElement('script');
-      player.src = 'https://fast.wistia.com/player.js';
-      player.async = true;
-      document.head.appendChild(player);
-      MEDIA.forEach(function (id) {
-        var s = document.createElement('script');
-        s.src = 'https://fast.wistia.com/embed/' + id + '.js';
-        s.async = true;
-        s.type = 'module';
-        document.head.appendChild(s);
-      });
-    };
-    var target = document.querySelector('.vwrap');
-    if ('IntersectionObserver' in window && target) {
-      var io = new IntersectionObserver(function (e) {
-        if (e[0].isIntersecting) { io.disconnect(); load(); }
-      }, { rootMargin: '400px 0px' });
-      io.observe(target);
-    } else {
-      load();
-    }
-  }
 })();
 </script>
 

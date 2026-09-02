@@ -25,24 +25,29 @@ the answers in `sessionStorage` and `book.html` appends `first_name`, `last_name
 page URL, so a name, email and phone don't land in browser history or referrer
 headers. Loading `book.html` directly just skips the prefill.
 
-### Placeholders on the thank-you page
+### The thank-you page
 
-The testimonial wall is deliberately not on this page — by the time someone books,
-they are already sold, and the page's job is getting them to show up.
+The testimonial wall is deliberately not here — by the time someone books they are
+already sold, and this page's job is getting them to show up.
 
-Anything wearing a dashed amber **FILL THIS IN** badge is not real content:
+The pre-call video is a **Vidalytics** embed, inline in the markup because the
+loader script has to sit next to its own div. It is the only external resource on
+the page; everything else ships with it. `fast.vidalytics.com` gets a `preconnect`
+so the player starts fetching as early as possible.
 
-- **Two video slots** — the pre-call video and the call-agenda video. Add
-  `<wistia-player media-id="…">`, put the id in that file's `MEDIA` array (empty
-  right now, so nothing is fetched), and add a matching
-  `wistia-player[media-id='…']:not(:defined)` swatch rule for its placeholder.
-- **Proof block** — the reference page has a founder line and two stat tiles
-  (companies served, revenue generated). Those are left out rather than invented;
-  the tile markup is commented out ready for your real figures.
+The reference layout has a second video inside the "before we talk" panel. With one
+video available that slot is removed rather than left empty, so the panel is now the
+background card plus the checklist. Adding a second video means a second Vidalytics
+snippet with its own embed id — the ids are unique per video, so the same snippet
+cannot be reused twice on one page.
 
-Two step cards also make operational promises — a calendar invite by email, and a
-confirmation text — so check your GoHighLevel automations actually send those
-before publishing.
+Two things to check before publishing:
+
+- **Operational promises.** Two step cards say a calendar invite arrives by email
+  and a confirmation text follows. Make sure your GoHighLevel automations send both.
+- **Proof.** The reference page has a founder line and two stat tiles (companies
+  served, revenue generated). Those are left out rather than invented; the tile
+  markup is commented out in the background card, ready for real figures.
 
 ### A note on the CSS
 
