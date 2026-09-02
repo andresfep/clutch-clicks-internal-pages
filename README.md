@@ -54,30 +54,64 @@ Handled for you:
 - The value rides along with the lead as a `service` field, so you can see which
   campaign produced it.
 
-### Wiring up leads
+## The form
 
-Set the endpoint near the top of the `<script>` block:
+Three steps, `33% / 66% / 98%` — the bar deliberately stops short of 100.
 
-```js
-var FORM_ENDPOINT = '/api/leads'; // <-- change me
+1. **City** — free text, Continue.
+2. **Monthly revenue** — four choices. Picking one *is* the continue; there is no
+   second click.
+3. **Contact** — Full Name, Business Name, Email, Phone, Submit.
+
+Back sits at the top of the card from step 2 on, and going back keeps whatever was
+already entered or picked.
+
+### Conditional logic — the revenue gate
+
+**Only qualified leads are sent to GoHighLevel.** Qualification is an attribute on
+each choice, so changing the threshold means editing one word of markup:
+
+```html
+<button class="opt" data-value="Less than $10K/mo" data-qualified="false">
+<button class="opt" data-value="$10K – $25K/mo"    data-qualified="true">
 ```
 
-It receives a JSON `POST`:
+A lead under $10K/mo completes the form and is then **never POSTed** — no request
+is made at all. They see a different closing message that does *not* promise a
+callback, since one isn't coming:
+
+> Thanks — we've got your answers. We work with shops already doing at least $10K
+> a month, so we won't be reaching out just yet.
+
+If you would rather stop those visitors at step 2 instead of collecting contact
+details you won't use, that's a change to `finish()` — say so and it's a few lines.
+
+### Wiring up GoHighLevel
+
+Set the webhook near the top of the `<script>` block:
+
+```js
+var GHL_WEBHOOK_URL = '/api/leads'; // <-- change me
+```
+
+Qualified leads arrive as a JSON `POST`:
 
 ```json
 {
-  "service": "Diesel",
+  "service": "HVAC",
+  "revenue": "$100K+/mo",
   "city": "Miami",
-  "shop": "Miami Auto Care",
-  "name": "Andres",
-  "email": "andres@miamiautocare.com",
+  "name": "Andres Perez",
+  "business": "Miami HVAC Co",
+  "email": "andres@miamihvac.com",
   "phone": "(305) 555-1234",
-  "page": "/",
-  "submittedAt": "2026-09-02T12:04:05.902Z"
+  "qualified": true,
+  "page": "/?service=hvac",
+  "submittedAt": "2026-09-02T12:57:11.814Z"
 }
 ```
 
-Any non-2xx response shows an inline retry message rather than a false success.
+Any non-2xx response shows an inline retry rather than a false success.
 
 ### Testimonials
 
@@ -102,8 +136,10 @@ swaps in without shifting the layout.
 
 ### Still to fill in
 
-- **`assets/logo.png`** — until it exists the header falls back to a
-  navy/red `ClutchClicks` wordmark. A ~460×120 PNG or an SVG (update the `src`) works.
+- **`assets/logo.png`** — drop the file at exactly that path and it appears
+  automatically; until then the header falls back to a navy/red `ClutchClicks`
+  wordmark. Roughly 460×120 (2× the 230×60 display size) keeps it crisp on retina.
+  For an SVG, name it `logo.svg` and update the `src` on `#logo-img`.
 - `/privacy` and `/terms` pages — the footer links to them
 - `hello@clutchclicks.com` in the `<noscript>` fallback, if that isn't the right inbox
 

@@ -44,7 +44,7 @@
   --navy:#17285a;
   --ink:#0d1420; --ink-2:#3d4655; --ink-3:#6b7481;
   --line:#e4e7eb; --panel:#f6f7f8; --bg:#fff;
-  --green:#22c55e; --green-track:#e8ebee; --err:#c8201a;
+  --green:#22c55e; --green-track:#e8ebee; --field-line:#7cc86c; --err:#c8201a;
   --radius:14px; --shadow:0 10px 34px rgba(16,24,40,.10),0 2px 6px rgba(16,24,40,.05);
   --font:'Poppins','Avenir Next','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
   --sticky-h:96px;
@@ -85,9 +85,10 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
   box-shadow:var(--shadow);padding:24px 20px;max-width:640px;margin:0 auto;
   text-align:left;scroll-margin-top:18px;
 }
-.card-title{font-size:clamp(15px,3.4vw,18px);font-weight:700;line-height:1.35;margin:0 0 14px;text-align:center;color:var(--ink)}
+.lede{font-size:clamp(16px,3.4vw,19px);font-weight:700;line-height:1.35;margin:0 0 16px;text-align:center;color:var(--ink)}
+.step-title{font-size:clamp(17px,3.6vw,21px);font-weight:800;line-height:1.3;margin:2px 0 18px;text-align:center;color:var(--ink);text-wrap:balance}
 
-.progress{height:26px;border-radius:8px;background:var(--green-track);overflow:hidden;margin-bottom:18px}
+.progress{height:28px;border-radius:8px;background:var(--green-track);overflow:hidden;margin-bottom:18px}
 .progress-fill{
   height:100%;width:33%;border-radius:8px;background-color:var(--green);
   color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
@@ -98,16 +99,31 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 @keyframes stripes{from{background-position:0 0}to{background-position:16px 0}}
 
 .field+.field{margin-top:14px}
-.field label{display:block;font-size:15px;font-weight:700;margin-bottom:7px;color:var(--ink)}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.field label,.field legend{display:block;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ink);padding:0}
+.req{color:var(--ink-3)}
+
+/* Revenue choices double as the step's Continue: picking one advances. */
+.opts{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:520px){.opts{grid-template-columns:1fr 1fr}}
+.opt{
+  font:inherit;font-size:16px;font-weight:700;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:20px 14px;cursor:pointer;
+  box-shadow:0 1px 2px rgba(16,24,40,.05);
+  transition:border-color .15s,box-shadow .15s,transform .06s;
+}
+.opt:hover{border-color:var(--red);box-shadow:0 4px 14px rgba(222,42,36,.13)}
+.opt:active{transform:translateY(1px)}
+.opt[aria-pressed="true"]{border-color:var(--red);box-shadow:0 0 0 3px rgba(222,42,36,.16)}
 .req{color:var(--ink-3)}
 .field input{
   width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
-  padding:13px 14px;border:2px solid var(--line);border-radius:10px;
+  padding:14px 15px;border:2px solid var(--field-line);border-radius:10px;
   transition:border-color .15s,box-shadow .15s;
 }
 .field input::placeholder{color:#a8afb8}
 .field input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(23,40,90,.13)}
-.field input.ok{border-color:var(--green)}
+
 .field input[aria-invalid="true"]{border-color:var(--err)}
 .err{display:block;font-size:13.5px;font-weight:700;color:var(--err);margin-top:6px}
 .err:empty{margin-top:0}
@@ -120,10 +136,10 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 .btn:hover{background:var(--red-dark)}
 .btn:active{transform:translateY(1px)}
 .btn[disabled]{opacity:.65;cursor:progress}
-.actions{margin-top:16px}
+.actions{margin-top:18px}
 .back{
-  display:inline-block;margin-top:12px;background:none;border:0;padding:6px 2px;
-  font:inherit;font-size:14px;font-weight:700;color:var(--ink-3);cursor:pointer;text-decoration:underline;
+  display:inline-flex;align-items:center;gap:8px;margin:0 0 10px;background:none;border:0;
+  padding:4px 2px;font:inherit;font-size:16px;font-weight:400;color:var(--ink-3);cursor:pointer;
 }
 .back:hover{color:var(--ink)}
 
@@ -206,48 +222,50 @@ footer .fine{font-size:13px;color:var(--ink-3)}
       We Help <span id="svc">Automotive</span> Shops <span class="u">Get More Jobs</span> With AI, Smart Websites, and 5 Star Reviews for Just <span class="price">$297/month</span> <span aria-hidden="true">&#128071;</span>
     </h1>
 
+    <p class="lede" id="form-title">Check If We Already Work With <span id="svc-article">An</span> <span id="svc-2">Automotive</span> Shop In Your Area Below</p>
+
+    <script>
+    /* ---------------------------------------------------------------------
+       ?service=  — swaps the trade named in the headline and the form title.
+       Runs here, inline and parser-blocking, so the swapped text is painted
+       on the first frame rather than flashing "Automotive" first.
+       The value is written with textContent and character-filtered, so a
+       crafted ?service= cannot inject markup.
+    --------------------------------------------------------------------- */
+    (function () {
+      var raw;
+      try { raw = new URLSearchParams(location.search).get('service') || ''; }
+      catch (e) { return; }
+
+      raw = raw.trim().replace(/\s+/g, ' ').slice(0, 28);
+      if (!raw) return;
+      if (!/^[\p{L}\p{N} &/'-]+$/u.test(raw)) return;   // letters, digits, space, & / ' -
+
+      // Trades that should always read as acronyms, however they're typed in the URL.
+      var ACRONYMS = ['HVAC','RV','AC','ATV','UTV','EV','ADAS','CDL','DOT','PDR','ASE','DPF','AG'];
+      function isInitialism(w) { return w.length <= 5 && w === w.toUpperCase() && /\p{L}/u.test(w); }
+
+      var svc = raw.split(' ').map(function (w) {
+        var up = w.toUpperCase();
+        if (ACRONYMS.indexOf(up) !== -1) return up;                       // hvac -> HVAC
+        if (w === up && w.length <= 4 && /\p{L}/u.test(w) && !/[AEIOU]/.test(up)) return up; // RV, DPF
+        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();      // ROOFING -> Roofing
+      }).join(' ');
+
+      // "An HVAC shop" (letter name starts with a vowel sound) vs "A Roofing shop".
+      var head = svc.split(' ')[0];
+      var an = isInitialism(head) ? /^[AEFHILMNORSX]/.test(head) : /^[AEIOU]/i.test(head);
+
+      document.getElementById('svc').textContent = svc;
+      document.getElementById('svc-2').textContent = svc;
+      document.getElementById('svc-article').textContent = an ? 'An' : 'A';
+      document.title = 'Get More Jobs For Your ' + svc + ' Shop | Clutch Clicks';
+      window.__service = svc;
+    })();
+    </script>
+
     <div class="card" id="apply">
-      <p class="card-title" id="form-title">Check If We Already Work With <span id="svc-article">An</span> <span id="svc-2">Automotive</span> Shop In Your Area Below</p>
-
-      <script>
-      /* ---------------------------------------------------------------------
-         ?service=  — swaps the trade named in the headline and the form title.
-         Runs here, inline and parser-blocking, so the swapped text is painted
-         on the first frame rather than flashing "Automotive" first.
-         The value is written with textContent and character-filtered, so a
-         crafted ?service= cannot inject markup.
-      --------------------------------------------------------------------- */
-      (function () {
-        var raw;
-        try { raw = new URLSearchParams(location.search).get('service') || ''; }
-        catch (e) { return; }
-
-        raw = raw.trim().replace(/\s+/g, ' ').slice(0, 28);
-        if (!raw) return;
-        if (!/^[\p{L}\p{N} &/'-]+$/u.test(raw)) return;   // letters, digits, space, & / ' -
-
-        // Trades that should always read as acronyms, however they're typed in the URL.
-        var ACRONYMS = ['HVAC','RV','AC','ATV','UTV','EV','ADAS','CDL','DOT','PDR','ASE','DPF','AG'];
-        function isInitialism(w) { return w.length <= 5 && w === w.toUpperCase() && /\p{L}/u.test(w); }
-
-        var svc = raw.split(' ').map(function (w) {
-          var up = w.toUpperCase();
-          if (ACRONYMS.indexOf(up) !== -1) return up;                       // hvac -> HVAC
-          if (w === up && w.length <= 4 && /\p{L}/u.test(w) && !/[AEIOU]/.test(up)) return up; // RV, DPF
-          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();      // ROOFING -> Roofing
-        }).join(' ');
-
-        // "An HVAC shop" (letter name starts with a vowel sound) vs "A Roofing shop".
-        var head = svc.split(' ')[0];
-        var an = isInitialism(head) ? /^[AEFHILMNORSX]/.test(head) : /^[AEIOU]/i.test(head);
-
-        document.getElementById('svc').textContent = svc;
-        document.getElementById('svc-2').textContent = svc;
-        document.getElementById('svc-article').textContent = an ? 'An' : 'A';
-        document.title = 'Get More Jobs For Your ' + svc + ' Shop | Clutch Clicks';
-        window.__service = svc;
-      })();
-      </script>
+      <button class="back" type="button" id="back-btn" hidden><span aria-hidden="true">&#8592;</span> Back</button>
 
       <div class="progress" role="progressbar" aria-labelledby="form-title" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" id="bar">
         <div class="progress-fill" id="bar-fill">33%</div>
@@ -255,52 +273,63 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
       <form id="lead-form" novalidate>
         <input type="hidden" name="service" id="svc-field" value="Automotive">
+        <input type="hidden" name="revenue" id="revenue-field" value="">
 
         <div class="step" data-step="1">
           <div class="field">
             <label for="city">What city is your company located in? <span class="req">*</span></label>
-            <input id="city" name="city" type="text" autocomplete="address-level2" enterkeyhint="next" aria-describedby="city-err" required>
+            <input id="city" name="city" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="e.g. Miami, Denver, Chicago" aria-describedby="city-err" required>
             <span class="err" id="city-err" aria-live="polite"></span>
           </div>
+          <div class="actions"><button class="btn" type="submit">Continue</button></div>
         </div>
 
         <div class="step" data-step="2" hidden>
-          <div class="field">
-            <label for="shop">What is the name of your shop? <span class="req">*</span></label>
-            <input id="shop" name="shop" type="text" autocomplete="organization" enterkeyhint="next" aria-describedby="shop-err" required>
-            <span class="err" id="shop-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="name">And your name? <span class="req">*</span></label>
-            <input id="name" name="name" type="text" autocomplete="name" enterkeyhint="next" aria-describedby="name-err" required>
-            <span class="err" id="name-err" aria-live="polite"></span>
-          </div>
+          <fieldset class="field">
+            <legend>What is your current monthly revenue? <span class="req">*</span></legend>
+            <div class="opts">
+              <button type="button" class="opt" data-value="Less than $10K/mo" data-qualified="false" aria-pressed="false">Less than $10K/mo</button>
+              <button type="button" class="opt" data-value="$10K - $25K/mo" data-qualified="true" aria-pressed="false">$10K &ndash; $25K/mo</button>
+              <button type="button" class="opt" data-value="$25K - $100K/mo" data-qualified="true" aria-pressed="false">$25K &ndash; $100K/mo</button>
+              <button type="button" class="opt" data-value="$100K+/mo" data-qualified="true" aria-pressed="false">$100K+/mo</button>
+            </div>
+            <span class="err" id="revenue-err" aria-live="polite"></span>
+          </fieldset>
         </div>
 
         <div class="step" data-step="3" hidden>
+          <h2 class="step-title">Where Should We Send Your Market Availability Report?</h2>
           <div class="field">
-            <label for="email">Where should we send your availability check? <span class="req">*</span></label>
-            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="next" placeholder="you@yourshop.com" aria-describedby="email-err" required>
+            <label for="name">Full Name <span class="req">*</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" enterkeyhint="next" placeholder="Full Name" aria-describedby="name-err" required>
+            <span class="err" id="name-err" aria-live="polite"></span>
+          </div>
+          <div class="field">
+            <label for="business">Business Name <span class="req">*</span></label>
+            <input id="business" name="business" type="text" autocomplete="organization" enterkeyhint="next" placeholder="Business Name" aria-describedby="business-err" required>
+            <span class="err" id="business-err" aria-live="polite"></span>
+          </div>
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="next" placeholder="your@email.com" aria-describedby="email-err" required>
             <span class="err" id="email-err" aria-live="polite"></span>
           </div>
           <div class="field">
-            <label for="phone">Best phone number to reach you? <span class="req">*</span></label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" placeholder="(555) 555-5555" aria-describedby="phone-err" required>
+            <label for="phone">Phone <span class="req">*</span></label>
+            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" placeholder="Phone" aria-describedby="phone-err" required>
             <span class="err" id="phone-err" aria-live="polite"></span>
           </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn" type="submit" id="next-btn">Continue</button>
-          <span class="err" id="form-err" aria-live="assertive"></span>
-          <button class="back" type="button" id="back-btn" hidden>&#8592; Back</button>
+          <div class="actions">
+            <button class="btn" type="submit" id="submit-btn">Submit</button>
+            <span class="err" id="form-err" aria-live="assertive"></span>
+          </div>
         </div>
       </form>
 
       <div class="done" id="done" hidden>
         <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 7"/></svg></div>
-        <h2>You&rsquo;re on the list.</h2>
-        <p>We&rsquo;re checking availability for your area right now &mdash; expect a text or call within one business day.</p>
+        <h2 id="done-title">You&rsquo;re on the list.</h2>
+        <p id="done-copy">We&rsquo;re checking availability for your area right now &mdash; expect a text or call within one business day.</p>
       </div>
 
       <noscript>
@@ -362,14 +391,14 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v1.3-1</span>
+<span class="ver">v1.4-1</span>
 
 <script>
 (function () {
   'use strict';
 
-  /* Where leads are POSTed as JSON. Point this at GoHighLevel, Zapier, or your own API. */
-  var FORM_ENDPOINT = '/api/leads'; // <-- change me
+  /* GoHighLevel inbound webhook. Qualified leads are POSTed here as JSON. */
+  var GHL_WEBHOOK_URL = '/api/leads'; // <-- change me
 
   /* ---------- logo: fall back to the wordmark if the file isn't there yet ---------- */
   var logoImg = document.getElementById('logo-img');
@@ -381,29 +410,34 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   if (logoImg.complete && logoImg.naturalWidth === 0) useTextLogo();
 
   /* ---------- form ---------- */
-  var form   = document.getElementById('lead-form');
-  var steps  = Array.prototype.slice.call(form.querySelectorAll('.step'));
-  var fill   = document.getElementById('bar-fill');
-  var bar    = document.getElementById('bar');
-  var next   = document.getElementById('next-btn');
-  var back   = document.getElementById('back-btn');
-  var formErr= document.getElementById('form-err');
-  var done   = document.getElementById('done');
-  var card   = document.getElementById('apply');
-  var sticky = document.getElementById('sticky');
+  var form    = document.getElementById('lead-form');
+  var steps   = Array.prototype.slice.call(form.querySelectorAll('.step'));
+  var fill    = document.getElementById('bar-fill');
+  var bar     = document.getElementById('bar');
+  var back    = document.getElementById('back-btn');
+  var submit  = document.getElementById('submit-btn');
+  var formErr = document.getElementById('form-err');
+  var revenue = document.getElementById('revenue-field');
+  var done    = document.getElementById('done');
+  var card    = document.getElementById('apply');
+  var sticky  = document.getElementById('sticky');
+
+  /* Deliberately stops at 98, not 100 -- the last step should still feel unfinished. */
+  var PCT = [33, 66, 98];
 
   /* Carry the ?service= value through with the lead. */
   if (window.__service) document.getElementById('svc-field').value = window.__service;
 
-  var at = 0;          // current step index
-  var touched = false; // don't steal focus on first paint (mobile keyboard)
+  var at = 0;
+  var touched = false;   // don't steal focus on first paint (mobile keyboard)
+  var qualified = false; // set by the revenue step
 
   var RULES = {
-    city:  function (v) { return v.length >= 2 || 'Please enter your city.'; },
-    shop:  function (v) { return v.length >= 2 || 'Please enter your shop name.'; },
-    name:  function (v) { return v.length >= 2 || 'Please enter your name.'; },
-    email: function (v) { return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v) || 'Please enter a valid email address.'; },
-    phone: function (v) { return (v.replace(/\D/g, '').length >= 10) || 'Please enter a 10-digit phone number.'; }
+    city:     function (v) { return v.length >= 2 || 'Please enter your city.'; },
+    name:     function (v) { return v.length >= 2 || 'Please enter your full name.'; },
+    business: function (v) { return v.length >= 2 || 'Please enter your business name.'; },
+    email:    function (v) { return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v) || 'Please enter a valid email address.'; },
+    phone:    function (v) { return (v.replace(/\D/g, '').length >= 10) || 'Please enter a 10-digit phone number.'; }
   };
 
   function check(input) {
@@ -413,12 +447,11 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     var box  = document.getElementById(input.name + '-err');
     if (box) box.textContent = msg;
     input.setAttribute('aria-invalid', msg ? 'true' : 'false');
-    input.classList.toggle('ok', !msg && input.value.trim() !== '');
     return !msg;
   }
 
   function validateStep(i) {
-    var inputs = steps[i].querySelectorAll('input');
+    var inputs = steps[i].querySelectorAll('input:not([type="hidden"])');
     var ok = true, first = null;
     for (var n = 0; n < inputs.length; n++) {
       if (!check(inputs[n]) && ok) { ok = false; first = inputs[n]; }
@@ -438,60 +471,86 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     at = i;
     steps.forEach(function (s, n) { s.hidden = n !== i; });
 
-    var pct = Math.round(((i + 1) / steps.length) * 100);
-    fill.style.width = pct + '%';
-    fill.textContent = pct + '%';
-    bar.setAttribute('aria-valuenow', String(pct));
+    fill.style.width = PCT[i] + '%';
+    fill.textContent = PCT[i] + '%';
+    bar.setAttribute('aria-valuenow', String(PCT[i]));
 
-    next.textContent = (i === steps.length - 1) ? 'Check My Area' : 'Continue';
     back.hidden = i === 0;
-    formErr.textContent = '';
+    if (formErr) formErr.textContent = '';
 
     if (touched) {
-      var f = steps[i].querySelector('input');
+      var f = steps[i].querySelector('input:not([type="hidden"])') || steps[i].querySelector('.opt');
       if (f) f.focus();
     }
   }
 
   back.addEventListener('click', function () { touched = true; show(at - 1); });
 
+  /* Revenue step: picking an option records it and moves on -- no extra click. */
+  form.querySelectorAll('.opt').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      form.querySelectorAll('.opt').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
+      btn.setAttribute('aria-pressed', 'true');
+      revenue.value = btn.dataset.value;
+      qualified = btn.dataset.qualified === 'true';
+      document.getElementById('revenue-err').textContent = '';
+      touched = true;
+      show(2);
+    });
+  });
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     touched = true;
     if (!validateStep(at)) return;
-    if (at < steps.length - 1) { show(at + 1); return; }
-    send();
+    if (at === 0) { show(1); return; }
+    finish();
   });
 
-  function send() {
-    next.disabled = true;
-    next.textContent = 'Checking…';
+  function showDone(sent) {
+    form.hidden = true;
+    done.hidden = false;
+    if (!sent) {
+      document.getElementById('done-title').textContent = 'Thanks \u2014 we\u2019ve got your answers.';
+      document.getElementById('done-copy').textContent =
+        'We work with shops already doing at least $10K a month, so we won\u2019t be reaching out just yet. ' +
+        'When you get there, come back and check your area again.';
+    }
+    var h = done.querySelector('h2');
+    h.setAttribute('tabindex', '-1');
+    h.focus();
+    sticky.dataset.hidden = 'true';
+  }
+
+  function finish() {
+    /* Conditional logic: only qualified leads are pushed to GoHighLevel.
+       Everyone else completes the form and is simply never sent. */
+    if (!qualified) { showDone(false); return; }
+
+    submit.disabled = true;
+    submit.textContent = 'Submitting\u2026';
     formErr.textContent = '';
 
     var data = {};
     new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
+    data.qualified = true;
     data.page = location.pathname + location.search;
     data.submittedAt = new Date().toISOString();
 
-    fetch(FORM_ENDPOINT, {
+    fetch(GHL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
-        form.hidden = true;
-        done.hidden = false;
-        var h = done.querySelector('h2');
-        h.setAttribute('tabindex', '-1');
-        h.focus();
-        sticky.dataset.hidden = 'true';
+        showDone(true);
       })
       .catch(function (err) {
-        console.warn('Lead POST failed. Is FORM_ENDPOINT configured?', FORM_ENDPOINT, err);
+        console.warn('Lead POST failed. Is GHL_WEBHOOK_URL configured?', GHL_WEBHOOK_URL, err);
         formErr.textContent = 'Something went wrong on our end. Please try again.';
-        next.disabled = false;
-        next.textContent = 'Check My Area';
+        submit.disabled = false;
+        submit.textContent = 'Submit';
       });
   }
 
