@@ -11,10 +11,28 @@
 <meta property="og:description" content="AI, smart websites, and 5 star reviews. Just $297/month.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
+<!-- The headline paints in Poppins 800, so fetch it in parallel with the HTML. -->
+<link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Warms the TLS connection so a testimonial click starts playing fast. Costs no bytes. -->
 <link rel="preconnect" href="https://fast.wistia.com" crossorigin>
 
 <style>
+/* Poppins, self-hosted. Same origin means no third-party DNS/TLS handshake, and
+   unicode-range means latin-ext is only fetched if an accented character is
+   actually typed or shown. Latin total across all three weights: ~24 KB. */
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;
+  src:url('assets/fonts/poppins-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;
+  src:url('assets/fonts/poppins-400-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;
+  src:url('assets/fonts/poppins-700-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;
+  src:url('assets/fonts/poppins-700-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:800;font-display:swap;
+  src:url('assets/fonts/poppins-800-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:800;font-display:swap;
+  src:url('assets/fonts/poppins-800-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+
 /* ---------------------------------------------------------------------------
    Clutch Clicks — offer page.
    CSS + JS are inlined on purpose: the initial load is ONE request.
@@ -27,7 +45,7 @@
   --line:#e4e7eb; --panel:#f6f7f8; --bg:#fff;
   --green:#22c55e; --green-track:#e8ebee; --err:#c8201a;
   --radius:14px; --shadow:0 10px 34px rgba(16,24,40,.10),0 2px 6px rgba(16,24,40,.05);
-  --font:'Poppins','Avenir Next','Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --font:'Poppins','Avenir Next','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
   --sticky-h:96px;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -41,7 +59,7 @@ body{
 img,video{max-width:100%;display:block}
 :focus-visible{outline:3px solid var(--navy);outline-offset:2px;border-radius:6px}
 
-.wrap{width:100%;max-width:980px;margin:0 auto;padding-left:20px;padding-right:20px}
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding-left:20px;padding-right:20px}
 
 /* ---------- header / logo ---------- */
 .masthead{padding-top:24px;padding-bottom:6px;text-align:center}
@@ -54,8 +72,8 @@ img,video{max-width:100%;display:block}
 /* ---------- hero ---------- */
 .hero{padding-top:14px;padding-bottom:8px;text-align:center}
 h1{
-  font-size:clamp(28px,6.4vw,52px);line-height:1.16;font-weight:800;
-  letter-spacing:-.02em;color:var(--ink);margin:0 0 26px;text-wrap:balance;
+  font-size:clamp(27px,4.6vw,45px);line-height:1.2;font-weight:800;
+  letter-spacing:-.02em;color:var(--ink);margin:0 0 22px;text-wrap:balance;
 }
 h1 .u{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.09em}
 h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
@@ -79,7 +97,7 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 @keyframes stripes{from{background-position:0 0}to{background-position:16px 0}}
 
 .field+.field{margin-top:14px}
-.field label{display:block;font-size:15px;font-weight:600;margin-bottom:7px;color:var(--ink)}
+.field label{display:block;font-size:15px;font-weight:700;margin-bottom:7px;color:var(--ink)}
 .req{color:var(--ink-3)}
 .field input{
   width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
@@ -90,7 +108,7 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 .field input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(23,40,90,.13)}
 .field input.ok{border-color:var(--green)}
 .field input[aria-invalid="true"]{border-color:var(--err)}
-.err{display:block;font-size:13.5px;font-weight:600;color:var(--err);margin-top:6px}
+.err{display:block;font-size:13.5px;font-weight:700;color:var(--err);margin-top:6px}
 .err:empty{margin-top:0}
 
 .btn{
@@ -104,7 +122,7 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 .actions{margin-top:16px}
 .back{
   display:inline-block;margin-top:12px;background:none;border:0;padding:6px 2px;
-  font:inherit;font-size:14px;font-weight:600;color:var(--ink-3);cursor:pointer;text-decoration:underline;
+  font:inherit;font-size:14px;font-weight:700;color:var(--ink-3);cursor:pointer;text-decoration:underline;
 }
 .back:hover{color:var(--ink)}
 
@@ -359,7 +377,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v1.1-1</span>
+<span class="ver">v1.2-1</span>
 
 <script>
 (function () {

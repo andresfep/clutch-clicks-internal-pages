@@ -7,10 +7,27 @@ Static, dependency-free landing pages. No build step, no framework, no package m
 Modeled on the Titans Media Group `/more-jobs` layout: hero + 3-step qualifying
 form, video testimonial wall, sticky CTA, compliance footer.
 
-**Performance:** CSS and JS are inlined and there are no web fonts, so the page
-itself is one ~26 KB request (7 KB brotli). Wistia's player (~150 KB of JS) is
-fetched *only after someone clicks a testimonial* — scrolling past the videos
+**Performance:** CSS and JS are inlined, so the page itself is one ~28 KB request
+(7.8 KB brotli) plus 23.5 KB of self-hosted font. Wistia's player (~150 KB of JS)
+is fetched *only after someone clicks a testimonial* — scrolling past the videos
 costs nothing but three tiny lazy-loaded swatch images.
+
+## Type
+
+Poppins, self-hosted from `assets/fonts/` in weights 400 / 700 / 800. Self-hosting
+rather than linking Google Fonts avoids a third-party DNS lookup and TLS handshake
+on the critical path. The 800 weight is `<link rel="preload">`ed because the
+headline paints in it, so it downloads in parallel with the HTML rather than
+after the CSS is parsed.
+
+Each weight ships as two files with a `unicode-range`, so `latin-ext` is fetched
+only if an accented character actually appears — a first load pulls just the three
+Latin files (~7.9 KB each). Verified: no duplicate fetches, no unused preload.
+
+Headline is 45px and holds **three lines at every width from 1024px up**, including
+the longest trade a `?service=` value can produce (the parameter is capped at 28
+characters). Below 1024px it scales down via `clamp()` and wraps naturally — three
+lines on a phone would mean ~16px text.
 
 ## Dynamic trade — `?service=`
 
