@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Get More Jobs For Your Auto Shop | Clutch Clicks</title>
+<meta name="description" content="We help automotive shops get more jobs with AI, smart websites, and 5 star reviews for just $297/month. Check if your area is still available.">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta property="og:title" content="Get More Jobs For Your Auto Shop | Clutch Clicks">
+<meta property="og:description" content="AI, smart websites, and 5 star reviews for automotive shops. Just $297/month.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
+
+<style>
+/* ---------------------------------------------------------------------------
+   Clutch Clicks — offer page.
+   Everything is inlined on purpose: 1 HTML request, 0 CSS/JS/font requests.
+   Testimonial videos are click-to-load facades, so no video bytes load either.
+--------------------------------------------------------------------------- */
+:root{
+  --blue:#2b6bf3; --blue-dark:#1b52d0; --blue-glow:rgba(43,107,243,.45);
+  --ink:#0d1420; --ink-2:#3d4655; --ink-3:#6b7481;
+  --line:#e4e7eb; --panel:#f6f7f8; --bg:#fff;
+  --green:#22c55e; --green-track:#e8ebee; --red:#d92d20;
+  --radius:14px; --shadow:0 10px 34px rgba(16,24,40,.10),0 2px 6px rgba(16,24,40,.05);
+  --font:'Poppins','Avenir Next','Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --sticky-h:96px;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+  font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-bottom:var(--sticky-h);
+}
+img,video{max-width:100%;display:block}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+
+.wrap{width:100%;max-width:980px;margin:0 auto;padding-left:20px;padding-right:20px}
+
+/* ---------- header / logo ---------- */
+.masthead{padding-top:26px;padding-bottom:6px;text-align:center}
+.logo{display:inline-block;text-decoration:none;color:var(--ink)}
+.logo-mark{font-size:clamp(22px,5.2vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1}
+.logo-sub{font-size:clamp(7px,1.7vw,9px);font-weight:600;letter-spacing:.42em;text-transform:uppercase;color:var(--ink-2);margin-top:3px;text-indent:.42em}
+
+/* ---------- hero ---------- */
+.hero{padding-top:14px;padding-bottom:8px;text-align:center}
+h1{
+  font-size:clamp(28px,6.4vw,52px);line-height:1.16;font-weight:800;
+  letter-spacing:-.02em;color:var(--blue);margin:0 0 26px;text-wrap:balance;
+}
+h1 .u{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.09em}
+h1 .price{color:var(--ink);font-style:italic;white-space:nowrap}
+
+/* ---------- form card ---------- */
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:24px 20px;max-width:640px;margin:0 auto;
+  text-align:left;scroll-margin-top:18px;
+}
+.card-title{font-size:clamp(15px,3.4vw,18px);font-weight:700;line-height:1.35;margin:0 0 14px;text-align:center;color:var(--ink)}
+
+.progress{height:26px;border-radius:8px;background:var(--green-track);overflow:hidden;margin-bottom:18px}
+.progress-fill{
+  height:100%;width:33%;border-radius:8px;background-color:var(--green);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(135deg,rgba(255,255,255,.3) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.3) 50%,rgba(255,255,255,.3) 75%,transparent 75%,transparent);
+  background-size:16px 16px;animation:stripes 1s linear infinite;
+  transition:width .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes stripes{from{background-position:0 0}to{background-position:16px 0}}
+
+.step[hidden]{display:none}
+.field+.field{margin-top:14px}
+.field label{display:block;font-size:15px;font-weight:600;margin-bottom:7px;color:var(--ink)}
+.req{color:var(--ink-3)}
+.field input,.field select{
+  width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
+  padding:13px 14px;border:2px solid var(--line);border-radius:10px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.field input::placeholder{color:#a8afb8}
+.field input:focus,.field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(43,107,243,.14)}
+.field input.ok{border-color:var(--green)}
+.field input[aria-invalid="true"]{border-color:var(--red)}
+.err{display:block;min-height:0;font-size:13.5px;font-weight:600;color:var(--red);margin-top:6px}
+.err:empty{margin-top:0}
+
+.btn{
+  display:block;width:100%;font:inherit;font-size:17px;font-weight:700;color:#fff;
+  background:var(--blue);border:0;border-radius:10px;padding:15px 20px;cursor:pointer;
+  transition:background-color .15s,transform .06s;
+}
+.btn:hover{background:var(--blue-dark)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.65;cursor:progress}
+.actions{margin-top:16px}
+.back{
+  display:inline-block;margin-top:12px;background:none;border:0;padding:6px 2px;
+  font:inherit;font-size:14px;font-weight:600;color:var(--ink-3);cursor:pointer;text-decoration:underline;
+}
+.back:hover{color:var(--ink)}
+
+.done{text-align:center;padding:10px 0 4px}
+.done h2{font-size:22px;font-weight:800;margin:0 0 8px}
+.done p{color:var(--ink-2);margin:0}
+.tick{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;background:var(--green);display:grid;place-items:center}
+.tick svg{width:26px;height:26px;stroke:#fff;stroke-width:3.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+noscript .note{display:block;margin-top:14px;padding:12px 14px;border:2px solid var(--line);border-radius:10px;font-size:14px;color:var(--ink-2)}
+
+/* ---------- testimonials ---------- */
+.results{padding-top:52px;padding-bottom:8px}
+h2.section{font-size:clamp(26px,5.6vw,44px);font-weight:800;letter-spacing:-.02em;text-align:center;margin:0 0 26px;color:var(--ink)}
+.grid{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.tcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.facade{
+  position:relative;width:100%;aspect-ratio:9/16;border:0;padding:0;cursor:pointer;display:block;
+  background:#1a1d22 center/cover no-repeat;
+}
+.facade::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(60% 45% at 50% 50%,rgba(0,0,0,.15),rgba(0,0,0,.42));
+}
+.play{
+  position:absolute;left:50%;top:50%;translate:-50% -50%;z-index:1;
+  width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);
+  display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.3);
+  transition:scale .15s;
+}
+.facade:hover .play{scale:1.07}
+.play svg{width:22px;height:22px;fill:var(--ink);margin-left:3px}
+.facade .hint{
+  position:absolute;left:0;right:0;bottom:14px;z-index:1;text-align:center;
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.8);
+}
+.tbody{padding:14px 15px 16px;background:var(--panel);flex:1}
+.quote{margin:0;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.stars{margin-top:8px;font-size:15px;letter-spacing:2px;color:#f5a623}
+.who{margin:6px 0 0;font-size:13px;font-weight:600;color:var(--ink-3)}
+
+/* ---------- footer ---------- */
+footer{margin-top:56px;border-top:1px solid var(--line);padding-top:30px;padding-bottom:26px;text-align:center}
+footer p{margin:0 0 8px;font-size:14px;color:var(--ink-2);line-height:1.55}
+footer a{color:var(--ink-2)}
+footer .fine{font-size:13px;color:var(--ink-3)}
+.ver{position:fixed;right:10px;bottom:6px;font-size:11px;color:#c3c8cf;pointer-events:none;z-index:5}
+
+/* ---------- sticky CTA ---------- */
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:10;
+  padding:16px 20px calc(16px + env(safe-area-inset-bottom));
+  display:flex;justify-content:center;pointer-events:none;
+  background:linear-gradient(to top,rgba(255,255,255,.97) 55%,rgba(255,255,255,0));
+  transition:opacity .25s,translate .25s;
+}
+.sticky button{
+  pointer-events:auto;width:100%;max-width:700px;font:inherit;font-size:clamp(16px,3.6vw,19px);
+  font-weight:700;color:#fff;background:var(--blue);border:0;border-radius:999px;
+  padding:18px 24px;cursor:pointer;box-shadow:0 0 0 6px rgba(43,107,243,.16),0 10px 28px var(--blue-glow);
+  transition:background-color .15s;
+}
+.sticky button:hover{background:var(--blue-dark)}
+.sticky[data-hidden="true"]{opacity:0;translate:0 100%;pointer-events:none}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+
+<body>
+
+<header class="masthead">
+  <a class="logo" href="/" aria-label="Clutch Clicks home">
+    <div class="logo-mark">CLUTCH CLICKS</div>
+    <div class="logo-sub">Marketing</div>
+  </a>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1>
+      We Help Automotive Shops <span class="u">Get More Jobs</span> With AI, Smart Websites, and 5 Star Reviews for Just <span class="price">$297/month</span> <span aria-hidden="true">&#128071;</span>
+    </h1>
+
+    <div class="card" id="apply">
+      <p class="card-title" id="form-title">Check If We Already Work With An Auto Shop In Your Area Below</p>
+
+      <div class="progress" role="progressbar" aria-labelledby="form-title" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" id="bar">
+        <div class="progress-fill" id="bar-fill">33%</div>
+      </div>
+
+      <form id="lead-form" novalidate>
+        <!-- Step 1 -->
+        <div class="step" data-step="1">
+          <div class="field">
+            <label for="city">What city is your company located in? <span class="req">*</span></label>
+            <input id="city" name="city" type="text" autocomplete="address-level2" enterkeyhint="next" aria-describedby="city-err" required>
+            <span class="err" id="city-err" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step" data-step="2" hidden>
+          <div class="field">
+            <label for="shop">What is the name of your shop? <span class="req">*</span></label>
+            <input id="shop" name="shop" type="text" autocomplete="organization" enterkeyhint="next" aria-describedby="shop-err" required>
+            <span class="err" id="shop-err" aria-live="polite"></span>
+          </div>
+          <div class="field">
+            <label for="name">And your name? <span class="req">*</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" enterkeyhint="next" aria-describedby="name-err" required>
+            <span class="err" id="name-err" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step" data-step="3" hidden>
+          <div class="field">
+            <label for="email">Where should we send your availability check? <span class="req">*</span></label>
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="next" placeholder="you@yourshop.com" aria-describedby="email-err" required>
+            <span class="err" id="email-err" aria-live="polite"></span>
+          </div>
+          <div class="field">
+            <label for="phone">Best phone number to reach you? <span class="req">*</span></label>
+            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" placeholder="(555) 555-5555" aria-describedby="phone-err" required>
+            <span class="err" id="phone-err" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="submit" id="next-btn">Continue</button>
+          <span class="err" id="form-err" aria-live="assertive"></span>
+          <button class="back" type="button" id="back-btn" hidden>&#8592; Back</button>
+        </div>
+      </form>
+
+      <div class="done" id="done" hidden>
+        <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 7"/></svg></div>
+        <h2>You&rsquo;re on the list.</h2>
+        <p>We&rsquo;re checking availability for your area right now &mdash; expect a text or call within one business day.</p>
+      </div>
+
+      <noscript>
+        <p class="note">This form needs JavaScript. Email <a href="mailto:hello@clutchclicks.com">hello@clutchclicks.com</a> with your city and shop name and we&rsquo;ll check your area manually.</p>
+      </noscript>
+    </div>
+  </section>
+
+  <section class="results wrap">
+    <h2 class="section">Some of our marketing results&hellip;</h2>
+
+    <!-- ========================================================================
+         TESTIMONIALS — replace the placeholder copy below with real client
+         quotes, and drop each clip in assets/ then set data-src + data-poster.
+         Videos only download after a click, so empty slots cost nothing.
+    ========================================================================= -->
+    <div class="grid">
+      <article class="tcard">
+        <button class="facade" data-src="" data-poster="" aria-label="Play video testimonial one">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          <span class="hint">Add clip &rarr; assets/</span>
+        </button>
+        <div class="tbody">
+          <p class="quote">&ldquo;Placeholder &mdash; swap in a real client quote about jobs booked, revenue, or ticket size.&rdquo;</p>
+          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="who">Shop owner, City ST</p>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <button class="facade" data-src="" data-poster="" aria-label="Play video testimonial two">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          <span class="hint">Add clip &rarr; assets/</span>
+        </button>
+        <div class="tbody">
+          <p class="quote">&ldquo;Placeholder &mdash; a results-focused quote works best here: impressions, leads, and new revenue in a stated timeframe.&rdquo;</p>
+          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="who">Shop owner, City ST</p>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <button class="facade" data-src="" data-poster="" aria-label="Play video testimonial three">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          <span class="hint">Add clip &rarr; assets/</span>
+        </button>
+        <div class="tbody">
+          <p class="quote">&ldquo;Placeholder &mdash; a before/after quote lands well: where their Google performance started and where it ended up.&rdquo;</p>
+          <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="who">Shop owner, City ST</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p class="fine">This site is not a part of the Facebook&trade; website or Meta Platforms, Inc. This site is NOT endorsed by Facebook&trade; in any way.</p>
+  <p><a href="/privacy">Privacy Policy</a> &middot; <a href="/terms">Terms of Service</a></p>
+  <p class="fine">Copyright 2026 Clutch Clicks, LLC. All Rights Reserved.</p>
+</footer>
+
+<div class="sticky" id="sticky" data-hidden="true">
+  <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
+</div>
+
+<span class="ver">v1.0-1</span>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Where leads are POSTed as JSON. Point this at GoHighLevel, Zapier, or your own API. */
+  var FORM_ENDPOINT = '/api/leads'; // <-- change me
+
+  var form   = document.getElementById('lead-form');
+  var steps  = Array.prototype.slice.call(form.querySelectorAll('.step'));
+  var fill   = document.getElementById('bar-fill');
+  var bar    = document.getElementById('bar');
+  var next   = document.getElementById('next-btn');
+  var back   = document.getElementById('back-btn');
+  var formErr= document.getElementById('form-err');
+  var done   = document.getElementById('done');
+  var card   = document.getElementById('apply');
+  var sticky = document.getElementById('sticky');
+
+  var at = 0;                 // current step index
+  var touched = false;        // don't steal focus on first paint (mobile keyboard)
+
+  /* ---------- validation ---------- */
+  var RULES = {
+    city:  function (v) { return v.length >= 2 || 'Please enter your city.'; },
+    shop:  function (v) { return v.length >= 2 || 'Please enter your shop name.'; },
+    name:  function (v) { return v.length >= 2 || 'Please enter your name.'; },
+    email: function (v) { return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v) || 'Please enter a valid email address.'; },
+    phone: function (v) { return (v.replace(/\D/g, '').length >= 10) || 'Please enter a 10-digit phone number.'; }
+  };
+
+  function check(input) {
+    var rule = RULES[input.name];
+    var res  = rule ? rule(input.value.trim()) : true;
+    var msg  = res === true ? '' : res;
+    var box  = document.getElementById(input.name + '-err');
+    if (box) box.textContent = msg;
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    input.classList.toggle('ok', !msg && input.value.trim() !== '');
+    return !msg;
+  }
+
+  function validateStep(i) {
+    var inputs = steps[i].querySelectorAll('input');
+    var ok = true, first = null;
+    for (var n = 0; n < inputs.length; n++) {
+      if (!check(inputs[n]) && ok) { ok = false; first = inputs[n]; }
+    }
+    if (first) first.focus();
+    return ok;
+  }
+
+  /* Clear a field's error as soon as it becomes valid again. */
+  form.addEventListener('input', function (e) {
+    if (e.target.matches('input') && e.target.getAttribute('aria-invalid') === 'true') check(e.target);
+  });
+  form.addEventListener('blur', function (e) {
+    if (e.target.matches('input') && e.target.value.trim() !== '') check(e.target);
+  }, true);
+
+  /* ---------- step navigation ---------- */
+  function show(i) {
+    at = i;
+    steps.forEach(function (s, n) { s.hidden = n !== i; });
+
+    var pct = Math.round(((i + 1) / steps.length) * 100);
+    fill.style.width = pct + '%';
+    fill.textContent = pct + '%';
+    bar.setAttribute('aria-valuenow', String(pct));
+
+    next.textContent = (i === steps.length - 1) ? 'Check My Area' : 'Continue';
+    back.hidden = i === 0;
+    formErr.textContent = '';
+
+    if (touched) {
+      var f = steps[i].querySelector('input');
+      if (f) f.focus();
+    }
+  }
+
+  back.addEventListener('click', function () { touched = true; show(at - 1); });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    touched = true;
+    if (!validateStep(at)) return;
+    if (at < steps.length - 1) { show(at + 1); return; }
+    send();
+  });
+
+  /* ---------- submit ---------- */
+  function send() {
+    next.disabled = true;
+    next.textContent = 'Checking…';
+    formErr.textContent = '';
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
+    data.page = location.pathname;
+    data.submittedAt = new Date().toISOString();
+
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        form.hidden = true;
+        done.hidden = false;
+        done.querySelector('h2').setAttribute('tabindex', '-1');
+        done.querySelector('h2').focus();
+        sticky.dataset.hidden = 'true';
+      })
+      .catch(function (err) {
+        console.warn('Lead POST failed. Is FORM_ENDPOINT configured?', FORM_ENDPOINT, err);
+        formErr.textContent = 'Something went wrong on our end. Please try again.';
+        next.disabled = false;
+        next.textContent = 'Check My Area';
+      });
+  }
+
+  /* ---------- sticky CTA: hide while the form is on screen ---------- */
+  document.getElementById('sticky-cta').addEventListener('click', function () {
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    touched = true;
+    var f = steps[at].querySelector('input');
+    if (f) setTimeout(function () { f.focus(); }, 420);
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      if (done.hidden === false) { sticky.dataset.hidden = 'true'; return; }
+      sticky.dataset.hidden = entries[0].isIntersecting ? 'true' : 'false';
+    }, { threshold: 0.25 }).observe(card);
+  } else {
+    sticky.dataset.hidden = 'false';
+  }
+
+  /* ---------- click-to-load testimonial videos ---------- */
+  document.querySelectorAll('.facade').forEach(function (btn) {
+    var poster = btn.dataset.poster;
+    if (poster) btn.style.backgroundImage = 'url("' + poster + '")';
+
+    btn.addEventListener('click', function () {
+      var src = btn.dataset.src;
+      if (!src) return; // empty slot — nothing to play yet
+      var v = document.createElement('video');
+      v.src = src;
+      v.controls = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      v.preload = 'auto';
+      if (poster) v.poster = poster;
+      v.style.aspectRatio = '9/16';
+      v.style.width = '100%';
+      v.style.background = '#000';
+      btn.replaceWith(v);
+    });
+  });
+
+  show(0);
+})();
+</script>
+
+</body>
+</html>
