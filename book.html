@@ -186,6 +186,18 @@ wistia-player[media-id='b1az1gc7z2']:not(:defined){background-image:url('https:/
 .stars{margin-top:8px;font-size:15px;letter-spacing:2px;color:#f5a623}
 .who{margin:6px 0 0;font-size:13.5px;font-weight:700;color:var(--ink)}
 
+/* Below the fold on phones the second and third testimonials sit roughly 1600px
+   and 2450px down. Skipping their rendering until they are approached also
+   defers their Wistia swatch background images, which loading="lazy" cannot
+   reach because they are CSS backgrounds rather than <img> elements. The auto
+   keyword makes the browser remember each card's real height after its first
+   render, so 820px is only an opening guess, never a lasting layout error.
+   Desktop lays the three cards side by side near the fold, so there is nothing
+   to defer there and the rule is scoped away from it. */
+@media(max-width:759px){
+  .tcard{content-visibility:auto;contain-intrinsic-size:auto 820px}
+}
+
 /* ---------- footer ---------- */
 footer{margin-top:56px;border-top:1px solid var(--line);padding-top:30px;padding-bottom:26px;text-align:center}
 footer p{margin:0 0 8px;font-size:14px;color:var(--ink-2);line-height:1.55}
@@ -341,7 +353,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Pick Your Time</button>
 </div>
 
-<span class="ver">v1.8-1</span>
+<span class="ver">v1.9-1</span>
 
 <!-- GoHighLevel resizes the iframe to fit its content via postMessage. -->
 <script src="https://api.clutchclicks.com/js/form_embed.js" async></script>

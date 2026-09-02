@@ -244,6 +244,15 @@ Three things were fixed after a PageSpeed run scored 60 on mobile:
   400 px margin, so the player scripts fetched during load and competed with the
   fonts. Loading now waits for `load` plus an idle callback. The posters are still
   there long before anyone scrolls.
+- **Below-the-fold work on phones.** The testimonial section is ~2700 px tall on
+  mobile, and its Wistia poster images are CSS `background-image`s, so
+  `loading="lazy"` cannot reach them. `.tcard` gets `content-visibility: auto`
+  under `max-width: 759px`, which skips rendering the cards until they are
+  approached and defers their images with it. `contain-intrinsic-size: auto 820px`
+  gives an opening guess that the browser replaces with each card's real height
+  after first render, so it never becomes a lasting layout error — CLS measured
+  identical before and after. Desktop lays the three cards side by side near the
+  fold, so the rule is scoped away from it.
 - **Font caching.** `_headers` had `/assets/fonts/*` before `/assets/*`. Cloudflare
   Pages applies every matching rule and the *last* one wins, so the general rule
   was overriding the font rule and pinning fonts to 7 days. The order is reversed
