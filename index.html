@@ -3,26 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Get More Jobs For Your Auto Shop | Clutch Clicks</title>
+<title>Get More Jobs For Your Shop | Clutch Clicks</title>
 <meta name="description" content="We help automotive shops get more jobs with AI, smart websites, and 5 star reviews for just $297/month. Check if your area is still available.">
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
-<meta property="og:title" content="Get More Jobs For Your Auto Shop | Clutch Clicks">
-<meta property="og:description" content="AI, smart websites, and 5 star reviews for automotive shops. Just $297/month.">
+<meta property="og:title" content="Get More Jobs For Your Shop | Clutch Clicks">
+<meta property="og:description" content="AI, smart websites, and 5 star reviews. Just $297/month.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
+<!-- Warms the TLS connection so a testimonial click starts playing fast. Costs no bytes. -->
+<link rel="preconnect" href="https://fast.wistia.com" crossorigin>
 
 <style>
 /* ---------------------------------------------------------------------------
    Clutch Clicks — offer page.
-   Everything is inlined on purpose: 1 HTML request, 0 CSS/JS/font requests.
-   Testimonial videos are click-to-load facades, so no video bytes load either.
+   CSS + JS are inlined on purpose: the initial load is ONE request.
+   Wistia's player (~150 KB) is only fetched after a testimonial is clicked.
 --------------------------------------------------------------------------- */
 :root{
-  --blue:#2b6bf3; --blue-dark:#1b52d0; --blue-glow:rgba(43,107,243,.45);
+  --red:#de2a24; --red-dark:#b4211c; --red-glow:rgba(222,42,36,.45);
+  --navy:#17285a;
   --ink:#0d1420; --ink-2:#3d4655; --ink-3:#6b7481;
   --line:#e4e7eb; --panel:#f6f7f8; --bg:#fff;
-  --green:#22c55e; --green-track:#e8ebee; --red:#d92d20;
+  --green:#22c55e; --green-track:#e8ebee; --err:#c8201a;
   --radius:14px; --shadow:0 10px 34px rgba(16,24,40,.10),0 2px 6px rgba(16,24,40,.05);
   --font:'Poppins','Avenir Next','Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
   --sticky-h:96px;
@@ -36,24 +39,26 @@ body{
   padding-bottom:var(--sticky-h);
 }
 img,video{max-width:100%;display:block}
-:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+:focus-visible{outline:3px solid var(--navy);outline-offset:2px;border-radius:6px}
 
 .wrap{width:100%;max-width:980px;margin:0 auto;padding-left:20px;padding-right:20px}
 
 /* ---------- header / logo ---------- */
-.masthead{padding-top:26px;padding-bottom:6px;text-align:center}
-.logo{display:inline-block;text-decoration:none;color:var(--ink)}
-.logo-mark{font-size:clamp(22px,5.2vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1}
-.logo-sub{font-size:clamp(7px,1.7vw,9px);font-weight:600;letter-spacing:.42em;text-transform:uppercase;color:var(--ink-2);margin-top:3px;text-indent:.42em}
+.masthead{padding-top:24px;padding-bottom:6px;text-align:center}
+.logo{display:inline-block;text-decoration:none}
+.logo img{height:clamp(42px,9vw,58px);width:auto;margin:0 auto}
+/* Shown only if assets/logo.png is missing, so the page never looks broken. */
+.logo-text{font-size:clamp(24px,5.6vw,34px);font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--navy)}
+.logo-text b{color:var(--red);font-weight:800}
 
 /* ---------- hero ---------- */
 .hero{padding-top:14px;padding-bottom:8px;text-align:center}
 h1{
   font-size:clamp(28px,6.4vw,52px);line-height:1.16;font-weight:800;
-  letter-spacing:-.02em;color:var(--blue);margin:0 0 26px;text-wrap:balance;
+  letter-spacing:-.02em;color:var(--ink);margin:0 0 26px;text-wrap:balance;
 }
 h1 .u{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.09em}
-h1 .price{color:var(--ink);font-style:italic;white-space:nowrap}
+h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 
 /* ---------- form card ---------- */
 .card{
@@ -73,28 +78,27 @@ h1 .price{color:var(--ink);font-style:italic;white-space:nowrap}
 }
 @keyframes stripes{from{background-position:0 0}to{background-position:16px 0}}
 
-.step[hidden]{display:none}
 .field+.field{margin-top:14px}
 .field label{display:block;font-size:15px;font-weight:600;margin-bottom:7px;color:var(--ink)}
 .req{color:var(--ink-3)}
-.field input,.field select{
+.field input{
   width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
   padding:13px 14px;border:2px solid var(--line);border-radius:10px;
   transition:border-color .15s,box-shadow .15s;
 }
 .field input::placeholder{color:#a8afb8}
-.field input:focus,.field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(43,107,243,.14)}
+.field input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(23,40,90,.13)}
 .field input.ok{border-color:var(--green)}
-.field input[aria-invalid="true"]{border-color:var(--red)}
-.err{display:block;min-height:0;font-size:13.5px;font-weight:600;color:var(--red);margin-top:6px}
+.field input[aria-invalid="true"]{border-color:var(--err)}
+.err{display:block;font-size:13.5px;font-weight:600;color:var(--err);margin-top:6px}
 .err:empty{margin-top:0}
 
 .btn{
   display:block;width:100%;font:inherit;font-size:17px;font-weight:700;color:#fff;
-  background:var(--blue);border:0;border-radius:10px;padding:15px 20px;cursor:pointer;
+  background:var(--red);border:0;border-radius:10px;padding:15px 20px;cursor:pointer;
   transition:background-color .15s,transform .06s;
 }
-.btn:hover{background:var(--blue-dark)}
+.btn:hover{background:var(--red-dark)}
 .btn:active{transform:translateY(1px)}
 .btn[disabled]{opacity:.65;cursor:progress}
 .actions{margin-top:16px}
@@ -119,30 +123,31 @@ h2.section{font-size:clamp(26px,5.6vw,44px);font-weight:800;letter-spacing:-.02e
 @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
 
 .tcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.stage{position:relative;width:100%;aspect-ratio:9/16;background:#12151a;overflow:hidden}
 .facade{
-  position:relative;width:100%;aspect-ratio:9/16;border:0;padding:0;cursor:pointer;display:block;
-  background:#1a1d22 center/cover no-repeat;
+  position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;margin:0;
+  background:transparent;cursor:pointer;display:block;
 }
-.facade::after{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(60% 45% at 50% 50%,rgba(0,0,0,.15),rgba(0,0,0,.42));
-}
+.poster{width:100%;height:100%;object-fit:cover}
+/* Wistia's swatch is a tiny blur-up placeholder, so lean into the blur rather
+   than showing it upscaled and mushy. Drop a real poster in assets/ and set
+   data-poster to get a crisp frame instead. */
+.poster.swatch{filter:blur(7px);transform:scale(1.08)}
+.facade::after{content:"";position:absolute;inset:0;background:radial-gradient(62% 46% at 50% 50%,rgba(0,0,0,.12),rgba(0,0,0,.44))}
 .play{
   position:absolute;left:50%;top:50%;translate:-50% -50%;z-index:1;
-  width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.94);
-  display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.3);
-  transition:scale .15s;
+  width:66px;height:66px;border-radius:50%;background:var(--red);
+  display:grid;place-items:center;box-shadow:0 6px 22px rgba(0,0,0,.35);
+  transition:scale .15s,background-color .15s;
 }
-.facade:hover .play{scale:1.07}
-.play svg{width:22px;height:22px;fill:var(--ink);margin-left:3px}
-.facade .hint{
-  position:absolute;left:0;right:0;bottom:14px;z-index:1;text-align:center;
-  font-size:12px;font-weight:600;color:rgba(255,255,255,.8);
-}
+.facade:hover .play{scale:1.07;background:var(--red-dark)}
+.play svg{width:24px;height:24px;fill:#fff;margin-left:3px}
+.stage wistia-player{width:100%;height:100%;display:block}
+
 .tbody{padding:14px 15px 16px;background:var(--panel);flex:1}
 .quote{margin:0;font-size:15px;line-height:1.5;color:var(--ink-2)}
 .stars{margin-top:8px;font-size:15px;letter-spacing:2px;color:#f5a623}
-.who{margin:6px 0 0;font-size:13px;font-weight:600;color:var(--ink-3)}
+.who{margin:6px 0 0;font-size:13.5px;font-weight:700;color:var(--ink)}
 
 /* ---------- footer ---------- */
 footer{margin-top:56px;border-top:1px solid var(--line);padding-top:30px;padding-bottom:26px;text-align:center}
@@ -161,11 +166,11 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 }
 .sticky button{
   pointer-events:auto;width:100%;max-width:700px;font:inherit;font-size:clamp(16px,3.6vw,19px);
-  font-weight:700;color:#fff;background:var(--blue);border:0;border-radius:999px;
-  padding:18px 24px;cursor:pointer;box-shadow:0 0 0 6px rgba(43,107,243,.16),0 10px 28px var(--blue-glow);
+  font-weight:700;color:#fff;background:var(--red);border:0;border-radius:999px;
+  padding:18px 24px;cursor:pointer;box-shadow:0 0 0 6px rgba(222,42,36,.16),0 10px 28px var(--red-glow);
   transition:background-color .15s;
 }
-.sticky button:hover{background:var(--blue-dark)}
+.sticky button:hover{background:var(--red-dark)}
 .sticky[data-hidden="true"]{opacity:0;translate:0 100%;pointer-events:none}
 
 @media(prefers-reduced-motion:reduce){
@@ -178,26 +183,67 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
 <header class="masthead">
   <a class="logo" href="/" aria-label="Clutch Clicks home">
-    <div class="logo-mark">CLUTCH CLICKS</div>
-    <div class="logo-sub">Marketing</div>
+    <img id="logo-img" src="assets/logo.png" alt="Clutch Clicks" width="230" height="60" fetchpriority="high" decoding="async">
+    <div class="logo-text" id="logo-text" hidden>Clutch<b>Clicks</b></div>
   </a>
 </header>
 
 <main>
   <section class="hero wrap">
     <h1>
-      We Help Automotive Shops <span class="u">Get More Jobs</span> With AI, Smart Websites, and 5 Star Reviews for Just <span class="price">$297/month</span> <span aria-hidden="true">&#128071;</span>
+      We Help <span id="svc">Automotive</span> Shops <span class="u">Get More Jobs</span> With AI, Smart Websites, and 5 Star Reviews for Just <span class="price">$297/month</span> <span aria-hidden="true">&#128071;</span>
     </h1>
 
     <div class="card" id="apply">
-      <p class="card-title" id="form-title">Check If We Already Work With An Auto Shop In Your Area Below</p>
+      <p class="card-title" id="form-title">Check If We Already Work With <span id="svc-article">An</span> <span id="svc-2">Automotive</span> Shop In Your Area Below</p>
+
+      <script>
+      /* ---------------------------------------------------------------------
+         ?service=  — swaps the trade named in the headline and the form title.
+         Runs here, inline and parser-blocking, so the swapped text is painted
+         on the first frame rather than flashing "Automotive" first.
+         The value is written with textContent and character-filtered, so a
+         crafted ?service= cannot inject markup.
+      --------------------------------------------------------------------- */
+      (function () {
+        var raw;
+        try { raw = new URLSearchParams(location.search).get('service') || ''; }
+        catch (e) { return; }
+
+        raw = raw.trim().replace(/\s+/g, ' ').slice(0, 28);
+        if (!raw) return;
+        if (!/^[\p{L}\p{N} &/'-]+$/u.test(raw)) return;   // letters, digits, space, & / ' -
+
+        // Trades that should always read as acronyms, however they're typed in the URL.
+        var ACRONYMS = ['HVAC','RV','AC','ATV','UTV','EV','ADAS','CDL','DOT','PDR','ASE','DPF','AG'];
+        function isInitialism(w) { return w.length <= 5 && w === w.toUpperCase() && /\p{L}/u.test(w); }
+
+        var svc = raw.split(' ').map(function (w) {
+          var up = w.toUpperCase();
+          if (ACRONYMS.indexOf(up) !== -1) return up;                       // hvac -> HVAC
+          if (w === up && w.length <= 4 && /\p{L}/u.test(w) && !/[AEIOU]/.test(up)) return up; // RV, DPF
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();      // ROOFING -> Roofing
+        }).join(' ');
+
+        // "An HVAC shop" (letter name starts with a vowel sound) vs "A Roofing shop".
+        var head = svc.split(' ')[0];
+        var an = isInitialism(head) ? /^[AEFHILMNORSX]/.test(head) : /^[AEIOU]/i.test(head);
+
+        document.getElementById('svc').textContent = svc;
+        document.getElementById('svc-2').textContent = svc;
+        document.getElementById('svc-article').textContent = an ? 'An' : 'A';
+        document.title = 'Get More Jobs For Your ' + svc + ' Shop | Clutch Clicks';
+        window.__service = svc;
+      })();
+      </script>
 
       <div class="progress" role="progressbar" aria-labelledby="form-title" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" id="bar">
         <div class="progress-fill" id="bar-fill">33%</div>
       </div>
 
       <form id="lead-form" novalidate>
-        <!-- Step 1 -->
+        <input type="hidden" name="service" id="svc-field" value="Automotive">
+
         <div class="step" data-step="1">
           <div class="field">
             <label for="city">What city is your company located in? <span class="req">*</span></label>
@@ -206,7 +252,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
           </div>
         </div>
 
-        <!-- Step 2 -->
         <div class="step" data-step="2" hidden>
           <div class="field">
             <label for="shop">What is the name of your shop? <span class="req">*</span></label>
@@ -220,7 +265,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
           </div>
         </div>
 
-        <!-- Step 3 -->
         <div class="step" data-step="3" hidden>
           <div class="field">
             <label for="email">Where should we send your availability check? <span class="req">*</span></label>
@@ -256,45 +300,49 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <section class="results wrap">
     <h2 class="section">Some of our marketing results&hellip;</h2>
 
-    <!-- ========================================================================
-         TESTIMONIALS — replace the placeholder copy below with real client
-         quotes, and drop each clip in assets/ then set data-src + data-poster.
-         Videos only download after a click, so empty slots cost nothing.
-    ========================================================================= -->
+    <!-- Each card stays a facade until clicked; that is what keeps the Wistia
+         player off the initial load. Add data-poster="assets/x.jpg" to any
+         card to replace the blurred Wistia swatch with a crisp frame. -->
     <div class="grid">
       <article class="tcard">
-        <button class="facade" data-src="" data-poster="" aria-label="Play video testimonial one">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          <span class="hint">Add clip &rarr; assets/</span>
-        </button>
+        <div class="stage">
+          <button class="facade" data-media="n86r5cqxqh" aria-label="Play video testimonial from Andrea of Bonafide Trucking">
+            <img class="poster swatch" src="https://fast.wistia.com/embed/medias/n86r5cqxqh/swatch" alt="" width="405" height="720" loading="lazy" decoding="async">
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          </button>
+        </div>
         <div class="tbody">
-          <p class="quote">&ldquo;Placeholder &mdash; swap in a real client quote about jobs booked, revenue, or ticket size.&rdquo;</p>
+          <p class="quote">&ldquo;It&rsquo;s been amazing! A lot of our customers are calling in and they&rsquo;re letting us know that they&rsquo;re reaching out because of the website.&rdquo;</p>
           <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="who">Shop owner, City ST</p>
+          <p class="who">Andrea from Bonafide Trucking</p>
         </div>
       </article>
 
       <article class="tcard">
-        <button class="facade" data-src="" data-poster="" aria-label="Play video testimonial two">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          <span class="hint">Add clip &rarr; assets/</span>
-        </button>
+        <div class="stage">
+          <button class="facade" data-media="ej7z3e8y1b" aria-label="Play video testimonial from Rick of Smart Prep Auto">
+            <img class="poster swatch" src="https://fast.wistia.com/embed/medias/ej7z3e8y1b/swatch" alt="" width="405" height="720" loading="lazy" decoding="async">
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          </button>
+        </div>
         <div class="tbody">
-          <p class="quote">&ldquo;Placeholder &mdash; a results-focused quote works best here: impressions, leads, and new revenue in a stated timeframe.&rdquo;</p>
+          <p class="quote">&ldquo;New leads coming has been invaluable. Definitely quality leads. I would say that difference we&rsquo;ve seen pretty much out the gate.&rdquo;</p>
           <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="who">Shop owner, City ST</p>
+          <p class="who">Rick from Smart Prep Auto</p>
         </div>
       </article>
 
       <article class="tcard">
-        <button class="facade" data-src="" data-poster="" aria-label="Play video testimonial three">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          <span class="hint">Add clip &rarr; assets/</span>
-        </button>
+        <div class="stage">
+          <button class="facade" data-media="b1az1gc7z2" aria-label="Play video testimonial from Jesus of Midwest Auto">
+            <img class="poster swatch" src="https://fast.wistia.com/embed/medias/b1az1gc7z2/swatch" alt="" width="405" height="720" loading="lazy" decoding="async">
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          </button>
+        </div>
         <div class="tbody">
-          <p class="quote">&ldquo;Placeholder &mdash; a before/after quote lands well: where their Google performance started and where it ended up.&rdquo;</p>
+          <p class="quote">&ldquo;The website looks phenomenal. We are getting a lot of traffic. Reviews are coming in left and right&hellip; For the price, you really can&rsquo;t beat what you guys are doing.&rdquo;</p>
           <div class="stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="who">Shop owner, City ST</p>
+          <p class="who">Jesus from Midwest Auto</p>
         </div>
       </article>
     </div>
@@ -311,7 +359,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v1.0-1</span>
+<span class="ver">v1.1-1</span>
 
 <script>
 (function () {
@@ -320,6 +368,16 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   /* Where leads are POSTed as JSON. Point this at GoHighLevel, Zapier, or your own API. */
   var FORM_ENDPOINT = '/api/leads'; // <-- change me
 
+  /* ---------- logo: fall back to the wordmark if the file isn't there yet ---------- */
+  var logoImg = document.getElementById('logo-img');
+  function useTextLogo() {
+    logoImg.hidden = true;
+    document.getElementById('logo-text').hidden = false;
+  }
+  logoImg.addEventListener('error', useTextLogo);
+  if (logoImg.complete && logoImg.naturalWidth === 0) useTextLogo();
+
+  /* ---------- form ---------- */
   var form   = document.getElementById('lead-form');
   var steps  = Array.prototype.slice.call(form.querySelectorAll('.step'));
   var fill   = document.getElementById('bar-fill');
@@ -331,10 +389,12 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   var card   = document.getElementById('apply');
   var sticky = document.getElementById('sticky');
 
-  var at = 0;                 // current step index
-  var touched = false;        // don't steal focus on first paint (mobile keyboard)
+  /* Carry the ?service= value through with the lead. */
+  if (window.__service) document.getElementById('svc-field').value = window.__service;
 
-  /* ---------- validation ---------- */
+  var at = 0;          // current step index
+  var touched = false; // don't steal focus on first paint (mobile keyboard)
+
   var RULES = {
     city:  function (v) { return v.length >= 2 || 'Please enter your city.'; },
     shop:  function (v) { return v.length >= 2 || 'Please enter your shop name.'; },
@@ -364,7 +424,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     return ok;
   }
 
-  /* Clear a field's error as soon as it becomes valid again. */
   form.addEventListener('input', function (e) {
     if (e.target.matches('input') && e.target.getAttribute('aria-invalid') === 'true') check(e.target);
   });
@@ -372,7 +431,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     if (e.target.matches('input') && e.target.value.trim() !== '') check(e.target);
   }, true);
 
-  /* ---------- step navigation ---------- */
   function show(i) {
     at = i;
     steps.forEach(function (s, n) { s.hidden = n !== i; });
@@ -402,7 +460,6 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     send();
   });
 
-  /* ---------- submit ---------- */
   function send() {
     next.disabled = true;
     next.textContent = 'Checking…';
@@ -410,7 +467,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
     var data = {};
     new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
-    data.page = location.pathname;
+    data.page = location.pathname + location.search;
     data.submittedAt = new Date().toISOString();
 
     fetch(FORM_ENDPOINT, {
@@ -422,8 +479,9 @@ footer .fine{font-size:13px;color:var(--ink-3)}
         if (!r.ok) throw new Error('HTTP ' + r.status);
         form.hidden = true;
         done.hidden = false;
-        done.querySelector('h2').setAttribute('tabindex', '-1');
-        done.querySelector('h2').focus();
+        var h = done.querySelector('h2');
+        h.setAttribute('tabindex', '-1');
+        h.focus();
         sticky.dataset.hidden = 'true';
       })
       .catch(function (err) {
@@ -444,32 +502,49 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
-      if (done.hidden === false) { sticky.dataset.hidden = 'true'; return; }
+      if (!done.hidden) { sticky.dataset.hidden = 'true'; return; }
       sticky.dataset.hidden = entries[0].isIntersecting ? 'true' : 'false';
     }, { threshold: 0.25 }).observe(card);
   } else {
     sticky.dataset.hidden = 'false';
   }
 
-  /* ---------- click-to-load testimonial videos ---------- */
+  /* ---------- Wistia: loaded only when a testimonial is actually clicked ---------- */
+  var playerLoaded = false;
+  function loadPlayer() {
+    if (playerLoaded) return;
+    playerLoaded = true;
+    var s = document.createElement('script');
+    s.src = 'https://fast.wistia.com/player.js';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+
   document.querySelectorAll('.facade').forEach(function (btn) {
-    var poster = btn.dataset.poster;
-    if (poster) btn.style.backgroundImage = 'url("' + poster + '")';
+    var custom = btn.dataset.poster;
+    if (custom) {
+      var img = btn.querySelector('.poster');
+      img.src = custom;
+      img.classList.remove('swatch');
+    }
 
     btn.addEventListener('click', function () {
-      var src = btn.dataset.src;
-      if (!src) return; // empty slot — nothing to play yet
-      var v = document.createElement('video');
-      v.src = src;
-      v.controls = true;
-      v.autoplay = true;
-      v.playsInline = true;
-      v.preload = 'auto';
-      if (poster) v.poster = poster;
-      v.style.aspectRatio = '9/16';
-      v.style.width = '100%';
-      v.style.background = '#000';
-      btn.replaceWith(v);
+      var id = btn.dataset.media;
+      if (!id) return;
+      loadPlayer();
+
+      // Per-video module, as in Wistia's own snippet.
+      var s = document.createElement('script');
+      s.src = 'https://fast.wistia.com/embed/' + id + '.js';
+      s.async = true;
+      s.type = 'module';
+      document.head.appendChild(s);
+
+      var player = document.createElement('wistia-player');
+      player.setAttribute('media-id', id);
+      player.setAttribute('aspect', '0.5625');
+      player.setAttribute('autoplay', 'true');
+      btn.replaceWith(player);
     });
   });
 

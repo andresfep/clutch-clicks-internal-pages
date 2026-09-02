@@ -1,1 +1,2 @@
-Drop testimonial clips and poster frames here (t1.mp4 / t1.jpg, etc.).
+Put logo.png here (the header falls back to a text wordmark without it).
+Optional: crisp testimonial poster frames, referenced via data-poster.
