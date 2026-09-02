@@ -3,17 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Get More Jobs For Your Shop | Clutch Clicks</title>
-<meta name="description" content="We help automotive shops get more jobs with AI, smart websites, and 5 star reviews for just $297/month. Check if your area is still available.">
+<title>Your Call Is Booked | Clutch Clicks</title>
+<meta name="description" content="Your call with Clutch Clicks is booked. Three quick things to do before we talk.">
+<meta name="robots" content="noindex">
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
-<meta property="og:title" content="Get More Jobs For Your Shop | Clutch Clicks">
-<meta property="og:description" content="AI, smart websites, and 5 star reviews. Just $297/month.">
-<meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
-<!-- The headline paints in Poppins 800, so fetch it in parallel with the HTML. -->
 <link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
-<!-- Warms the TLS connection so a testimonial click starts playing fast. Costs no bytes. -->
 <link rel="preconnect" href="https://fast.wistia.com" crossorigin>
 
 <style>
@@ -205,6 +201,59 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
+
+/* ---------- thank you ---------- */
+.typ{padding-top:6px;padding-bottom:8px;text-align:center}
+.wait{font-size:clamp(34px,7.4vw,58px);font-weight:800;letter-spacing:-.02em;color:var(--red);margin:4px 0;line-height:1}
+.typ-h1{font-size:clamp(21px,4.2vw,36px);line-height:1.22;font-weight:800;color:var(--ink);margin:6px 0 24px;text-transform:uppercase;text-wrap:balance}
+.pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--red);background:#fdeceb;border:1px solid #f7cbc9;border-radius:999px;padding:6px 14px}
+.pill.ok{color:#12803c;background:#e9f8ef;border-color:#bfe8cd}
+.sec-h{font-size:clamp(22px,4.4vw,34px);font-weight:800;letter-spacing:-.02em;margin:14px 0 24px;color:var(--ink);text-wrap:balance}
+.sec-h em{font-style:normal;color:var(--red)}
+.vwrap{max-width:840px;margin:0 auto}
+.vslot{aspect-ratio:16/9;border-radius:14px;background:#12151a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;color:#fff}
+.vslot .vplay{width:64px;height:64px;border-radius:50%;background:var(--red);display:grid;place-items:center}
+.vslot .vplay svg{width:22px;height:22px;fill:#fff;margin-left:3px}
+.vslot p{margin:0;font-size:14px;font-weight:700}
+.vslot span{display:block;font-weight:400;color:#9aa3af;font-size:12px;margin-top:4px}
+
+.steps{display:grid;gap:18px;grid-template-columns:1fr;text-align:left;margin-top:4px}
+@media(min-width:820px){.steps{grid-template-columns:repeat(3,1fr)}}
+.stepc{border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:9px}
+.stepc h3{margin:0;font-size:20px;font-weight:800;color:var(--ink)}
+.stepc h3 span{color:var(--red)}
+.stepc p{margin:0;font-size:15px;color:var(--ink-2);line-height:1.5}
+.stepc .hint{margin-top:auto;font-size:13.5px;color:var(--ink-3);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+
+.panel{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:24px 18px;margin-top:38px}
+.panel-grid{display:grid;gap:20px;grid-template-columns:1fr;text-align:left;margin-top:20px}
+@media(min-width:880px){.panel-grid{grid-template-columns:1.02fr .98fr}}
+.checklist,.bg-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:left}
+.checklist h3,.bg-card h3{margin:0 0 14px;font-size:16px;font-weight:800;color:var(--ink)}
+.checklist ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:13px;counter-reset:c}
+.checklist > ol > li{display:flex;gap:11px;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.checklist > ol > li::before{counter-increment:c;content:counter(c);flex:0 0 24px;height:24px;border-radius:6px;background:var(--red);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.checklist b{color:var(--ink)}
+.covers{margin:8px 0 0;padding-left:19px;font-size:14px;color:var(--ink-3);line-height:1.65;list-style:disc}
+.covers li{display:list-item;color:var(--ink-3)}
+.bg-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+.bg-card li{display:flex;gap:10px;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.bg-card li::before{content:"\2713";color:var(--green);font-weight:800;flex:0 0 auto}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.stat{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px;text-align:center}
+.stat b{display:block;font-size:22px;font-weight:800;color:var(--ink)}
+.stat span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+
+/* Anything still wearing this badge has placeholder copy in it. */
+.todo{position:relative;border:2px dashed #d99400;border-radius:12px;background:#fffdf4;padding:20px 14px 14px;color:#7a5600;font-size:14px;line-height:1.55;text-align:left;margin-top:14px}
+.todo::before{content:"FILL THIS IN";position:absolute;top:-9px;left:12px;background:#d99400;color:#fff;font-size:10px;font-weight:800;letter-spacing:.08em;padding:2px 7px;border-radius:4px}
+.todo code{background:#fff;border:1px solid #eadfc0;border-radius:4px;padding:1px 5px;font-size:13px}
+
+.bar-inner{pointer-events:auto;width:100%;max-width:900px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.bar-msg{font-size:14.5px;color:var(--ink-2);line-height:1.4}
+.bar-msg b{color:var(--ink)}
+.bar-inner button{width:auto;flex:0 0 auto;padding:15px 24px;font-size:16px}
+@media(max-width:660px){.bar-inner{justify-content:center;text-align:center}.bar-inner button{width:100%}}
 </style>
 </head>
 
@@ -221,125 +270,95 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 </header>
 
 <main>
-  <section class="hero wrap">
-    <h1>
-      We Help <span id="svc">Automotive</span> Shops <span class="u">Get More Jobs</span> With AI, Smart Websites, and 5 Star Reviews for Just <span class="price">$297/month</span> <span aria-hidden="true">&#128071;</span>
-    </h1>
+  <section class="typ wrap">
+    <p class="wait">WAIT!</p>
+    <h1 class="typ-h1">Watch The Short Video Below So Your Call Doesn&rsquo;t Get Cancelled</h1>
 
-    <p class="lede" id="form-title">Check If We Already Work With <span id="svc-article">An</span> <span id="svc-2">Automotive</span> Shop In Your Area Below</p>
-
-    <script>
-    /* ---------------------------------------------------------------------
-       ?service=  — swaps the trade named in the headline and the form title.
-       Runs here, inline and parser-blocking, so the swapped text is painted
-       on the first frame rather than flashing "Automotive" first.
-       The value is written with textContent and character-filtered, so a
-       crafted ?service= cannot inject markup.
-    --------------------------------------------------------------------- */
-    (function () {
-      var raw;
-      try { raw = new URLSearchParams(location.search).get('service') || ''; }
-      catch (e) { return; }
-
-      raw = raw.trim().replace(/\s+/g, ' ').slice(0, 28);
-      if (!raw) return;
-      if (!/^[\p{L}\p{N} &/'-]+$/u.test(raw)) return;   // letters, digits, space, & / ' -
-
-      // Trades that should always read as acronyms, however they're typed in the URL.
-      var ACRONYMS = ['HVAC','RV','AC','ATV','UTV','EV','ADAS','CDL','DOT','PDR','ASE','DPF','AG'];
-      function isInitialism(w) { return w.length <= 5 && w === w.toUpperCase() && /\p{L}/u.test(w); }
-
-      var svc = raw.split(' ').map(function (w) {
-        var up = w.toUpperCase();
-        if (ACRONYMS.indexOf(up) !== -1) return up;                       // hvac -> HVAC
-        if (w === up && w.length <= 4 && /\p{L}/u.test(w) && !/[AEIOU]/.test(up)) return up; // RV, DPF
-        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();      // ROOFING -> Roofing
-      }).join(' ');
-
-      // "An HVAC shop" (letter name starts with a vowel sound) vs "A Roofing shop".
-      var head = svc.split(' ')[0];
-      var an = isInitialism(head) ? /^[AEFHILMNORSX]/.test(head) : /^[AEIOU]/i.test(head);
-
-      function put(id, text) { var el = document.getElementById(id); if (el) el.textContent = text; }
-      put('svc', svc);
-      put('svc-2', svc);
-      put('svc-article', an ? 'An' : 'A');   // not present on the booking page
-      document.title = 'Get More Jobs For Your ' + svc + ' Shop | Clutch Clicks';
-      window.__service = svc;
-    })();
-    </script>
-
-    <div class="card" id="apply">
-      <button class="back" type="button" id="back-btn" hidden><span aria-hidden="true">&#8592;</span> Back</button>
-
-      <div class="progress" role="progressbar" aria-labelledby="form-title" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" id="bar">
-        <div class="progress-fill" id="bar-fill">33%</div>
+    <div class="vwrap">
+      <div class="vslot">
+          <div class="vplay" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <p>Your pre-call video<span>Drop the Wistia embed here</span></p>
+        </div>
+      <div class="todo">
+        <b>Pre-call video.</b> Replace this slot with a Wistia embed, the same way the
+        testimonials work on the opt-in page: add <code>&lt;wistia-player media-id="&hellip;"&gt;</code>
+        here and put the id in the <code>MEDIA</code> array at the bottom of this file.
       </div>
+    </div>
 
-      <form id="lead-form" novalidate>
-        <input type="hidden" name="service" id="svc-field" value="Automotive">
-        <input type="hidden" name="revenue" id="revenue-field" value="">
+    <div style="margin-top:44px">
+      <span class="pill">Your next steps</span>
+      <h2 class="sec-h">Do these <em>3 quick things</em> so your call goes ahead</h2>
 
-        <div class="step" data-step="1">
-          <div class="field">
-            <label for="city">What city is your company located in? <span class="req">*</span></label>
-            <input id="city" name="city" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="e.g. Miami, Denver, Chicago" aria-describedby="city-err" required>
-            <span class="err" id="city-err" aria-live="polite"></span>
-          </div>
-          <div class="actions"><button class="btn" type="submit">Continue</button></div>
+      <div class="steps">
+        <article class="stepc">
+          <h3>Step <span>1</span></h3>
+          <p>Add the appointment to your calendar so it doesn&rsquo;t get lost.</p>
+          <p class="hint">Your calendar invite is in your confirmation email.</p>
+        </article>
+        <article class="stepc">
+          <h3>Step <span>2</span></h3>
+          <p>Confirm by replying <b>YES</b> to our text, so we know you&rsquo;re coming.</p>
+          <p class="hint">Watch for a text from us shortly after booking.</p>
+        </article>
+        <article class="stepc">
+          <h3>Step <span>3</span></h3>
+          <p>Watch the video below for the agenda, what we do, and how we can help.</p>
+          <p class="hint">About 5 minutes. Worth it before we talk.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="panel" id="before">
+      <span class="pill ok">&#9679; Your call is booked</span>
+      <h2 class="sec-h">Watch this <em>before we talk</em></h2>
+
+      <div class="panel-grid">
+        <div>
+          <div class="vslot">
+          <div class="vplay" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <p>The agenda for our call<span>Drop the Wistia embed here</span></p>
         </div>
 
-        <div class="step" data-step="2" hidden>
-          <fieldset class="field">
-            <legend>What is your current monthly revenue? <span class="req">*</span></legend>
-            <div class="opts">
-              <button type="button" class="opt" data-value="Less than $10K/mo" data-qualified="false" aria-pressed="false">Less than $10K/mo</button>
-              <button type="button" class="opt" data-value="$10K - $25K/mo" data-qualified="true" aria-pressed="false">$10K &ndash; $25K/mo</button>
-              <button type="button" class="opt" data-value="$25K - $100K/mo" data-qualified="true" aria-pressed="false">$25K &ndash; $100K/mo</button>
-              <button type="button" class="opt" data-value="$100K+/mo" data-qualified="true" aria-pressed="false">$100K+/mo</button>
+          <div class="bg-card" style="margin-top:20px">
+            <h3>Quick background on Clutch Clicks</h3>
+            <ul>
+              <li>We build AI-driven websites, Google rankings and 5 star review systems for shops.</li>
+              <li>Everything runs for a flat $297/month &mdash; no setup fees, no long contract.</li>
+              <li>We work with one shop per area, which is why we check availability first.</li>
+            </ul>
+            <div class="todo">
+              <b>Add your proof.</b> The reference page carries a founder line and two
+              stat tiles here (companies served, revenue generated). I have left those
+              out rather than invent numbers &mdash; fill in your real figures and delete
+              this note. The markup for the tiles is commented out just below.
             </div>
-            <span class="err" id="revenue-err" aria-live="polite"></span>
-          </fieldset>
-        </div>
-
-        <div class="step" data-step="3" hidden>
-          <h2 class="step-title">Where Should We Send Your Market Availability Report?</h2>
-          <div class="field">
-            <label for="name">Full Name <span class="req">*</span></label>
-            <input id="name" name="name" type="text" autocomplete="name" enterkeyhint="next" placeholder="Full Name" aria-describedby="name-err" required>
-            <span class="err" id="name-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="business">Business Name <span class="req">*</span></label>
-            <input id="business" name="business" type="text" autocomplete="organization" enterkeyhint="next" placeholder="Business Name" aria-describedby="business-err" required>
-            <span class="err" id="business-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="email">Email <span class="req">*</span></label>
-            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="next" placeholder="your@email.com" aria-describedby="email-err" required>
-            <span class="err" id="email-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="phone">Phone <span class="req">*</span></label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" placeholder="Phone" aria-describedby="phone-err" required>
-            <span class="err" id="phone-err" aria-live="polite"></span>
-          </div>
-          <div class="actions">
-            <button class="btn" type="submit" id="submit-btn">Submit</button>
-            <span class="err" id="form-err" aria-live="assertive"></span>
+            <!-- Real numbers only. Uncomment and fill in:
+            <div class="stats">
+              <div class="stat"><b>000+</b><span>Shops served</span></div>
+              <div class="stat"><b>$0M+</b><span>Generated for clients</span></div>
+            </div>
+            -->
           </div>
         </div>
-      </form>
 
-      <div class="done" id="done" hidden>
-        <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 7"/></svg></div>
-        <h2 id="done-title">You&rsquo;re on the list.</h2>
-        <p id="done-copy">We&rsquo;re checking availability for your area right now &mdash; expect a text or call within one business day.</p>
+        <div class="checklist">
+          <h3>What to do before we talk</h3>
+          <ol>
+            <li><span><b>Add the appointment</b> to your calendar from the confirmation email.</span></li>
+            <li><span>Reply <b>&ldquo;YES&rdquo;</b> to our text, or click <b>&ldquo;I know the sender&rdquo;</b> on the calendar invite.</span></li>
+            <li><span><b>Join from a laptop</b> rather than your phone &mdash; we&rsquo;ll be sharing a screen.</span></li>
+            <li><span><b>Watch the video.</b> Here&rsquo;s what we cover:
+              <ul class="covers">
+                <li>Who we are and why we only take one shop per area</li>
+                <li>What we build in your first 30 days</li>
+                <li>How the $297/month actually works</li>
+                <li>What we&rsquo;ll need from you, and what we handle</li>
+              </ul>
+            </span></li>
+          </ol>
+        </div>
       </div>
-
-      <noscript>
-        <p class="note">This form needs JavaScript. Email <a href="mailto:hello@clutchclicks.com">hello@clutchclicks.com</a> with your city and shop name and we&rsquo;ll check your area manually.</p>
-      </noscript>
     </div>
   </section>
 
@@ -392,8 +411,11 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <p class="fine">Copyright 2026 Clutch Clicks, LLC. All Rights Reserved.</p>
 </footer>
 
-<div class="sticky" id="sticky" data-hidden="true">
-  <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
+<div class="sticky" id="sticky" data-hidden="false">
+  <div class="bar-inner">
+    <span class="bar-msg"><b>Don&rsquo;t forget.</b> Add your call to your calendar and reply &ldquo;YES&rdquo; to confirm.</span>
+    <button type="button" id="sticky-cta">Confirm My Call</button>
+  </div>
 </div>
 
 <span class="ver">v1.6-1</span>
@@ -402,13 +424,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 (function () {
   'use strict';
 
-  /* GoHighLevel inbound webhook. Qualified leads are POSTed here as JSON.
-     Note this URL ships in the page source, so anyone can post to it -- lean on
-     GoHighLevel's own duplicate/spam handling, or proxy through your own
-     endpoint if that ever becomes a problem. */
-  var GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/W6A6ortd1jFsrR7CsHLH/webhook-trigger/f8448c5c-03bb-4858-954d-03476c3fe547';
-
-  /* ---------- logo: fall back to the wordmark if the file isn't there yet ---------- */
+  /* logo: fall back to the wordmark if the file isn't there */
   var logoImg = document.getElementById('logo-img');
   function useTextLogo() {
     logoImg.hidden = true;
@@ -417,206 +433,21 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   logoImg.addEventListener('error', useTextLogo);
   if (logoImg.complete && logoImg.naturalWidth === 0) useTextLogo();
 
-  /* ---------- form ---------- */
-  var form    = document.getElementById('lead-form');
-  var steps   = Array.prototype.slice.call(form.querySelectorAll('.step'));
-  var fill    = document.getElementById('bar-fill');
-  var bar     = document.getElementById('bar');
-  var back    = document.getElementById('back-btn');
-  var submit  = document.getElementById('submit-btn');
-  var formErr = document.getElementById('form-err');
-  var revenue = document.getElementById('revenue-field');
-  var done    = document.getElementById('done');
-  var card    = document.getElementById('apply');
-  var sticky  = document.getElementById('sticky');
-
-  /* Deliberately stops at 98, not 100 -- the last step should still feel unfinished. */
-  var PCT = [33, 66, 98];
-
-  /* Carry the ?service= value through with the lead. */
-  if (window.__service) document.getElementById('svc-field').value = window.__service;
-
-  var at = 0;
-  var touched = false;   // don't steal focus on first paint (mobile keyboard)
-  var qualified = false; // set by the revenue step
-
-  var RULES = {
-    city:     function (v) { return v.length >= 2 || 'Please enter your city.'; },
-    name:     function (v) { return v.length >= 2 || 'Please enter your full name.'; },
-    business: function (v) { return v.length >= 2 || 'Please enter your business name.'; },
-    email:    function (v) { return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v) || 'Please enter a valid email address.'; },
-    phone:    function (v) { return (v.replace(/\D/g, '').length >= 10) || 'Please enter a 10-digit phone number.'; }
-  };
-
-  function check(input) {
-    var rule = RULES[input.name];
-    var res  = rule ? rule(input.value.trim()) : true;
-    var msg  = res === true ? '' : res;
-    var box  = document.getElementById(input.name + '-err');
-    if (box) box.textContent = msg;
-    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
-    return !msg;
-  }
-
-  function validateStep(i) {
-    var inputs = steps[i].querySelectorAll('input:not([type="hidden"])');
-    var ok = true, first = null;
-    for (var n = 0; n < inputs.length; n++) {
-      if (!check(inputs[n]) && ok) { ok = false; first = inputs[n]; }
-    }
-    if (first) first.focus();
-    return ok;
-  }
-
-  form.addEventListener('input', function (e) {
-    if (e.target.matches('input') && e.target.getAttribute('aria-invalid') === 'true') check(e.target);
-  });
-  form.addEventListener('blur', function (e) {
-    if (e.target.matches('input') && e.target.value.trim() !== '') check(e.target);
-  }, true);
-
-  function show(i) {
-    at = i;
-    steps.forEach(function (s, n) { s.hidden = n !== i; });
-
-    fill.style.width = PCT[i] + '%';
-    fill.textContent = PCT[i] + '%';
-    bar.setAttribute('aria-valuenow', String(PCT[i]));
-
-    back.hidden = i === 0;
-    if (formErr) formErr.textContent = '';
-
-    if (touched) {
-      var f = steps[i].querySelector('input:not([type="hidden"])') || steps[i].querySelector('.opt');
-      if (f) f.focus();
-    }
-  }
-
-  back.addEventListener('click', function () { touched = true; show(at - 1); });
-
-  /* Revenue step: picking an option records it and moves on -- no extra click. */
-  form.querySelectorAll('.opt').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      form.querySelectorAll('.opt').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
-      btn.setAttribute('aria-pressed', 'true');
-      revenue.value = btn.dataset.value;
-      qualified = btn.dataset.qualified === 'true';
-      document.getElementById('revenue-err').textContent = '';
-      touched = true;
-      show(2);
-    });
-  });
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    touched = true;
-    if (!validateStep(at)) return;
-    if (at === 0) { show(1); return; }
-    finish();
-  });
-
-  /* Qualified leads go on to the booking page. The answers ride in sessionStorage
-     rather than the URL so the calendar can prefill without putting a name, email
-     and phone number into browser history and referrer headers. */
-  function toBooking() {
-    var lead = {};
-    new FormData(form).forEach(function (v, k) { lead[k] = String(v).trim(); });
-    try { sessionStorage.setItem('cc_lead', JSON.stringify(lead)); } catch (e) {}
-    location.assign('book.html' + location.search);
-  }
-
-  function showDone(sent) {
-    form.hidden = true;
-    done.hidden = false;
-    if (!sent) {
-      document.getElementById('done-title').textContent = 'Thanks \u2014 we\u2019ve got your answers.';
-      document.getElementById('done-copy').textContent =
-        'We work with shops already doing at least $10K a month, so we won\u2019t be reaching out just yet. ' +
-        'When you get there, come back and check your area again.';
-    }
-    var h = done.querySelector('h2');
-    h.setAttribute('tabindex', '-1');
-    h.focus();
-    sticky.dataset.hidden = 'true';
-  }
-
-  function finish() {
-    /* Conditional logic: only qualified leads are pushed to GoHighLevel.
-       Everyone else completes the form and is simply never sent. */
-    if (!qualified) { showDone(false); return; }
-
-    submit.disabled = true;
-    submit.textContent = 'Submitting\u2026';
-    formErr.textContent = '';
-
-    var data = {};
-    new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
-    data.qualified = true;
-    data.page = location.pathname + location.search;
-    data.submittedAt = new Date().toISOString();
-
-    /* Content-Type is text/plain, not application/json, on purpose: that keeps
-       this a "simple" request, so the browser sends no CORS preflight and a
-       missing preflight response can never stop a lead being delivered.
-       GoHighLevel parses the JSON body either way.
-
-       If GoHighLevel returns CORS headers we can read the status and report a
-       real rejection. If it does not, fetch rejects with a TypeError even
-       though the POST went out -- so that case is treated as delivered. Showing
-       an error there would be worse than useless: the lead is already in the
-       CRM, and the visitor would submit again and duplicate it. */
-    fetch(GHL_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify(data)
-    })
-      .then(function (r) {
-        if (!r.ok) { var e = new Error('HTTP ' + r.status); e.fromServer = true; throw e; }
-        toBooking();
-      })
-      .catch(function (err) {
-        if (err && err.fromServer) {
-          console.warn('GoHighLevel rejected the lead:', err);
-          formErr.textContent = 'Something went wrong on our end. Please try again.';
-          submit.disabled = false;
-          submit.textContent = 'Submit';
-          return;
-        }
-        console.warn('Could not read the webhook response (most likely CORS). The lead was still delivered.', err);
-        toBooking();
-      });
-  }
-
-  /* ---------- sticky CTA: hide while the form is on screen ---------- */
   document.getElementById('sticky-cta').addEventListener('click', function () {
-    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    touched = true;
-    var f = steps[at].querySelector('input');
-    if (f) setTimeout(function () { f.focus(); }, 420);
+    document.getElementById('before').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      if (!done.hidden) { sticky.dataset.hidden = 'true'; return; }
-      sticky.dataset.hidden = entries[0].isIntersecting ? 'true' : 'false';
-    }, { threshold: 0.25 }).observe(card);
-  } else {
-    sticky.dataset.hidden = 'false';
-  }
-
-  /* ---------- Wistia: fetched as the testimonials come into view ---------- */
+  /* Wistia: fetched as the testimonials come into view. Add any pre-call video
+     ids to this array once their embeds are in place above. */
   var MEDIA = ['n86r5cqxqh', 'ej7z3e8y1b', 'b1az1gc7z2'];
   var wistiaStarted = false;
-
   function loadWistia() {
     if (wistiaStarted) return;
     wistiaStarted = true;
-
     var player = document.createElement('script');
     player.src = 'https://fast.wistia.com/player.js';
     player.async = true;
     document.head.appendChild(player);
-
     MEDIA.forEach(function (id) {
       var s = document.createElement('script');
       s.src = 'https://fast.wistia.com/embed/' + id + '.js';
@@ -625,18 +456,15 @@ footer .fine{font-size:13px;color:var(--ink-3)}
       document.head.appendChild(s);
     });
   }
-
   var results = document.querySelector('.results');
   if ('IntersectionObserver' in window && results) {
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { io.disconnect(); loadWistia(); }
+    var io = new IntersectionObserver(function (e) {
+      if (e[0].isIntersecting) { io.disconnect(); loadWistia(); }
     }, { rootMargin: '400px 0px' });
     io.observe(results);
   } else {
     loadWistia();
   }
-
-  show(0);
 })();
 </script>
 

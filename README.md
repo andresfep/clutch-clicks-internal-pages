@@ -2,6 +2,50 @@
 
 Static, dependency-free landing pages. No build step, no framework, no package manager.
 
+## The funnel
+
+Three static pages. Cloudflare Pages serves `/book` and `/thanks` from the `.html`
+files automatically; `_redirects` also keeps `/booking` and `/typ` working.
+
+| Page | File | Role |
+| --- | --- | --- |
+| Opt-in | `index.html` | Headline, 3-step qualifying form, testimonials |
+| Booking | `book.html` | Same shell, GoHighLevel calendar instead of the form |
+| Thank you | `thanks.html` | Pre-call video, next steps, what-to-do checklist |
+
+**Flow:** a qualifying lead submits the opt-in form → POSTed to GoHighLevel →
+redirected to `book.html` (any `?service=` carries over). A lead under $10K/mo is
+*not* sent and is *not* given a booking link — they stop on the opt-in page with
+the "not a fit" message. Set the calendar's post-booking redirect in GoHighLevel to
+`/thanks`.
+
+The calendar prefills from what the visitor already typed. The opt-in page stashes
+the answers in `sessionStorage` and `book.html` appends `first_name`, `last_name`,
+`email` and `phone` to the iframe URL — deliberately not via query string on the
+page URL, so a name, email and phone don't land in browser history or referrer
+headers. Loading `book.html` directly just skips the prefill.
+
+### Placeholders on the thank-you page
+
+Anything wearing a dashed amber **FILL THIS IN** badge is not real content:
+
+- **Two video slots** — the pre-call video and the call-agenda video. Add
+  `<wistia-player media-id="…">` and put the id in that file's `MEDIA` array.
+- **Proof block** — the reference page has a founder line and two stat tiles
+  (companies served, revenue generated). Those are left out rather than invented;
+  the tile markup is commented out ready for your real figures.
+
+Two step cards also make operational promises — a calendar invite by email, and a
+confirmation text — so check your GoHighLevel automations actually send those
+before publishing.
+
+### A note on the CSS
+
+The shared block is inlined in all three pages rather than linked from one
+stylesheet, which keeps every page a single request. The cost is that a change to
+the shared styling has to be made in all three files. Worth revisiting if the funnel
+grows past a handful of pages.
+
 ## `index.html` — auto shop offer page
 
 Modeled on the Titans Media Group `/more-jobs` layout: hero + 3-step qualifying

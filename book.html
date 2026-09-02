@@ -3,18 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Get More Jobs For Your Shop | Clutch Clicks</title>
-<meta name="description" content="We help automotive shops get more jobs with AI, smart websites, and 5 star reviews for just $297/month. Check if your area is still available.">
+<title>Book Your Call | Clutch Clicks</title>
+<meta name="description" content="Pick a time for your market availability call with Clutch Clicks.">
+<meta name="robots" content="noindex">
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
-<meta property="og:title" content="Get More Jobs For Your Shop | Clutch Clicks">
-<meta property="og:description" content="AI, smart websites, and 5 star reviews. Just $297/month.">
-<meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
-<!-- The headline paints in Poppins 800, so fetch it in parallel with the HTML. -->
 <link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
-<!-- Warms the TLS connection so a testimonial click starts playing fast. Costs no bytes. -->
 <link rel="preconnect" href="https://fast.wistia.com" crossorigin>
+<link rel="preconnect" href="https://api.clutchclicks.com" crossorigin>
 
 <style>
 /* Poppins, self-hosted. Same origin means no third-party DNS/TLS handshake, and
@@ -205,6 +202,12 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
+
+/* ---------- booking ---------- */
+.cal-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:10px 10px 4px;max-width:820px;margin:0 auto;scroll-margin-top:18px}
+.cal-card iframe{width:100%;border:0;overflow:hidden;display:block;min-height:640px}
+.cal-note{max-width:820px;margin:14px auto 0;text-align:center;font-size:14px;color:var(--ink-3)}
 </style>
 </head>
 
@@ -226,7 +229,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
       We Help <span id="svc">Automotive</span> Shops <span class="u">Get More Jobs</span> With AI, Smart Websites, and 5 Star Reviews for Just <span class="price">$297/month</span> <span aria-hidden="true">&#128071;</span>
     </h1>
 
-    <p class="lede" id="form-title">Check If We Already Work With <span id="svc-article">An</span> <span id="svc-2">Automotive</span> Shop In Your Area Below</p>
+    <p class="lede" id="form-title">Your Area Is Open &mdash; Pick A Time Below For Your <span id="svc-2">Automotive</span> Shop Market Review</p>
 
     <script>
     /* ---------------------------------------------------------------------
@@ -269,78 +272,12 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     })();
     </script>
 
-    <div class="card" id="apply">
-      <button class="back" type="button" id="back-btn" hidden><span aria-hidden="true">&#8592;</span> Back</button>
-
-      <div class="progress" role="progressbar" aria-labelledby="form-title" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" id="bar">
-        <div class="progress-fill" id="bar-fill">33%</div>
-      </div>
-
-      <form id="lead-form" novalidate>
-        <input type="hidden" name="service" id="svc-field" value="Automotive">
-        <input type="hidden" name="revenue" id="revenue-field" value="">
-
-        <div class="step" data-step="1">
-          <div class="field">
-            <label for="city">What city is your company located in? <span class="req">*</span></label>
-            <input id="city" name="city" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="e.g. Miami, Denver, Chicago" aria-describedby="city-err" required>
-            <span class="err" id="city-err" aria-live="polite"></span>
-          </div>
-          <div class="actions"><button class="btn" type="submit">Continue</button></div>
-        </div>
-
-        <div class="step" data-step="2" hidden>
-          <fieldset class="field">
-            <legend>What is your current monthly revenue? <span class="req">*</span></legend>
-            <div class="opts">
-              <button type="button" class="opt" data-value="Less than $10K/mo" data-qualified="false" aria-pressed="false">Less than $10K/mo</button>
-              <button type="button" class="opt" data-value="$10K - $25K/mo" data-qualified="true" aria-pressed="false">$10K &ndash; $25K/mo</button>
-              <button type="button" class="opt" data-value="$25K - $100K/mo" data-qualified="true" aria-pressed="false">$25K &ndash; $100K/mo</button>
-              <button type="button" class="opt" data-value="$100K+/mo" data-qualified="true" aria-pressed="false">$100K+/mo</button>
-            </div>
-            <span class="err" id="revenue-err" aria-live="polite"></span>
-          </fieldset>
-        </div>
-
-        <div class="step" data-step="3" hidden>
-          <h2 class="step-title">Where Should We Send Your Market Availability Report?</h2>
-          <div class="field">
-            <label for="name">Full Name <span class="req">*</span></label>
-            <input id="name" name="name" type="text" autocomplete="name" enterkeyhint="next" placeholder="Full Name" aria-describedby="name-err" required>
-            <span class="err" id="name-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="business">Business Name <span class="req">*</span></label>
-            <input id="business" name="business" type="text" autocomplete="organization" enterkeyhint="next" placeholder="Business Name" aria-describedby="business-err" required>
-            <span class="err" id="business-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="email">Email <span class="req">*</span></label>
-            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="next" placeholder="your@email.com" aria-describedby="email-err" required>
-            <span class="err" id="email-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="phone">Phone <span class="req">*</span></label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" placeholder="Phone" aria-describedby="phone-err" required>
-            <span class="err" id="phone-err" aria-live="polite"></span>
-          </div>
-          <div class="actions">
-            <button class="btn" type="submit" id="submit-btn">Submit</button>
-            <span class="err" id="form-err" aria-live="assertive"></span>
-          </div>
-        </div>
-      </form>
-
-      <div class="done" id="done" hidden>
-        <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 7"/></svg></div>
-        <h2 id="done-title">You&rsquo;re on the list.</h2>
-        <p id="done-copy">We&rsquo;re checking availability for your area right now &mdash; expect a text or call within one business day.</p>
-      </div>
-
-      <noscript>
-        <p class="note">This form needs JavaScript. Email <a href="mailto:hello@clutchclicks.com">hello@clutchclicks.com</a> with your city and shop name and we&rsquo;ll check your area manually.</p>
-      </noscript>
+    <div class="cal-card" id="calendar">
+      <iframe src="https://api.clutchclicks.com/widget/booking/lNbi9w8QPtACsn72VGOB"
+              allow="payment" scrolling="no" title="Book your call with Clutch Clicks"
+              id="lNbi9w8QPtACsn72VGOB_1788357040560"></iframe>
     </div>
+    <p class="cal-note">Calls run about 20 minutes. Please join from a laptop rather than your phone.</p>
   </section>
 
   <section class="results wrap">
@@ -393,22 +330,18 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 </footer>
 
 <div class="sticky" id="sticky" data-hidden="true">
-  <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
+  <button type="button" id="sticky-cta">Pick Your Time</button>
 </div>
 
 <span class="ver">v1.6-1</span>
 
+<!-- GoHighLevel resizes the iframe to fit its content via postMessage. -->
+<script src="https://api.clutchclicks.com/js/form_embed.js" async></script>
 <script>
 (function () {
   'use strict';
 
-  /* GoHighLevel inbound webhook. Qualified leads are POSTed here as JSON.
-     Note this URL ships in the page source, so anyone can post to it -- lean on
-     GoHighLevel's own duplicate/spam handling, or proxy through your own
-     endpoint if that ever becomes a problem. */
-  var GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/W6A6ortd1jFsrR7CsHLH/webhook-trigger/f8448c5c-03bb-4858-954d-03476c3fe547';
-
-  /* ---------- logo: fall back to the wordmark if the file isn't there yet ---------- */
+  /* logo: fall back to the wordmark if the file isn't there */
   var logoImg = document.getElementById('logo-img');
   function useTextLogo() {
     logoImg.hidden = true;
@@ -417,206 +350,51 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   logoImg.addEventListener('error', useTextLogo);
   if (logoImg.complete && logoImg.naturalWidth === 0) useTextLogo();
 
-  /* ---------- form ---------- */
-  var form    = document.getElementById('lead-form');
-  var steps   = Array.prototype.slice.call(form.querySelectorAll('.step'));
-  var fill    = document.getElementById('bar-fill');
-  var bar     = document.getElementById('bar');
-  var back    = document.getElementById('back-btn');
-  var submit  = document.getElementById('submit-btn');
-  var formErr = document.getElementById('form-err');
-  var revenue = document.getElementById('revenue-field');
-  var done    = document.getElementById('done');
-  var card    = document.getElementById('apply');
-  var sticky  = document.getElementById('sticky');
-
-  /* Deliberately stops at 98, not 100 -- the last step should still feel unfinished. */
-  var PCT = [33, 66, 98];
-
-  /* Carry the ?service= value through with the lead. */
-  if (window.__service) document.getElementById('svc-field').value = window.__service;
-
-  var at = 0;
-  var touched = false;   // don't steal focus on first paint (mobile keyboard)
-  var qualified = false; // set by the revenue step
-
-  var RULES = {
-    city:     function (v) { return v.length >= 2 || 'Please enter your city.'; },
-    name:     function (v) { return v.length >= 2 || 'Please enter your full name.'; },
-    business: function (v) { return v.length >= 2 || 'Please enter your business name.'; },
-    email:    function (v) { return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v) || 'Please enter a valid email address.'; },
-    phone:    function (v) { return (v.replace(/\D/g, '').length >= 10) || 'Please enter a 10-digit phone number.'; }
-  };
-
-  function check(input) {
-    var rule = RULES[input.name];
-    var res  = rule ? rule(input.value.trim()) : true;
-    var msg  = res === true ? '' : res;
-    var box  = document.getElementById(input.name + '-err');
-    if (box) box.textContent = msg;
-    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
-    return !msg;
-  }
-
-  function validateStep(i) {
-    var inputs = steps[i].querySelectorAll('input:not([type="hidden"])');
-    var ok = true, first = null;
-    for (var n = 0; n < inputs.length; n++) {
-      if (!check(inputs[n]) && ok) { ok = false; first = inputs[n]; }
+  /* Prefill the calendar from the answers the opt-in page stored, so nobody
+     retypes what they just gave us. Missing or unreadable storage is fine --
+     the widget simply loads without a prefill. */
+  var frame = document.querySelector('.cal-card iframe');
+  try {
+    var lead = JSON.parse(sessionStorage.getItem('cc_lead') || '{}');
+    var name = (lead.name || '').trim();
+    var params = new URLSearchParams();
+    if (name) {
+      var bits = name.split(/\s+/);
+      params.set('first_name', bits.shift());
+      if (bits.length) params.set('last_name', bits.join(' '));
     }
-    if (first) first.focus();
-    return ok;
+    if (lead.email) params.set('email', lead.email);
+    if (lead.phone) params.set('phone', lead.phone);
+    var q = params.toString();
+    if (q) frame.src = frame.src + '?' + q;
+  } catch (e) {
+    console.warn('No stored lead to prefill the calendar with.', e);
   }
 
-  form.addEventListener('input', function (e) {
-    if (e.target.matches('input') && e.target.getAttribute('aria-invalid') === 'true') check(e.target);
-  });
-  form.addEventListener('blur', function (e) {
-    if (e.target.matches('input') && e.target.value.trim() !== '') check(e.target);
-  }, true);
-
-  function show(i) {
-    at = i;
-    steps.forEach(function (s, n) { s.hidden = n !== i; });
-
-    fill.style.width = PCT[i] + '%';
-    fill.textContent = PCT[i] + '%';
-    bar.setAttribute('aria-valuenow', String(PCT[i]));
-
-    back.hidden = i === 0;
-    if (formErr) formErr.textContent = '';
-
-    if (touched) {
-      var f = steps[i].querySelector('input:not([type="hidden"])') || steps[i].querySelector('.opt');
-      if (f) f.focus();
-    }
-  }
-
-  back.addEventListener('click', function () { touched = true; show(at - 1); });
-
-  /* Revenue step: picking an option records it and moves on -- no extra click. */
-  form.querySelectorAll('.opt').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      form.querySelectorAll('.opt').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
-      btn.setAttribute('aria-pressed', 'true');
-      revenue.value = btn.dataset.value;
-      qualified = btn.dataset.qualified === 'true';
-      document.getElementById('revenue-err').textContent = '';
-      touched = true;
-      show(2);
-    });
-  });
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    touched = true;
-    if (!validateStep(at)) return;
-    if (at === 0) { show(1); return; }
-    finish();
-  });
-
-  /* Qualified leads go on to the booking page. The answers ride in sessionStorage
-     rather than the URL so the calendar can prefill without putting a name, email
-     and phone number into browser history and referrer headers. */
-  function toBooking() {
-    var lead = {};
-    new FormData(form).forEach(function (v, k) { lead[k] = String(v).trim(); });
-    try { sessionStorage.setItem('cc_lead', JSON.stringify(lead)); } catch (e) {}
-    location.assign('book.html' + location.search);
-  }
-
-  function showDone(sent) {
-    form.hidden = true;
-    done.hidden = false;
-    if (!sent) {
-      document.getElementById('done-title').textContent = 'Thanks \u2014 we\u2019ve got your answers.';
-      document.getElementById('done-copy').textContent =
-        'We work with shops already doing at least $10K a month, so we won\u2019t be reaching out just yet. ' +
-        'When you get there, come back and check your area again.';
-    }
-    var h = done.querySelector('h2');
-    h.setAttribute('tabindex', '-1');
-    h.focus();
-    sticky.dataset.hidden = 'true';
-  }
-
-  function finish() {
-    /* Conditional logic: only qualified leads are pushed to GoHighLevel.
-       Everyone else completes the form and is simply never sent. */
-    if (!qualified) { showDone(false); return; }
-
-    submit.disabled = true;
-    submit.textContent = 'Submitting\u2026';
-    formErr.textContent = '';
-
-    var data = {};
-    new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
-    data.qualified = true;
-    data.page = location.pathname + location.search;
-    data.submittedAt = new Date().toISOString();
-
-    /* Content-Type is text/plain, not application/json, on purpose: that keeps
-       this a "simple" request, so the browser sends no CORS preflight and a
-       missing preflight response can never stop a lead being delivered.
-       GoHighLevel parses the JSON body either way.
-
-       If GoHighLevel returns CORS headers we can read the status and report a
-       real rejection. If it does not, fetch rejects with a TypeError even
-       though the POST went out -- so that case is treated as delivered. Showing
-       an error there would be worse than useless: the lead is already in the
-       CRM, and the visitor would submit again and duplicate it. */
-    fetch(GHL_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify(data)
-    })
-      .then(function (r) {
-        if (!r.ok) { var e = new Error('HTTP ' + r.status); e.fromServer = true; throw e; }
-        toBooking();
-      })
-      .catch(function (err) {
-        if (err && err.fromServer) {
-          console.warn('GoHighLevel rejected the lead:', err);
-          formErr.textContent = 'Something went wrong on our end. Please try again.';
-          submit.disabled = false;
-          submit.textContent = 'Submit';
-          return;
-        }
-        console.warn('Could not read the webhook response (most likely CORS). The lead was still delivered.', err);
-        toBooking();
-      });
-  }
-
-  /* ---------- sticky CTA: hide while the form is on screen ---------- */
+  /* sticky CTA: hide while the calendar is on screen */
+  var sticky = document.getElementById('sticky');
+  var cal = document.getElementById('calendar');
   document.getElementById('sticky-cta').addEventListener('click', function () {
-    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    touched = true;
-    var f = steps[at].querySelector('input');
-    if (f) setTimeout(function () { f.focus(); }, 420);
+    cal.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      if (!done.hidden) { sticky.dataset.hidden = 'true'; return; }
-      sticky.dataset.hidden = entries[0].isIntersecting ? 'true' : 'false';
-    }, { threshold: 0.25 }).observe(card);
+    new IntersectionObserver(function (e) {
+      sticky.dataset.hidden = e[0].isIntersecting ? 'true' : 'false';
+    }, { threshold: 0.15 }).observe(cal);
   } else {
     sticky.dataset.hidden = 'false';
   }
 
-  /* ---------- Wistia: fetched as the testimonials come into view ---------- */
+  /* Wistia: fetched as the testimonials come into view */
   var MEDIA = ['n86r5cqxqh', 'ej7z3e8y1b', 'b1az1gc7z2'];
   var wistiaStarted = false;
-
   function loadWistia() {
     if (wistiaStarted) return;
     wistiaStarted = true;
-
     var player = document.createElement('script');
     player.src = 'https://fast.wistia.com/player.js';
     player.async = true;
     document.head.appendChild(player);
-
     MEDIA.forEach(function (id) {
       var s = document.createElement('script');
       s.src = 'https://fast.wistia.com/embed/' + id + '.js';
@@ -625,18 +403,15 @@ footer .fine{font-size:13px;color:var(--ink-3)}
       document.head.appendChild(s);
     });
   }
-
   var results = document.querySelector('.results');
   if ('IntersectionObserver' in window && results) {
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { io.disconnect(); loadWistia(); }
+    var io = new IntersectionObserver(function (e) {
+      if (e[0].isIntersecting) { io.disconnect(); loadWistia(); }
     }, { rootMargin: '400px 0px' });
     io.observe(results);
   } else {
     loadWistia();
   }
-
-  show(0);
 })();
 </script>
 

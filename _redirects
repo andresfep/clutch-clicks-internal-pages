@@ -1,0 +1,4 @@
+# Friendly paths. Cloudflare Pages already serves /book and /thanks from the
+# .html files; these keep the old-style URLs working too.
+/booking  /book.html  301
+/typ      /thanks.html  301
