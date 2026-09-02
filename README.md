@@ -216,11 +216,38 @@ swaps in without shifting the layout.
 
 ### The logo
 
-`assets/logo.webp` (21 KB) with `assets/logo.png` (44 KB) as the fallback, both
-465×124 — 2× the display height. Both were resized from
-`assets/Clutch Clicks Site Logo.png`, the 1158×309 / 173 KB master, which is kept
-for future exports but never served. If the image ever fails to load the header
-falls back to a navy/red `ClutchClicks` wordmark, so it never renders broken.
+`assets/logo.png` — 231×62, 3.9 KB. Served as PNG with no WebP alternative because
+for this artwork (flat colour, hard edges) the PNG is *smaller* than its own WebP
+(3.9 KB vs 5.7 KB). `assets/Clutch Clicks Site Logo.png` is the 1158×309 master,
+kept for future exports but never served.
+
+One trade-off: at 231×62 the file is 1× the display size, so on a 2× screen it is
+upscaled — about 1.35× on mobile and 1.9× at the desktop maximum, which reads
+slightly soft. A 462×124 export would be pixel-perfect and, given how well this
+artwork compresses, should still land well under the old 21 KB.
+
+If the image ever fails to load the header falls back to a navy/red `ClutchClicks`
+wordmark, so it never renders broken.
+
+## Performance notes
+
+Three things were fixed after a PageSpeed run scored 60 on mobile:
+
+- **Layout shift (CLS 0.31 → measured 0.003).** Only the 800 weight was preloaded,
+  so Poppins 400 and 700 were discovered at layout and arrived ~300 ms late; the
+  swap reflowed the form card. All three weights are now preloaded, and a
+  `@font-face` named `Poppins Fallback` gives Arial `size-adjust: 114.26%` plus
+  ascent/descent/line-gap overrides computed from the shipped Poppins metrics, so
+  fallback text occupies the same space as the real thing and a late swap moves
+  nothing.
+- **Wistia on the critical path.** The testimonials sit within the observer's
+  400 px margin, so the player scripts fetched during load and competed with the
+  fonts. Loading now waits for `load` plus an idle callback. The posters are still
+  there long before anyone scrolls.
+- **Font caching.** `_headers` had `/assets/fonts/*` before `/assets/*`. Cloudflare
+  Pages applies every matching rule and the *last* one wins, so the general rule
+  was overriding the font rule and pinning fonts to 7 days. The order is reversed
+  and fonts are `immutable` for a year.
 
 ### Still to fill in
 

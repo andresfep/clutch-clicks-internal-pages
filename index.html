@@ -11,8 +11,12 @@
 <meta property="og:description" content="AI, smart websites, and 5 star reviews. Just $297/month.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128295;</text></svg>">
-<!-- The headline paints in Poppins 800, so fetch it in parallel with the HTML. -->
+<!-- All three weights render above the fold. Preloading only the headline weight
+     left 400 and 700 to be discovered at layout, ~300ms late, and the swap when
+     they landed was what shifted the form card on mobile. -->
 <link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Warms the TLS connection so a testimonial click starts playing fast. Costs no bytes. -->
 <link rel="preconnect" href="https://fast.wistia.com" crossorigin>
 
@@ -33,6 +37,13 @@
 @font-face{font-family:'Poppins';font-style:normal;font-weight:800;font-display:swap;
   src:url('assets/fonts/poppins-800-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
 
+/* Metric-matched fallback. Poppins is 14.26% wider than Arial per character, so
+   without these overrides the fallback text lays out at a different size and the
+   page reflows the moment Poppins arrives -- which was the whole of the mobile
+   CLS. Values computed from the shipped Poppins metrics against Arial's. */
+@font-face{font-family:'Poppins Fallback';src:local('Arial'),local('Helvetica'),local('Liberation Sans');
+  size-adjust:114.26%;ascent-override:91.89%;descent-override:30.63%;line-gap-override:8.75%;}
+
 /* ---------------------------------------------------------------------------
    Clutch Clicks — offer page.
    CSS + JS are inlined on purpose, so the page itself is one request.
@@ -46,7 +57,7 @@
   --line:#e4e7eb; --panel:#f6f7f8; --bg:#fff;
   --green:#22c55e; --green-track:#e8ebee; --field-line:#7cc86c; --err:#c8201a;
   --radius:14px; --shadow:0 10px 34px rgba(16,24,40,.10),0 2px 6px rgba(16,24,40,.05);
-  --font:'Poppins','Avenir Next','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --font:'Poppins','Poppins Fallback','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
   --sticky-h:96px;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -65,7 +76,6 @@ img,video{max-width:100%;display:block}
 /* ---------- header / logo ---------- */
 .masthead{padding-top:24px;padding-bottom:6px;text-align:center}
 .logo{display:inline-block;text-decoration:none}
-.logo picture{display:block}
 .logo img{height:clamp(42px,9vw,58px);width:auto;margin:0 auto}
 /* Shown only if assets/logo.png is missing, so the page never looks broken. */
 .logo-text{font-size:clamp(24px,5.6vw,34px);font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--navy)}
@@ -101,7 +111,7 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 
 .field+.field{margin-top:14px}
 fieldset{border:0;margin:0;padding:0;min-width:0}
-.field label,.field legend{display:block;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ink);padding:0}
+.field label,.field legend{display:block;font-size:15px;font-weight:700;margin-bottom:8px;color:var(--ink);padding:0}
 .req{color:var(--ink-3)}
 
 /* Revenue choices double as the step's Continue: picking one advances. */
@@ -212,11 +222,8 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
 <header class="masthead">
   <a class="logo" href="/" aria-label="Clutch Clicks home">
-    <picture>
-      <source srcset="assets/logo.webp" type="image/webp">
-      <img id="logo-img" src="assets/logo.png" alt="Clutch Clicks" width="465" height="124" fetchpriority="high" decoding="async">
-    </picture>
-    <div class="logo-text" id="logo-text" hidden>Clutch<b>Clicks</b></div>
+    <img id="logo-img" src="assets/logo.png" alt="Clutch Clicks" width="231" height="62" fetchpriority="high" decoding="async">
+        <div class="logo-text" id="logo-text" hidden>Clutch<b>Clicks</b></div>
   </a>
 </header>
 
@@ -282,7 +289,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 
         <div class="step" data-step="1">
           <div class="field">
-            <label for="city">What city is your company located in? <span class="req">*</span></label>
+            <label for="city">What city is your shop located in? <span class="req">*</span></label>
             <input id="city" name="city" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="e.g. Miami, Denver, Chicago" aria-describedby="city-err" required>
             <span class="err" id="city-err" aria-live="polite"></span>
           </div>
@@ -396,7 +403,7 @@ footer .fine{font-size:13px;color:var(--ink-3)}
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v1.7-1</span>
+<span class="ver">v1.8-1</span>
 
 <script>
 (function () {
@@ -634,15 +641,29 @@ footer .fine{font-size:13px;color:var(--ink-3)}
     });
   }
 
-  var results = document.querySelector('.results');
-  if ('IntersectionObserver' in window && results) {
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { io.disconnect(); loadWistia(); }
-    }, { rootMargin: '400px 0px' });
-    io.observe(results);
-  } else {
-    loadWistia();
+  /* Hold Wistia until the page has finished loading and the main thread is idle.
+     The testimonials sit within 400px of the fold, so the observer used to fire
+     during load and the player scripts competed with the fonts for bandwidth on
+     the critical path. Waiting costs nothing visible -- the posters are still
+     there well before anyone scrolls to them. */
+  function watchForVideos() {
+    var results = document.querySelector('.results');
+    if ('IntersectionObserver' in window && results) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { io.disconnect(); loadWistia(); }
+      }, { rootMargin: '400px 0px' });
+      io.observe(results);
+    } else {
+      loadWistia();
+    }
   }
+
+  function afterLoad() {
+    if (window.requestIdleCallback) requestIdleCallback(watchForVideos, { timeout: 2000 });
+    else setTimeout(watchForVideos, 500);
+  }
+  if (document.readyState === 'complete') afterLoad();
+  else window.addEventListener('load', afterLoad);
 
   show(0);
 })();
