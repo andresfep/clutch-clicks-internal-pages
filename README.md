@@ -111,15 +111,27 @@ Handled for you:
 
 ## The form
 
-Three steps, `33% / 66% / 98%` — the bar deliberately stops short of 100.
+Six steps, one question each, asked as a centred heading. The bar starts at 50% so
+the first answer already reads as real progress, then climbs in shrinking steps and
+deliberately stops short of 100:
 
-1. **City** — free text, Continue.
-2. **Monthly revenue** — four choices. Picking one *is* the continue; there is no
-   second click.
-3. **Contact** — Full Name, Business Name, Email, Phone, Submit.
+| Step | Question | Progress |
+| --- | --- | --- |
+| 1 | What city is your shop located in? | 50% |
+| 2 | What is your current monthly revenue? | 65% |
+| 3 | Your company name | 75% |
+| 4 | Your mobile phone | 84% |
+| 5 | What's your best email? | 90% |
+| 6 | Your name ("First and last name") | 94% |
 
-Back sits at the top of the card from step 2 on, and going back keeps whatever was
-already entered or picked.
+Picking a revenue option *is* that step's continue. Back sits at the top of the
+card from step 2 on, and going back keeps whatever was already entered. The last
+button reads "Continue" like the others — it submits and hands off to the booking
+page.
+
+Field names are unchanged from the earlier three-step layout (`city`, `revenue`,
+`business`, `phone`, `email`, `name`), so the webhook payload and any GoHighLevel
+mapping built against it still apply.
 
 ### Conditional logic — the revenue gate
 

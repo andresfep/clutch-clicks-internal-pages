@@ -112,7 +112,6 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
   text-align:left;scroll-margin-top:18px;
 }
 .lede{font-size:clamp(16px,3.4vw,19px);font-weight:700;line-height:1.35;margin:0 0 16px;text-align:center;color:var(--ink)}
-.step-title{font-size:clamp(17px,3.6vw,21px);font-weight:800;line-height:1.3;margin:2px 0 18px;text-align:center;color:var(--ink);text-wrap:balance}
 
 .progress{height:28px;border-radius:8px;background:var(--green-track);overflow:hidden;margin-bottom:18px}
 .progress-fill{
@@ -127,6 +126,8 @@ h1 .price{color:var(--red);font-style:italic;white-space:nowrap}
 .field+.field{margin-top:14px}
 fieldset{border:0;margin:0;padding:0;min-width:0}
 .field label,.field legend{display:block;font-size:15px;font-weight:700;margin-bottom:8px;color:var(--ink);padding:0}
+/* One question per step, asked as a centred heading rather than a field label. */
+.field .q{text-align:center;font-size:clamp(20px,4.8vw,26px);font-weight:700;line-height:1.25;margin:6px 0 16px;width:100%}
 .req{color:var(--ink-3)}
 
 /* Revenue choices double as the step's Continue: picking one advances. */
@@ -324,16 +325,18 @@ alt=""/></noscript>
 
         <div class="step" data-step="1">
           <div class="field">
-            <label for="city">What city is your shop located in? <span class="req">*</span></label>
+            <label class="q" for="city">What city is your shop located in?</label>
             <input id="city" name="city" type="text" autocomplete="address-level2" enterkeyhint="next" placeholder="e.g. Miami, Denver, Chicago" aria-describedby="city-err" required>
             <span class="err" id="city-err" aria-live="polite"></span>
           </div>
-          <div class="actions"><button class="btn" type="submit">Continue</button></div>
+          <div class="actions">
+            <button class="btn" type="submit">Continue</button>
+          </div>
         </div>
 
         <div class="step" data-step="2" hidden>
           <fieldset class="field">
-            <legend>What is your current monthly revenue? <span class="req">*</span></legend>
+            <legend class="q">What is your current monthly revenue?</legend>
             <div class="opts">
               <button type="button" class="opt" data-value="Less than $10K/mo" data-qualified="false" aria-pressed="false">Less than $10K/mo</button>
               <button type="button" class="opt" data-value="$10K - $25K/mo" data-qualified="true" aria-pressed="false">$10K &ndash; $25K/mo</button>
@@ -345,29 +348,46 @@ alt=""/></noscript>
         </div>
 
         <div class="step" data-step="3" hidden>
-          <h2 class="step-title">Where Should We Send Your Market Availability Report?</h2>
           <div class="field">
-            <label for="name">Full Name <span class="req">*</span></label>
-            <input id="name" name="name" type="text" autocomplete="name" enterkeyhint="next" placeholder="Full Name" aria-describedby="name-err" required>
-            <span class="err" id="name-err" aria-live="polite"></span>
-          </div>
-          <div class="field">
-            <label for="business">Business Name <span class="req">*</span></label>
-            <input id="business" name="business" type="text" autocomplete="organization" enterkeyhint="next" placeholder="Business Name" aria-describedby="business-err" required>
+            <label class="q" for="business">Your company name</label>
+            <input id="business" name="business" type="text" autocomplete="organization" enterkeyhint="next" placeholder="Company name" aria-describedby="business-err" required>
             <span class="err" id="business-err" aria-live="polite"></span>
           </div>
-          <div class="field">
-            <label for="email">Email <span class="req">*</span></label>
-            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="next" placeholder="your@email.com" aria-describedby="email-err" required>
-            <span class="err" id="email-err" aria-live="polite"></span>
+          <div class="actions">
+            <button class="btn" type="submit">Continue</button>
           </div>
+        </div>
+
+        <div class="step" data-step="4" hidden>
           <div class="field">
-            <label for="phone">Phone <span class="req">*</span></label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" placeholder="Phone" aria-describedby="phone-err" required>
+            <label class="q" for="phone">Your mobile phone</label>
+            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" placeholder="(555) 555-5555" aria-describedby="phone-err" required>
             <span class="err" id="phone-err" aria-live="polite"></span>
           </div>
           <div class="actions">
-            <button class="btn" type="submit" id="submit-btn">Submit</button>
+            <button class="btn" type="submit">Continue</button>
+          </div>
+        </div>
+
+        <div class="step" data-step="5" hidden>
+          <div class="field">
+            <label class="q" for="email">What&rsquo;s your best email?</label>
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="next" placeholder="you@yourshop.com" aria-describedby="email-err" required>
+            <span class="err" id="email-err" aria-live="polite"></span>
+          </div>
+          <div class="actions">
+            <button class="btn" type="submit">Continue</button>
+          </div>
+        </div>
+
+        <div class="step" data-step="6" hidden>
+          <div class="field">
+            <label class="q" for="name">Your name</label>
+            <input id="name" name="name" type="text" autocomplete="name" enterkeyhint="done" placeholder="First and last name" aria-describedby="name-err" required>
+            <span class="err" id="name-err" aria-live="polite"></span>
+          </div>
+          <div class="actions">
+            <button class="btn" type="submit" id="submit-btn">Continue</button>
             <span class="err" id="form-err" aria-live="assertive"></span>
           </div>
         </div>
@@ -438,7 +458,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.1-1</span>
+<span class="ver">v2.2-1</span>
 
 <script>
 (function () {
@@ -472,8 +492,9 @@ alt=""/></noscript>
   var card    = document.getElementById('apply');
   var sticky  = document.getElementById('sticky');
 
-  /* Deliberately stops at 98, not 100 -- the last step should still feel unfinished. */
-  var PCT = [33, 66, 98];
+  /* Starts at 50 so the first answer already feels like real progress, then
+     climbs in shrinking steps and deliberately stops short of 100. */
+  var PCT = [50, 65, 75, 84, 90, 94];
 
   /* Carry the ?service= value through with the lead. */
   if (window.__service) document.getElementById('svc-field').value = window.__service;
@@ -485,7 +506,7 @@ alt=""/></noscript>
   var RULES = {
     city:     function (v) { return v.length >= 2 || 'Please enter your city.'; },
     name:     function (v) { return v.length >= 2 || 'Please enter your full name.'; },
-    business: function (v) { return v.length >= 2 || 'Please enter your business name.'; },
+    business: function (v) { return v.length >= 2 || 'Please enter your company name.'; },
     email:    function (v) { return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v) || 'Please enter a valid email address.'; },
     phone:    function (v) { return (v.replace(/\D/g, '').length >= 10) || 'Please enter a 10-digit phone number.'; }
   };
@@ -553,7 +574,7 @@ alt=""/></noscript>
     e.preventDefault();
     touched = true;
     if (!validateStep(at)) return;
-    if (at === 0) { show(1); return; }
+    if (at < steps.length - 1) { show(at + 1); return; }
     finish();
   });
 
@@ -588,7 +609,7 @@ alt=""/></noscript>
     if (!qualified) { showDone(false); return; }
 
     submit.disabled = true;
-    submit.textContent = 'Submitting\u2026';
+    submit.textContent = 'One moment\u2026';
     formErr.textContent = '';
 
     var data = {};
@@ -629,7 +650,7 @@ alt=""/></noscript>
           console.warn('GoHighLevel rejected the lead:', err);
           formErr.textContent = 'Something went wrong on our end. Please try again.';
           submit.disabled = false;
-          submit.textContent = 'Submit';
+          submit.textContent = 'Continue';
           return;
         }
         console.warn('Could not read the webhook response (most likely CORS). The lead was still delivered.', err);
