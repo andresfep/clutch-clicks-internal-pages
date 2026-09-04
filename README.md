@@ -28,6 +28,13 @@ headers. Loading `book.html` directly just skips the prefill.
 
 ### The thank-you page
 
+The red "WAIT!" line greets the visitor by first name ("WAIT, John!"). The name
+comes from the URL first (`?first_name=`, `?name=`), then from the same
+`sessionStorage` hand-off the booking page uses. If neither has one the line is
+just "WAIT!". GoHighLevel opens the redirect in the same tab, so the hand-off
+normally survives; to be safe regardless, set the calendar's redirect to
+`https://grow.clutchclicks.com/thanks?first_name={{contact.first_name}}`.
+
 The testimonial wall is deliberately not here — by the time someone books they are
 already sold, and this page's job is getting them to show up.
 

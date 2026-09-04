@@ -223,6 +223,22 @@ footer .fine{font-size:13px;color:var(--ink-3)}
 .sec-h em{font-style:normal;color:var(--red)}
 .vwrap{max-width:840px;margin:0 auto}
 
+/* "Watch this" pointers around the video. The label + down arrow sit above it;
+   the two side arrows only appear once the viewport is wide enough to hold them
+   outside the 840px video without pushing anything (840 + 2 x 82 = 1004px), so
+   they never cause horizontal scroll or a layout shift. Every box here has a
+   fixed size for the same reason. */
+.vstage{position:relative}
+.watch{display:flex;flex-direction:column;align-items:center;margin:0 0 4px;color:var(--red)}
+.watch b{font-size:clamp(18px,3.6vw,26px);font-weight:800;font-style:italic;line-height:1;letter-spacing:-.01em}
+.watch svg{width:34px;height:46px;display:block;margin-top:4px}
+.arrow{position:absolute;top:50%;width:70px;height:44px;margin-top:-22px;color:var(--red);display:none}
+.arrow.l{right:100%;margin-right:12px}
+.arrow.r{left:100%;margin-left:12px;transform:scaleX(-1)}
+.arrow svg{width:70px;height:44px;display:block}
+.arrow svg,.watch svg{fill:none;stroke:currentColor;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+@media(min-width:1024px){.arrow{display:block}}
+
 .steps{display:grid;gap:18px;grid-template-columns:1fr;text-align:left;margin-top:4px}
 @media(min-width:820px){.steps{grid-template-columns:repeat(3,1fr)}}
 .stepc{border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:9px}
@@ -279,10 +295,41 @@ alt=""/></noscript>
 
 <main>
   <section class="typ wrap">
-    <p class="wait">WAIT!</p>
+    <p class="wait">WAIT<span id="wait-name"></span>!</p>
+    <script>
+    /* "WAIT, John!" -- the first name the visitor typed on the opt-in page.
+       Looked for in the URL first (?first_name= / ?name=, so a GoHighLevel
+       redirect can pass {{contact.first_name}}), then in the sessionStorage
+       hand-off from the opt-in page. Nothing found means the line simply
+       stays "WAIT!". Runs inline so there is no flash of the bare version. */
+    (function () {
+      var first = '';
+      try {
+        var q = new URLSearchParams(location.search);
+        first = q.get('first_name') || q.get('firstname') || q.get('fname') || q.get('name') || '';
+      } catch (e) {}
+      if (!first) {
+        try {
+          var lead = JSON.parse(sessionStorage.getItem('cc_lead') || '{}');
+          first = lead.first_name || lead.name || '';
+        } catch (e) {}
+      }
+      first = String(first).trim().split(/\s+/)[0] || '';
+      if (!/^[\p{L}'\u2019-]{1,24}$/u.test(first)) return;   // letters only; textContent below never parses HTML
+      first = first.charAt(0).toUpperCase() + first.slice(1);
+      document.getElementById('wait-name').textContent = ', ' + first;
+    })();
+    </script>
     <h1 class="typ-h1">Watch The Short Video Below So Your Call Doesn&rsquo;t Get Cancelled</h1>
 
     <div class="vwrap">
+      <div class="watch" aria-hidden="true">
+        <b>Watch this!</b>
+        <svg viewBox="0 0 34 46"><path d="M18 4C7 13 28 22 16 40"/><path d="M8 32l8 9 9-8"/></svg>
+      </div>
+      <div class="vstage">
+      <div class="arrow l" aria-hidden="true"><svg viewBox="0 0 70 44"><path d="M4 12c18-4 40 4 60 20"/><path d="M50 34l14-2-3-13"/></svg></div>
+      <div class="arrow r" aria-hidden="true"><svg viewBox="0 0 70 44"><path d="M4 12c18-4 40 4 60 20"/><path d="M50 34l14-2-3-13"/></svg></div>
       <!-- Vidalytics pre-call video. The loader script must sit next to its own
            div, which is why this block is inline rather than in the page script. -->
       <div id="vidalytics_embed_wJuj0izxS9oVDl_H" style="width:100%;position:relative;padding-top:56.25%"></div>
@@ -297,6 +344,7 @@ alt=""/></noscript>
           vsl(l+'loader.min.js',function(){if(!vli){var vlc=v[c][vl];vli=new vlc();}vli.loadScript(l+'player.min.js',function(){var vec=v[d][ve];t=new vec();t.run(a);});});
       })(window, document, 'Vidalytics', 'vidalytics_embed_wJuj0izxS9oVDl_H', 'https://fast.vidalytics.com/embeds/WMno8S_4/wJuj0izxS9oVDl_H/');
       </script>
+      </div>
     </div>
 
     <div style="margin-top:44px">
@@ -378,7 +426,7 @@ alt=""/></noscript>
   </div>
 </div>
 
-<span class="ver">v1.6-1</span>
+<span class="ver">v1.7-1</span>
 
 <script>
 (function () {
