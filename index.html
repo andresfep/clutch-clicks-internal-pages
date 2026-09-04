@@ -458,7 +458,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.5-1</span>
+<span class="ver">v2.5-2</span>
 
 <script>
 (function () {
@@ -529,6 +529,33 @@ alt=""/></noscript>
     if (first) first.focus();
     return ok;
   }
+
+  /* Format the phone number as it is typed: (111) 244-1332. Works from the digits
+     alone, and a separator is only emitted once the next group has a digit, so
+     backspacing over a ")" or "-" removes the digit before it instead of getting
+     stuck re-inserting the separator. A pasted +1 country code is dropped. */
+  var phoneInput = document.getElementById('phone');
+  function formatPhone(digits) {
+    if (!digits) return '';
+    if (digits.length < 4) return '(' + digits;
+    if (digits.length < 7) return '(' + digits.slice(0, 3) + ') ' + digits.slice(3);
+    return '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6, 10);
+  }
+  var phonePrev = '';
+  phoneInput.addEventListener('input', function () {
+    var raw = phoneInput.value;
+    var digits = raw.replace(/\D/g, '');
+    /* A leading country code may only be dropped from bulk input -- a paste or
+       autofill -- never from a keystroke, or typing an 11th digit into a 1xx
+       area code would shift the whole number. Bulk input either adds several
+       digits at once or replaces the field outright, so the new value no longer
+       starts with the old one. */
+    var prevDigits = phonePrev.replace(/\D/g, '').length;
+    var bulk = digits.length - prevDigits > 1 || raw.indexOf(phonePrev) !== 0;
+    if (bulk && digits.length === 11 && digits.charAt(0) === '1') digits = digits.slice(1);
+    phonePrev = formatPhone(digits.slice(0, 10));
+    phoneInput.value = phonePrev;
+  });
 
   form.addEventListener('input', function (e) {
     if (e.target.matches('input') && e.target.getAttribute('aria-invalid') === 'true') check(e.target);
