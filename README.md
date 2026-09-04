@@ -153,58 +153,43 @@ callback, since one isn't coming:
 If you would rather stop those visitors at step 2 instead of collecting contact
 details you won't use, that's a change to `finish()` — say so and it's a few lines.
 
-### Wiring up GoHighLevel
+### How leads reach GoHighLevel
 
-The LeadConnector inbound webhook is wired into `GHL_WEBHOOK_URL` near the top of
-the `<script>` block (trigger `0a39617e-286a-4db0-845c-b018d7eced51`). It ships in the page source, so anyone can post to it —
-lean on GoHighLevel's own duplicate/spam handling, or proxy through your own
-endpoint if that becomes a problem.
+The form posts to **`/api/lead`**, a Cloudflare Pages Function in
+`functions/api/lead.js`. It forwards the lead to the LeadConnector inbound webhook
+server-side and relays GoHighLevel's real status back to the browser.
 
-The POST is sent as `Content-Type: text/plain` rather than `application/json`, on
-purpose: that makes it a "simple" request, so the browser sends no CORS preflight
-and a missing preflight response can never stop a lead being delivered. GoHighLevel
-parses the JSON body either way. If it returns CORS headers, a real rejection shows
-the inline retry; if it does not, the response is unreadable and the submission is
-treated as delivered — which it is — rather than prompting a duplicate resubmit.
+Why a proxy instead of posting straight from the page:
 
-Qualified leads arrive as a JSON `POST`:
+- **No CORS.** The browser only ever talks to its own origin.
+- **`application/json` on the hop GoHighLevel sees.** An earlier version posted
+  `text/plain` from the browser to avoid a preflight; if GoHighLevel only parses
+  JSON bodies, that would have arrived empty.
+- **Failures are visible.** The page logs GoHighLevel's reply to the console as
+  `[lead] GoHighLevel replied:` and only redirects on a real 2xx.
+- **The webhook URL is not in the page source**, and the revenue gate is enforced
+  server-side as well as in the page.
 
-```json
-{
-  "service": "HVAC",
-  "revenue": "$100K+/mo",
-  "city": "Miami",
-  "name": "Andres Perez",
-  "business": "Miami HVAC Co",
-  "email": "andres@miamihvac.com",
-  "phone": "(305) 555-1234",
-  "first_name": "Andres",
-  "last_name": "Perez",
-  "qualified": true,
-  "page": "/?service=hvac",
-  "submittedAt": "2026-09-02T12:57:11.814Z"
-}
+The webhook URL is a constant in the Function. To change it without a commit, set
+`GHL_WEBHOOK_URL` under Pages → Settings → Variables and secrets.
+
+Pages picks up `functions/` automatically — no build command, no config.
+
+**Diagnose from a terminal, no browser needed:**
+
+```sh
+curl -i -X POST https://grow.clutchclicks.com/api/lead \
+  -H 'Content-Type: application/json' \
+  -d '{"qualified":true,"name":"Webhook Test","first_name":"Webhook","last_name":"Test",
+       "email":"webhook-test@example.com","phone":"(555) 555-0100",
+       "business":"Clutch Clicks Webhook Test","city":"Miami","revenue":"$100K+/mo",
+       "service":"Automotive","page":"/","submittedAt":"2026-09-03T00:00:00Z"}'
 ```
 
-`first_name` / `last_name` are split from `name` in the page so the GoHighLevel
-workflow doesn't have to. A single-word name leaves `last_name` empty.
+The JSON reply carries `status` and the first 500 characters of GoHighLevel's own
+response — that is the answer to "is GoHighLevel receiving it".
 
-### Mapping it in GoHighLevel
-
-The webhook URL is only the trigger. Receiving a payload does not create a contact
-on its own — the workflow needs a **Create/Update Contact** action with the fields
-mapped, or leads arrive and vanish.
-
-1. Automation → Workflows → the workflow holding this Inbound Webhook trigger.
-2. Open the trigger and use its sample-payload capture, then send one submission so
-   GoHighLevel learns the field names.
-3. Add **Create/Update Contact** and map `first_name`, `last_name`, `email`,
-   `phone`, and `business` → Company Name.
-4. `city`, `revenue`, `service` and `page` need custom fields; create them first,
-   then map. `service` and `page` tell you which campaign produced the lead.
-5. Publish the workflow. A saved-but-unpublished workflow silently drops everything.
-
-Any non-2xx response shows an inline retry rather than a false success.
+Qualified leads arrive at GoHighLevel as JSON:
 
 ### Testimonials
 

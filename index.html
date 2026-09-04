@@ -458,17 +458,16 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.4-1</span>
+<span class="ver">v2.5-1</span>
 
 <script>
 (function () {
   'use strict';
 
-  /* GoHighLevel inbound webhook. Qualified leads are POSTed here as JSON.
-     Note this URL ships in the page source, so anyone can post to it -- lean on
-     GoHighLevel's own duplicate/spam handling, or proxy through your own
-     endpoint if that ever becomes a problem. */
-  var GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/W6A6ortd1jFsrR7CsHLH/webhook-trigger/0a39617e-286a-4db0-845c-b018d7eced51';
+  /* Leads go to /api/lead, a Cloudflare Pages Function in functions/api/lead.js,
+     which forwards them to GoHighLevel server-side and returns its real status.
+     Same origin, so no CORS and no content-type guesswork. */
+  var LEAD_ENDPOINT = '/api/lead';
 
   /* ---------- logo: fall back to the wordmark if the file isn't there yet ---------- */
   var logoImg = document.getElementById('logo-img');
@@ -626,35 +625,26 @@ alt=""/></noscript>
     data.page = location.pathname + location.search;
     data.submittedAt = new Date().toISOString();
 
-    /* Content-Type is text/plain, not application/json, on purpose: that keeps
-       this a "simple" request, so the browser sends no CORS preflight and a
-       missing preflight response can never stop a lead being delivered.
-       GoHighLevel parses the JSON body either way.
-
-       If GoHighLevel returns CORS headers we can read the status and report a
-       real rejection. If it does not, fetch rejects with a TypeError even
-       though the POST went out -- so that case is treated as delivered. Showing
-       an error there would be worse than useless: the lead is already in the
-       CRM, and the visitor would submit again and duplicate it. */
-    fetch(GHL_WEBHOOK_URL, {
+    fetch(LEAD_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
       .then(function (r) {
-        if (!r.ok) { var e = new Error('HTTP ' + r.status); e.fromServer = true; throw e; }
-        toBooking();
+        return r.json().catch(function () { return { ok: false, error: 'Bad reply from /api/lead (HTTP ' + r.status + ')' }; });
+      })
+      .then(function (res) {
+        /* This is GoHighLevel's answer, relayed. Left in the console on purpose
+           so a failed submission can be diagnosed from DevTools. */
+        console.info('[lead] GoHighLevel replied:', res);
+        if (res && res.ok) { toBooking(); return; }
+        throw new Error(res && res.error ? res.error : 'GoHighLevel status ' + (res && res.status));
       })
       .catch(function (err) {
-        if (err && err.fromServer) {
-          console.warn('GoHighLevel rejected the lead:', err);
-          formErr.textContent = 'Something went wrong on our end. Please try again.';
-          submit.disabled = false;
-          submit.textContent = 'Continue';
-          return;
-        }
-        console.warn('Could not read the webhook response (most likely CORS). The lead was still delivered.', err);
-        toBooking();
+        console.warn('[lead] not delivered:', err);
+        formErr.textContent = 'Something went wrong on our end. Please try again.';
+        submit.disabled = false;
+        submit.textContent = 'Continue';
       });
   }
 
