@@ -17,15 +17,21 @@
 <link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<!-- Meta Pixel Code -->
+<!-- Meta Pixel Code. Same stub as Meta's snippet, with one change: fbevents.js
+     (~100 KB of JavaScript) is fetched once the page has painted and the browser
+     is idle, instead of from <head>. The stub queues init + PageView meanwhile,
+     so nothing is lost; the pixel just stays off the critical rendering path. -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
+n.queue=[];
+function load(){t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
+s.parentNode.insertBefore(t,s)}
+function idle(){if(f.requestIdleCallback)f.requestIdleCallback(load,{timeout:1500});else setTimeout(load,300)}
+if(b.readyState==='complete')idle();else f.addEventListener('load',idle)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1945577459646581');
 fbq('track', 'PageView');
@@ -482,7 +488,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.6-3</span>
+<span class="ver">v2.6-4</span>
 
 <script>
 (function () {
@@ -696,8 +702,12 @@ alt=""/></noscript>
     new FormData(form).forEach(function (v, k) { lead[k] = String(v).trim(); });
     try { sessionStorage.setItem('cc_lead', JSON.stringify(lead)); } catch (e) {}
 
+    /* GoHighLevel reads different keys depending on how the calendar form is
+       built: a single "Full Name" field takes full_name, split fields take
+       first_name / last_name. Send all of them so either layout prefills. */
     var params = new URLSearchParams();
     var bits = (lead.name || '').split(/\s+/).filter(Boolean);
+    if (bits.length) { params.set('full_name', bits.join(' ')); params.set('name', bits.join(' ')); }
     if (bits.length) params.set('first_name', bits.shift());
     if (bits.length) params.set('last_name', bits.join(' '));
     if (lead.email) params.set('email', lead.email);
