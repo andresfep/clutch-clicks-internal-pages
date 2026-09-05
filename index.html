@@ -540,6 +540,31 @@ alt=""/></noscript>
   /* Carry the ?service= value through with the lead. */
   if (window.__service) document.getElementById('svc-field').value = window.__service;
 
+  /* ---------- attribution ----------
+     The ad platform's parameters on the landing URL (utm_*, fbclid, gclid...)
+     are read once on arrival and kept for the session, so they survive a
+     reload or a stripped URL. They go to GoHighLevel as separate keys on the
+     lead payload (map them to contact fields in the workflow) and onto the
+     calendar's own address, which is how GoHighLevel attributes bookings. */
+  var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id',
+                   'fbclid', 'gclid', 'ttclid', 'msclkid'];
+  var attribution = (function () {
+    var out = {}, found = false;
+    try {
+      var q = new URLSearchParams(location.search);
+      ATTR_KEYS.forEach(function (k) { var v = q.get(k); if (v) { out[k] = v.slice(0, 300); found = true; } });
+      if (found) {
+        out.landing_url = location.href.slice(0, 1000);
+        out.referrer = document.referrer.slice(0, 300);
+        sessionStorage.setItem('cc_attr', JSON.stringify(out));
+      } else {
+        out = JSON.parse(sessionStorage.getItem('cc_attr') || '{}');
+        if (!out.landing_url) { out.landing_url = location.href.slice(0, 1000); out.referrer = document.referrer.slice(0, 300); }
+      }
+    } catch (e) {}
+    return out;
+  })();
+
   var at = 0;
   var touched = false;   // don't steal focus on first paint (mobile keyboard)
   var qualified = false; // set by the revenue step
@@ -812,6 +837,7 @@ alt=""/></noscript>
     if (bits.length) params.set('last_name', bits.join(' '));
     if (lead.email) params.set('email', lead.email);
     if (lead.phone) params.set('phone', lead.phone);
+    ATTR_KEYS.forEach(function (k) { if (attribution[k]) params.set(k, attribution[k]); });
     /* Show the slot first, then put the frame in it: a frame created inside a
        hidden container starts at 0px wide, and WebKit in particular can leave
        the widget inside mis-sized or blank when that happens. */
@@ -862,6 +888,7 @@ alt=""/></noscript>
     data.qualified = true;
     data.page = location.pathname + location.search;
     data.submittedAt = new Date().toISOString();
+    ATTR_KEYS.concat(['landing_url', 'referrer']).forEach(function (k) { data[k] = attribution[k] || ''; });
 
     /* The calendar comes up immediately; the lead goes to GoHighLevel in the
        background so nobody waits on that round trip. A failed send retries

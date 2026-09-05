@@ -27,6 +27,22 @@ are also stashed in `sessionStorage` so the thank-you page can greet the visitor
 by first name. `book.html` still exists as a standalone calendar page (`/book`),
 but nothing in the funnel links to it any more.
 
+### Attribution (UTMs, fbclid) into GoHighLevel
+
+The landing URL's `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`,
+`utm_term`, `utm_id`, `fbclid`, `gclid`, `ttclid` and `msclkid` are read on
+arrival, kept in `sessionStorage` for the session, and sent two ways:
+
+- **On the lead webhook** as separate keys (always present, empty when
+  unknown), plus `landing_url` and `referrer`. An inbound webhook does not fill
+  GoHighLevel's attribution panel by itself: in the workflow, open the Inbound
+  Webhook trigger after one real submission with UTMs so it learns the new
+  keys, then add an *Update Contact Field* step mapping each key to a custom
+  field (create them under Settings → Custom Fields, e.g. "UTM Source").
+- **On the inline calendar's address**, alongside the prefill. That is how
+  GoHighLevel's native attribution works for bookings, so appointments booked
+  through the funnel carry the ad source without any workflow setup.
+
 ### The thank-you page
 
 The red "WAIT!" line greets the visitor by first name ("WAIT, John!"). The name
