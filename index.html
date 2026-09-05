@@ -487,7 +487,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.7-1</span>
+<span class="ver">v2.7-2</span>
 
 <script>
 (function () {
@@ -665,7 +665,9 @@ alt=""/></noscript>
     warm = document.createElement('div');
     warm.className = 'cal-warm';
     warm.setAttribute('aria-hidden', 'true');
-    warm.appendChild(calendarFrame(''));
+    var wf = calendarFrame('');
+    wf.addEventListener('load', function () { log('warm-up frame loaded'); });
+    warm.appendChild(wf);
     document.body.appendChild(warm);
     log('warm-up frame added');
   }
@@ -683,7 +685,7 @@ alt=""/></noscript>
     if (debugBox) debugBox.textContent += line + '\n';
   }
 
-  var calFrame = null, calLoaded = false, calWatchdog = null;
+  var calFrame = null, calLoaded = false, calWatchdog = null, calHeights = 0;
   function mountCalendar(qs) {
     if (warm) { warm.parentNode.removeChild(warm); warm = null; }
     placeFrame(qs, false);
@@ -696,9 +698,13 @@ alt=""/></noscript>
     s.onload = function () { log('embed script loaded'); };
     s.onerror = function () { log('embed script FAILED to load'); };
     document.head.appendChild(s);
-    /* Whatever happens, after 10s offer the standalone calendar page as a way
-       out. Harmless when the calendar is fine, a lifeline when it is not. */
-    setTimeout(function () { document.getElementById('cal-fallback').hidden = false; }, 10000);
+    /* If, 12s in, the calendar has neither loaded nor reported a height, offer
+       the standalone calendar page as a way out. Either signal cancels this. */
+    setTimeout(function () {
+      var f = calFrame ? calFrame.getBoundingClientRect() : null;
+      log('12s check: frame loaded=' + calLoaded + ', height messages=' + calHeights + ', frame box=' + (f ? Math.round(f.width) + 'x' + Math.round(f.height) : 'none') + ', cookies=' + navigator.cookieEnabled);
+      if (!calLoaded && !calHeights) document.getElementById('cal-fallback').hidden = false;
+    }, 12000);
     document.getElementById('cal-fallback-link').href = 'book.html' + location.search;
   }
 
@@ -715,7 +721,7 @@ alt=""/></noscript>
     calWatchdog = setTimeout(function () {
       if (calLoaded) return;
       if (!isRetry) { log('frame not loaded after 8s, retrying'); placeFrame(qs, true); }
-      else { log('frame still not loaded'); document.getElementById('cal-fallback').hidden = false; }
+      else { log('frame still not loaded after retry'); if (!calHeights) document.getElementById('cal-fallback').hidden = false; }
     }, 8000);
   }
 
@@ -730,7 +736,7 @@ alt=""/></noscript>
     if (Array.isArray(d)) d.forEach(pick);
     else if (d && typeof d === 'object') { pick(d.height); if (!h && d.data && typeof d.data === 'object') pick(d.data.height); }
     else if (typeof d === 'string' && d.charAt(0) === '{') { try { var o = JSON.parse(d); pick(o.height); } catch (x) {} }
-    if (h) { calFrame.style.minHeight = '0'; calFrame.style.height = Math.ceil(h) + 'px'; log('frame height set to ' + Math.ceil(h) + 'px'); }
+    if (h) { calHeights++; calFrame.style.minHeight = '0'; calFrame.style.height = Math.ceil(h) + 'px'; log('frame height set to ' + Math.ceil(h) + 'px'); }
   });
 
   function showBooking() {
