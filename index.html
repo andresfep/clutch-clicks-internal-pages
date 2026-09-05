@@ -193,6 +193,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 @media(min-width:520px){.card.booked{padding-left:16px;padding-right:16px}}
 .cal-warm{position:absolute;left:-9999px;top:0;width:600px;height:700px;overflow:hidden;visibility:hidden;pointer-events:none}
 .cal-warm iframe{width:100%;height:100%;border:0}
+.cal-debug{position:fixed;left:8px;right:8px;bottom:8px;z-index:50;max-height:40vh;overflow:auto;margin:0;padding:8px 10px;font:11px/1.4 ui-monospace,Menlo,monospace;color:#0f0;background:rgba(0,0,0,.85);border-radius:8px;white-space:pre-wrap}
 .cal-note{font-size:13.5px;color:var(--ink-3);margin:12px 0 0}
 .done h2{font-size:22px;font-weight:800;margin:0 0 8px}
 .done p{color:var(--ink-2);margin:0}
@@ -421,6 +422,7 @@ alt=""/></noscript>
         <h2><em>Great!</em> Next step: book your growth plan call with our team below.</h2>
         <div class="cal" id="cal"></div>
         <p class="cal-note">Calls run about 20 minutes. Please join from a laptop rather than your phone.</p>
+        <p class="cal-note" id="cal-fallback" hidden>Calendar not showing? <a href="book.html" id="cal-fallback-link">Open it on its own page</a>.</p>
       </div>
 
       <div class="done" id="done" hidden>
@@ -488,7 +490,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.6-4</span>
+<span class="ver">v2.6-5</span>
 
 <script>
 (function () {
@@ -668,20 +670,56 @@ alt=""/></noscript>
     warm.setAttribute('aria-hidden', 'true');
     warm.appendChild(calendarFrame(''));
     document.body.appendChild(warm);
+    log('warm-up frame added');
   }
 
-  var calFrame = null;
+  /* ?debug=1 shows a small on-page log of the calendar's life cycle, so a
+     problem on a phone can be read off a screenshot. Otherwise console only. */
+  var debugBox = null;
+  function log(msg) {
+    var line = (performance.now() / 1000).toFixed(1) + 's  ' + msg;
+    console.info('[cal] ' + line);
+    if (debugBox === null) {
+      debugBox = false;
+      try { if (/[?&#]debug=1/.test(location.search + location.hash)) { debugBox = document.createElement('pre'); debugBox.className = 'cal-debug'; document.body.appendChild(debugBox); } } catch (e) {}
+    }
+    if (debugBox) debugBox.textContent += line + '\n';
+  }
+
+  var calFrame = null, calLoaded = false, calWatchdog = null;
   function mountCalendar(qs) {
     if (warm) { warm.parentNode.removeChild(warm); warm = null; }
-    calFrame = calendarFrame(qs);
-    document.getElementById('cal').appendChild(calFrame);
+    placeFrame(qs, false);
     /* GoHighLevel's embed script sizes the frame to its content. It is loaded
        only now, after the frame is in the page, which is the arrangement its
        own embed code assumes. */
     var s = document.createElement('script');
     s.src = 'https://api.clutchclicks.com/js/form_embed.js';
     s.async = true;
+    s.onload = function () { log('embed script loaded'); };
+    s.onerror = function () { log('embed script FAILED to load'); };
     document.head.appendChild(s);
+    /* Whatever happens, after 10s offer the standalone calendar page as a way
+       out. Harmless when the calendar is fine, a lifeline when it is not. */
+    setTimeout(function () { document.getElementById('cal-fallback').hidden = false; }, 10000);
+    document.getElementById('cal-fallback-link').href = 'book.html' + location.search;
+  }
+
+  function placeFrame(qs, isRetry) {
+    if (calFrame && calFrame.parentNode) calFrame.parentNode.removeChild(calFrame);
+    calFrame = calendarFrame(qs);
+    calLoaded = false;
+    calFrame.addEventListener('load', function () { calLoaded = true; log('calendar frame loaded' + (isRetry ? ' (retry)' : '')); });
+    calFrame.addEventListener('error', function () { log('calendar frame error'); });
+    document.getElementById('cal').appendChild(calFrame);
+    log((isRetry ? 'retry: ' : '') + 'calendar frame added, width ' + calFrame.getBoundingClientRect().width + 'px');
+    /* If the frame has not loaded after 8s, try once more with a fresh element. */
+    clearTimeout(calWatchdog);
+    calWatchdog = setTimeout(function () {
+      if (calLoaded) return;
+      if (!isRetry) { log('frame not loaded after 8s, retrying'); placeFrame(qs, true); }
+      else { log('frame still not loaded'); document.getElementById('cal-fallback').hidden = false; }
+    }, 8000);
   }
 
   /* Belt and braces: whatever shape GoHighLevel's height message takes, if it
@@ -690,11 +728,12 @@ alt=""/></noscript>
   window.addEventListener('message', function (e) {
     if (!calFrame || e.source !== calFrame.contentWindow) return;
     var d = e.data, h = 0;
+    try { log('message from calendar: ' + JSON.stringify(d).slice(0, 140)); } catch (x) { log('message from calendar (unserialisable)'); }
     function pick(v) { var n = typeof v === 'string' ? parseFloat(v) : v; if (typeof n === 'number' && n > 300 && n < 8000) h = n; }
     if (Array.isArray(d)) d.forEach(pick);
     else if (d && typeof d === 'object') { pick(d.height); if (!h && d.data && typeof d.data === 'object') pick(d.data.height); }
     else if (typeof d === 'string' && d.charAt(0) === '{') { try { var o = JSON.parse(d); pick(o.height); } catch (x) {} }
-    if (h) { calFrame.style.minHeight = '0'; calFrame.style.height = Math.ceil(h) + 'px'; }
+    if (h) { calFrame.style.minHeight = '0'; calFrame.style.height = Math.ceil(h) + 'px'; log('frame height set to ' + Math.ceil(h) + 'px'); }
   });
 
   function showBooking() {
@@ -712,14 +751,16 @@ alt=""/></noscript>
     if (bits.length) params.set('last_name', bits.join(' '));
     if (lead.email) params.set('email', lead.email);
     if (lead.phone) params.set('phone', lead.phone);
-    mountCalendar(params.toString());
-
+    /* Show the slot first, then put the frame in it: a frame created inside a
+       hidden container starts at 0px wide, and WebKit in particular can leave
+       the widget inside mis-sized or blank when that happens. */
     form.hidden = true;
     back.hidden = true;
     bar.hidden = true;
     booking.hidden = false;
     card.classList.add('booked');
     sticky.dataset.hidden = 'true';
+    mountCalendar(params.toString());
     card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     var h = booking.querySelector('h2');
     h.setAttribute('tabindex', '-1');
