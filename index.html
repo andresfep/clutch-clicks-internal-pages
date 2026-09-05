@@ -179,6 +179,8 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .booking h2{font-size:clamp(18px,4vw,23px);font-weight:800;line-height:1.3;margin:0 0 16px;color:var(--ink);text-wrap:balance}
 .booking h2 em{font-style:normal;color:var(--red)}
 .cal iframe{width:100%;border:0;overflow:hidden;display:block;min-height:640px}
+.cal-warm{position:absolute;left:-9999px;top:0;width:600px;height:700px;overflow:hidden;visibility:hidden;pointer-events:none}
+.cal-warm iframe{width:100%;height:100%;border:0}
 .cal-note{font-size:13.5px;color:var(--ink-3);margin:12px 0 0}
 .done h2{font-size:22px;font-weight:800;margin:0 0 8px}
 .done p{color:var(--ink-2);margin:0}
@@ -474,7 +476,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.6-1</span>
+<span class="ver">v2.6-2</span>
 
 <script>
 (function () {
@@ -609,6 +611,7 @@ alt=""/></noscript>
       qualified = btn.dataset.qualified === 'true';
       document.getElementById('revenue-err').textContent = '';
       touched = true;
+      if (qualified) warmCalendar();
       show(2);
     });
   });
@@ -629,20 +632,39 @@ alt=""/></noscript>
   var CAL_ID  = 'lNbi9w8QPtACsn72VGOB';
   var CAL_URL = 'https://api.clutchclicks.com/widget/booking/' + CAL_ID;
 
-  function mountCalendar(qs) {
+  function calendarFrame(qs) {
     var frame = document.createElement('iframe');
     frame.src = CAL_URL + (qs ? '?' + qs : '');
     frame.id = CAL_ID + '_' + Date.now();          // the id shape GoHighLevel's embed uses
     frame.title = 'Book your call with Clutch Clicks';
     frame.setAttribute('allow', 'payment');
     frame.setAttribute('scrolling', 'no');
-    document.getElementById('cal').appendChild(frame);
-    /* GoHighLevel resizes the iframe to fit its content via postMessage. Loaded
-       only now, so it never touches the page for people who never get this far. */
+    return frame;
+  }
+
+  /* Warm-up: the moment a qualifying revenue is picked, load the calendar once
+     in an off-screen box. That pulls its scripts, styles, fonts and config into
+     the browser cache while the visitor types the remaining four answers, so
+     the real, prefilled calendar at the end boots from cache instead of cold.
+     (Prefill only works through the URL, which is why a second load is needed.)
+     GoHighLevel's embed script is fetched here too, so it is cached as well. */
+  var warm = null;
+  function warmCalendar() {
+    if (warm) return;
+    warm = document.createElement('div');
+    warm.className = 'cal-warm';
+    warm.setAttribute('aria-hidden', 'true');
+    warm.appendChild(calendarFrame(''));
+    document.body.appendChild(warm);
     var s = document.createElement('script');
     s.src = 'https://api.clutchclicks.com/js/form_embed.js';
     s.async = true;
     document.head.appendChild(s);
+  }
+
+  function mountCalendar(qs) {
+    if (warm) { warm.parentNode.removeChild(warm); warm = null; }
+    document.getElementById('cal').appendChild(calendarFrame(qs));
   }
 
   function showBooking() {
@@ -704,10 +726,21 @@ alt=""/></noscript>
     data.page = location.pathname + location.search;
     data.submittedAt = new Date().toISOString();
 
+    /* The calendar comes up immediately; the lead goes to GoHighLevel in the
+       background so nobody waits on that round trip. A failed send retries
+       three times (2s, 4s, 8s). If it still fails, the booking itself creates
+       the contact in GoHighLevel, so the lead is not lost -- only the webhook
+       trigger is missed, and the console says so. */
+    showBooking();
+    sendLead(data, 0);
+  }
+
+  function sendLead(data, attempt) {
     fetch(LEAD_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      keepalive: true            // survives the redirect to the thank-you page
     })
       .then(function (r) {
         return r.json().catch(function () { return { ok: false, error: 'Bad reply from /api/lead (HTTP ' + r.status + ')' }; });
@@ -716,14 +749,17 @@ alt=""/></noscript>
         /* This is GoHighLevel's answer, relayed. Left in the console on purpose
            so a failed submission can be diagnosed from DevTools. */
         console.info('[lead] GoHighLevel replied:', res);
-        if (res && res.ok) { showBooking(); return; }
+        if (res && res.ok) return;
         throw new Error(res && res.error ? res.error : 'GoHighLevel status ' + (res && res.status));
       })
       .catch(function (err) {
-        console.warn('[lead] not delivered:', err);
-        formErr.textContent = 'Something went wrong on our end. Please try again.';
-        submit.disabled = false;
-        submit.textContent = 'Continue';
+        if (attempt < 3) {
+          var wait = 2000 * Math.pow(2, attempt);
+          console.warn('[lead] not delivered, retrying in ' + wait / 1000 + 's:', err);
+          setTimeout(function () { sendLead(data, attempt + 1); }, wait);
+          return;
+        }
+        console.warn('[lead] not delivered after 4 attempts:', err);
       });
   }
 
