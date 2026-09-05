@@ -487,7 +487,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.7-5</span>
+<span class="ver">v2.7-6</span>
 
 <script>
 (function () {
@@ -955,28 +955,32 @@ alt=""/></noscript>
     Array.prototype.forEach.call(players, function (p) { io.observe(p); });
   }
 
-  /* The players are armed on the first sign of intent -- a scroll, touch, key or
-     pointer -- and only after the page has loaded. The testimonials sit below the
-     fold on every screen, so a visitor who never scrolls never needed them, and
-     the ~400 KB of player code (plus the Sentry and New Relic it drags along)
-     stays off the initial load entirely. Someone who does scroll gets exactly
-     what they got before: each player loads as its card comes within 300px of
-     the viewport, no click needed. The preconnect is opened at the same moment. */
-  var armed = false, loaded = document.readyState === 'complete';
+  /* The players are armed on the first sign of scrolling intent -- a scroll,
+     wheel or touch-move -- and only after the page has loaded. The testimonials
+     sit below the fold on every screen, so a visitor who never scrolls never
+     needed them, and the ~400 KB of player code (plus the Sentry and New Relic
+     it drags along) stays off the initial load entirely. Someone who does
+     scroll gets exactly what they got before: each player loads as its card
+     comes within 300px of the viewport, no click needed.
+
+     Clicks and keys deliberately do not count: on a desktop screen the first
+     card already pokes above the fold, so arming on the click into the city
+     field loaded all three players while the visitor was filling in the form,
+     and the calendar then had to fight them for the CPU when it appeared. For
+     the same reason arming waits while the calendar is still sizing itself. */
+  var WISTIA_INTENT = ['scroll', 'wheel', 'touchmove'];
+  var armed = false, loaded = document.readyState === 'complete', armWaits = 0;
   function arm() {
     if (armed || !loaded) return;
+    if (!booking.hidden && !irReplied && armWaits++ < 10) { setTimeout(arm, 1000); return; }
     armed = true;
-    ['scroll', 'touchstart', 'pointerdown', 'keydown', 'wheel'].forEach(function (ev) {
-      window.removeEventListener(ev, arm, { passive: true });
-    });
+    WISTIA_INTENT.forEach(function (ev) { window.removeEventListener(ev, arm, { passive: true }); });
     var l = document.createElement('link');
     l.rel = 'preconnect'; l.href = 'https://fast.wistia.com'; l.crossOrigin = '';
     document.head.appendChild(l);
     watchForVideos();
   }
-  ['scroll', 'touchstart', 'pointerdown', 'keydown', 'wheel'].forEach(function (ev) {
-    window.addEventListener(ev, arm, { passive: true });
-  });
+  WISTIA_INTENT.forEach(function (ev) { window.addEventListener(ev, arm, { passive: true }); });
   function onLoaded() {
     loaded = true;
     /* Already scrolled before load finished (fast readers on slow networks)? Arm now. */
