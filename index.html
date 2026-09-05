@@ -38,9 +38,6 @@ fbq('track', 'PageView');
 </script>
 <!-- End Meta Pixel Code -->
 
-<!-- Warms the TLS connection so a testimonial click starts playing fast. Costs no bytes. -->
-<link rel="preconnect" href="https://fast.wistia.com" crossorigin>
-
 <style>
 /* Poppins, self-hosted. Same origin means no third-party DNS/TLS handshake, and
    unicode-range means latin-ext is only fetched if an accented character is
@@ -490,7 +487,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.6-5</span>
+<span class="ver">v2.7-1</span>
 
 <script>
 (function () {
@@ -862,8 +859,8 @@ alt=""/></noscript>
      visitor paid ~400 KB for testimonials most of them never scroll to -- and on a
      phone the section starts about 600px down, so it always triggered.
 
-     Each <wistia-player> is now observed individually and loads only as it comes
-     within 150px of the viewport. No click is needed: scroll to a testimonial and
+     Each <wistia-player> is observed individually and loads only as it comes
+     within 300px of the viewport. No click is needed: scroll to a testimonial and
      it is already there. Media ids are read from the markup so there is no second
      list to keep in sync. */
   var runtimeRequested = false;
@@ -901,18 +898,39 @@ alt=""/></noscript>
         io.unobserve(e.target);
         loadMedia(e.target.getAttribute('media-id'));
       });
-    }, { rootMargin: '150px 0px' });
+    }, { rootMargin: '300px 0px' });
 
     Array.prototype.forEach.call(players, function (p) { io.observe(p); });
   }
 
-  /* Still held until load plus an idle slot, so nothing competes with the fonts. */
-  function afterLoad() {
-    if (window.requestIdleCallback) requestIdleCallback(watchForVideos, { timeout: 2000 });
-    else setTimeout(watchForVideos, 500);
+  /* The players are armed on the first sign of intent -- a scroll, touch, key or
+     pointer -- and only after the page has loaded. The testimonials sit below the
+     fold on every screen, so a visitor who never scrolls never needed them, and
+     the ~400 KB of player code (plus the Sentry and New Relic it drags along)
+     stays off the initial load entirely. Someone who does scroll gets exactly
+     what they got before: each player loads as its card comes within 300px of
+     the viewport, no click needed. The preconnect is opened at the same moment. */
+  var armed = false, loaded = document.readyState === 'complete';
+  function arm() {
+    if (armed || !loaded) return;
+    armed = true;
+    ['scroll', 'touchstart', 'pointerdown', 'keydown', 'wheel'].forEach(function (ev) {
+      window.removeEventListener(ev, arm, { passive: true });
+    });
+    var l = document.createElement('link');
+    l.rel = 'preconnect'; l.href = 'https://fast.wistia.com'; l.crossOrigin = '';
+    document.head.appendChild(l);
+    watchForVideos();
   }
-  if (document.readyState === 'complete') afterLoad();
-  else window.addEventListener('load', afterLoad);
+  ['scroll', 'touchstart', 'pointerdown', 'keydown', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, arm, { passive: true });
+  });
+  function onLoaded() {
+    loaded = true;
+    /* Already scrolled before load finished (fast readers on slow networks)? Arm now. */
+    if (window.scrollY > 0) arm();
+  }
+  if (loaded) onLoaded(); else window.addEventListener('load', onLoaded);
 
   show(0);
 })();
