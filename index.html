@@ -174,6 +174,12 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .back:hover{color:var(--ink)}
 
 .done{text-align:center;padding:10px 0 4px}
+/* Qualified leads: the calendar takes the form's place inside the same card. */
+.booking{text-align:center;padding:4px 0 0}
+.booking h2{font-size:clamp(18px,4vw,23px);font-weight:800;line-height:1.3;margin:0 0 16px;color:var(--ink);text-wrap:balance}
+.booking h2 em{font-style:normal;color:var(--red)}
+.cal iframe{width:100%;border:0;overflow:hidden;display:block;min-height:640px}
+.cal-note{font-size:13.5px;color:var(--ink-3);margin:12px 0 0}
 .done h2{font-size:22px;font-weight:800;margin:0 0 8px}
 .done p{color:var(--ink-2);margin:0}
 .tick{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;background:var(--green);display:grid;place-items:center}
@@ -396,10 +402,17 @@ alt=""/></noscript>
         </div>
       </form>
 
+      <div class="booking" id="booking" hidden>
+        <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 7"/></svg></div>
+        <h2><em>Great!</em> Next step: book your growth plan call with our team below.</h2>
+        <div class="cal" id="cal"></div>
+        <p class="cal-note">Calls run about 20 minutes. Please join from a laptop rather than your phone.</p>
+      </div>
+
       <div class="done" id="done" hidden>
         <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 7"/></svg></div>
-        <h2 id="done-title">You&rsquo;re on the list.</h2>
-        <p id="done-copy">We&rsquo;re checking availability for your area right now &mdash; expect a text or call within one business day.</p>
+        <h2>Thanks for applying.</h2>
+        <p>Our team will reach out to you.</p>
       </div>
 
       <noscript>
@@ -461,7 +474,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.5-3</span>
+<span class="ver">v2.6-1</span>
 
 <script>
 (function () {
@@ -491,6 +504,7 @@ alt=""/></noscript>
   var formErr = document.getElementById('form-err');
   var revenue = document.getElementById('revenue-field');
   var done    = document.getElementById('done');
+  var booking = document.getElementById('booking');
   var card    = document.getElementById('apply');
   var sticky  = document.getElementById('sticky');
 
@@ -607,25 +621,60 @@ alt=""/></noscript>
     finish();
   });
 
-  /* Qualified leads go on to the booking page. The answers ride in sessionStorage
-     rather than the URL so the calendar can prefill without putting a name, email
-     and phone number into browser history and referrer headers. */
-  function toBooking() {
+  /* Qualified leads book right here: the form gives way to the GoHighLevel
+     calendar inside the same card, so there is no second page to load. The
+     calendar prefills from what was just typed (as iframe query params, not the
+     page URL, so nothing lands in history or referrers). The answers are also
+     stashed in sessionStorage so the thank-you page can greet them by name. */
+  var CAL_ID  = 'lNbi9w8QPtACsn72VGOB';
+  var CAL_URL = 'https://api.clutchclicks.com/widget/booking/' + CAL_ID;
+
+  function mountCalendar(qs) {
+    var frame = document.createElement('iframe');
+    frame.src = CAL_URL + (qs ? '?' + qs : '');
+    frame.id = CAL_ID + '_' + Date.now();          // the id shape GoHighLevel's embed uses
+    frame.title = 'Book your call with Clutch Clicks';
+    frame.setAttribute('allow', 'payment');
+    frame.setAttribute('scrolling', 'no');
+    document.getElementById('cal').appendChild(frame);
+    /* GoHighLevel resizes the iframe to fit its content via postMessage. Loaded
+       only now, so it never touches the page for people who never get this far. */
+    var s = document.createElement('script');
+    s.src = 'https://api.clutchclicks.com/js/form_embed.js';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+
+  function showBooking() {
     var lead = {};
     new FormData(form).forEach(function (v, k) { lead[k] = String(v).trim(); });
     try { sessionStorage.setItem('cc_lead', JSON.stringify(lead)); } catch (e) {}
-    location.assign('book.html' + location.search);
+
+    var params = new URLSearchParams();
+    var bits = (lead.name || '').split(/\s+/).filter(Boolean);
+    if (bits.length) params.set('first_name', bits.shift());
+    if (bits.length) params.set('last_name', bits.join(' '));
+    if (lead.email) params.set('email', lead.email);
+    if (lead.phone) params.set('phone', lead.phone);
+    mountCalendar(params.toString());
+
+    form.hidden = true;
+    back.hidden = true;
+    bar.hidden = true;
+    booking.hidden = false;
+    sticky.dataset.hidden = 'true';
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var h = booking.querySelector('h2');
+    h.setAttribute('tabindex', '-1');
+    h.focus({ preventScroll: true });
   }
 
-  function showDone(sent) {
+  /* Under $10K/mo: a short thank-you, nothing sent, no calendar. */
+  function showDone() {
     form.hidden = true;
+    back.hidden = true;
+    bar.hidden = true;
     done.hidden = false;
-    if (!sent) {
-      document.getElementById('done-title').textContent = 'Thanks \u2014 we\u2019ve got your answers.';
-      document.getElementById('done-copy').textContent =
-        'We work with shops already doing at least $10K a month, so we won\u2019t be reaching out just yet. ' +
-        'When you get there, come back and check your area again.';
-    }
     var h = done.querySelector('h2');
     h.setAttribute('tabindex', '-1');
     h.focus();
@@ -635,7 +684,7 @@ alt=""/></noscript>
   function finish() {
     /* Conditional logic: only qualified leads are pushed to GoHighLevel.
        Everyone else completes the form and is simply never sent. */
-    if (!qualified) { showDone(false); return; }
+    if (!qualified) { showDone(); return; }
 
     submit.disabled = true;
     submit.textContent = 'One moment\u2026';
@@ -667,7 +716,7 @@ alt=""/></noscript>
         /* This is GoHighLevel's answer, relayed. Left in the console on purpose
            so a failed submission can be diagnosed from DevTools. */
         console.info('[lead] GoHighLevel replied:', res);
-        if (res && res.ok) { toBooking(); return; }
+        if (res && res.ok) { showBooking(); return; }
         throw new Error(res && res.error ? res.error : 'GoHighLevel status ' + (res && res.status));
       })
       .catch(function (err) {
@@ -688,7 +737,7 @@ alt=""/></noscript>
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
-      if (!done.hidden) { sticky.dataset.hidden = 'true'; return; }
+      if (!done.hidden || !booking.hidden) { sticky.dataset.hidden = 'true'; return; }
       sticky.dataset.hidden = entries[0].isIntersecting ? 'true' : 'false';
     }, { threshold: 0.25 }).observe(card);
   } else {

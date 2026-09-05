@@ -12,6 +12,12 @@
 <link rel="preload" href="assets/fonts/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+/* The calendar now lives inside the opt-in page. If GoHighLevel's post-booking
+   redirect fires inside that iframe, hop out to the top window so this page is
+   never shown boxed inside the form card. Same origin, so this always works. */
+if (window.top !== window.self) { try { window.top.location.href = location.href; } catch (e) {} }
+</script>
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -426,7 +432,7 @@ alt=""/></noscript>
   </div>
 </div>
 
-<span class="ver">v1.7-1</span>
+<span class="ver">v1.7-2</span>
 
 <script>
 (function () {

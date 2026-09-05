@@ -15,16 +15,18 @@ files automatically; `_redirects` also keeps `/booking` and `/typ` working.
 | Opt-in (ROASForm) | `roasform.html` | Variant of the opt-in with a ROASForm embed instead of the built-in form |
 
 **Flow:** a qualifying lead submits the opt-in form → POSTed to GoHighLevel →
-redirected to `book.html` (any `?service=` carries over). A lead under $10K/mo is
-*not* sent and is *not* given a booking link — they stop on the opt-in page with
-the "not a fit" message. Set the calendar's post-booking redirect in GoHighLevel to
-`/thanks`.
+the form gives way to the GoHighLevel calendar *inside the same card* ("Great!
+Next step: book your growth plan call with our team below"), so there is no
+second page load. A lead under $10K/mo is *not* sent and gets a short
+"Thanks for applying. Our team will reach out to you." instead. Set the
+calendar's post-booking redirect in GoHighLevel to `/thanks`.
 
-The calendar prefills from what the visitor already typed. The opt-in page stashes
-the answers in `sessionStorage` and `book.html` appends `first_name`, `last_name`,
-`email` and `phone` to the iframe URL — deliberately not via query string on the
-page URL, so a name, email and phone don't land in browser history or referrer
-headers. Loading `book.html` directly just skips the prefill.
+The inline calendar prefills from what the visitor just typed: `first_name`,
+`last_name`, `email` and `phone` go on the iframe URL — deliberately not on the
+page URL, so they don't land in browser history or referrer headers. The answers
+are also stashed in `sessionStorage` so the thank-you page can greet the visitor
+by first name. `book.html` still exists as a standalone calendar page (`/book`),
+but nothing in the funnel links to it any more.
 
 ### The thank-you page
 
