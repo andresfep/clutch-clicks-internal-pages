@@ -487,7 +487,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.7-2</span>
+<span class="ver">v2.7-3</span>
 
 <script>
 (function () {
@@ -685,10 +685,10 @@ alt=""/></noscript>
     if (debugBox) debugBox.textContent += line + '\n';
   }
 
-  var calFrame = null, calLoaded = false, calWatchdog = null, calHeights = 0;
+  var calFrame = null, calLoaded = false, calHeights = 0;
   function mountCalendar(qs) {
     if (warm) { warm.parentNode.removeChild(warm); warm = null; }
-    placeFrame(qs, false);
+    placeFrame(qs);
     /* GoHighLevel's embed script sizes the frame to its content. It is loaded
        only now, after the frame is in the page, which is the arrangement its
        own embed code assumes. */
@@ -708,35 +708,42 @@ alt=""/></noscript>
     document.getElementById('cal-fallback-link').href = 'book.html' + location.search;
   }
 
-  function placeFrame(qs, isRetry) {
-    if (calFrame && calFrame.parentNode) calFrame.parentNode.removeChild(calFrame);
+  /* The frame is placed once and left alone. The widget paints well before the
+     frame's own load event fires (that event waits for every analytics script
+     inside the widget), so "not loaded yet" must never be treated as failure. */
+  function placeFrame(qs) {
     calFrame = calendarFrame(qs);
     calLoaded = false;
-    calFrame.addEventListener('load', function () { calLoaded = true; log('calendar frame loaded' + (isRetry ? ' (retry)' : '')); });
+    calFrame.addEventListener('load', function () { calLoaded = true; log('calendar frame loaded'); });
     calFrame.addEventListener('error', function () { log('calendar frame error'); });
     document.getElementById('cal').appendChild(calFrame);
-    log((isRetry ? 'retry: ' : '') + 'calendar frame added, width ' + calFrame.getBoundingClientRect().width + 'px');
-    /* If the frame has not loaded after 8s, try once more with a fresh element. */
-    clearTimeout(calWatchdog);
-    calWatchdog = setTimeout(function () {
-      if (calLoaded) return;
-      if (!isRetry) { log('frame not loaded after 8s, retrying'); placeFrame(qs, true); }
-      else { log('frame still not loaded after retry'); if (!calHeights) document.getElementById('cal-fallback').hidden = false; }
-    }, 8000);
+    log('calendar frame added, width ' + calFrame.getBoundingClientRect().width + 'px');
   }
 
-  /* Belt and braces: whatever shape GoHighLevel's height message takes, if it
-     comes from our calendar frame and carries a plausible pixel height, apply
-     it. This works even if the embed script never picks the frame up. */
+  /* Size the frame from the widget's own messages, which come in two shapes:
+       "[iFrameSizer]<frame id>:<height>:<width>:<event>"   (iframe-resizer)
+       ["highlevel.setHeight", { height: 674, id: "msgsndr-calendar" }]
+     Only our frame's messages count, heights under 200px are ignored (a
+     transient 0 during a re-render must never collapse the calendar), and a
+     400px floor stays in place so nothing else can collapse it either. */
   window.addEventListener('message', function (e) {
     if (!calFrame || e.source !== calFrame.contentWindow) return;
     var d = e.data, h = 0;
     try { log('message from calendar: ' + JSON.stringify(d).slice(0, 140)); } catch (x) { log('message from calendar (unserialisable)'); }
-    function pick(v) { var n = typeof v === 'string' ? parseFloat(v) : v; if (typeof n === 'number' && n > 300 && n < 8000) h = n; }
-    if (Array.isArray(d)) d.forEach(pick);
-    else if (d && typeof d === 'object') { pick(d.height); if (!h && d.data && typeof d.data === 'object') pick(d.data.height); }
-    else if (typeof d === 'string' && d.charAt(0) === '{') { try { var o = JSON.parse(d); pick(o.height); } catch (x) {} }
-    if (h) { calHeights++; calFrame.style.minHeight = '0'; calFrame.style.height = Math.ceil(h) + 'px'; log('frame height set to ' + Math.ceil(h) + 'px'); }
+    if (typeof d === 'string' && d.indexOf('[iFrameSizer]') === 0) {
+      var parts = d.slice(13).split(':');
+      if (parts[0] === calFrame.id) h = parseInt(parts[1], 10);
+    } else if (Array.isArray(d) && d[0] === 'highlevel.setHeight' && d[1] && typeof d[1] === 'object') {
+      h = parseInt(d[1].height, 10);
+    } else if (d && typeof d === 'object' && typeof d.height === 'number') {
+      h = d.height;
+    }
+    if (h >= 200 && h < 8000) {
+      calHeights++;
+      calFrame.style.minHeight = '400px';
+      calFrame.style.height = Math.ceil(h) + 'px';
+      log('frame height set to ' + Math.ceil(h) + 'px');
+    }
   });
 
   function showBooking() {
