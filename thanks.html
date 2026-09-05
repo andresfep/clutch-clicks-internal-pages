@@ -431,14 +431,14 @@ alt=""/></noscript>
   <p class="fine">Copyright 2026 Clutch Clicks, LLC. All Rights Reserved.</p>
 </footer>
 
-<div class="sticky" id="sticky" data-hidden="false">
+<div class="sticky" id="sticky" data-hidden="true">
   <div class="bar-inner">
     <span class="bar-msg"><b>Don&rsquo;t forget.</b> Add your call to your calendar and reply &ldquo;YES&rdquo; to confirm.</span>
     <button type="button" id="sticky-cta">Confirm My Call</button>
   </div>
 </div>
 
-<span class="ver">v1.7-3</span>
+<span class="ver">v1.8-1</span>
 
 <script>
 (function () {
@@ -456,6 +456,23 @@ alt=""/></noscript>
   document.getElementById('sticky-cta').addEventListener('click', function () {
     document.getElementById('before').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+
+  /* The bar stays out of the way while the video is on screen and slides in
+     once the visitor has scrolled past the first screen (the fold). It goes
+     again if they scroll back up. Checked on scroll, coalesced to one check
+     per frame. */
+  var sticky = document.getElementById('sticky');
+  var ticking = false;
+  function placeSticky() {
+    ticking = false;
+    var pastFold = (window.scrollY || window.pageYOffset) > window.innerHeight * 0.85;
+    sticky.dataset.hidden = pastFold ? 'false' : 'true';
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(placeSticky); }
+  }, { passive: true });
+  window.addEventListener('resize', placeSticky, { passive: true });
+  placeSticky();
 
 })();
 </script>
