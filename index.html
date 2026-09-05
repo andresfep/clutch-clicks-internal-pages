@@ -487,7 +487,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.7-4</span>
+<span class="ver">v2.7-5</span>
 
 <script>
 (function () {
@@ -690,11 +690,10 @@ alt=""/></noscript>
     if (warm) { warm.parentNode.removeChild(warm); warm = null; }
     placeFrame(qs);
     /* GoHighLevel's optional embed script (form_embed.js) is deliberately NOT
-       loaded. Its only job is resizing, and the widget already reports its
-       height in a ["highlevel.setHeight", {height}] message that the listener
-       below applies. Loading the script created a race: on a cold cache it
-       arrived after the calendar had painted, re-initialised the frame, and the
-       calendar vanished. Without it there is nothing to race. */
+       loaded. Loading it created a race: on a cold cache it arrived after the
+       calendar had painted, re-initialised the frame, and the calendar
+       vanished. The two things it did that matter -- the iframe-resizer
+       handshake and applying the reported heights -- are done here instead. */
     watchFrame();
     /* If, 12s in, the calendar has neither loaded nor reported a height, offer
        the standalone calendar page as a way out. Either signal cancels this. */
@@ -727,10 +726,33 @@ alt=""/></noscript>
   function placeFrame(qs) {
     calFrame = calendarFrame(qs);
     calLoaded = false;
-    calFrame.addEventListener('load', function () { calLoaded = true; log('calendar frame loaded'); });
+    calFrame.addEventListener('load', function () {
+      calLoaded = true; log('calendar frame loaded');
+      sendInit();
+      /* No handshake reply 6s after load: the widget will not report sizes, so
+         give the frame enough room for its tallest step (the details form). */
+      setTimeout(function () {
+        if (!irReplied && calFrame) { calFrame.style.minHeight = '1500px'; log('no size reports; min-height raised to 1500px'); }
+      }, 6000);
+    });
     calFrame.addEventListener('error', function () { log('calendar frame error'); });
     document.getElementById('cal').appendChild(calFrame);
     log('calendar frame added, width ' + calFrame.getBoundingClientRect().width + 'px');
+    irTimer = setInterval(sendInit, 500);
+  }
+
+  /* The widget embeds the iframe-resizer child library. Once a parent sends it
+     the init message it reports its exact height on every content change --
+     month view, details form, confirmation -- as
+     "[iFrameSizer]<frame id>:<height>:<width>:<event>". GoHighLevel's embed
+     script used to send this; sending it here keeps the sizing without the
+     script. Repeated every 500ms until the widget replies (its script may not
+     be running yet), then stopped. Extra copies after that are ignored by it. */
+  var IR_INIT = ':8:false:false:32:true:true:null:lowestElement:null:null:0:false:parent:scroll:true';
+  var irReplied = false, irTimer = null, irTries = 0;
+  function sendInit() {
+    if (!calFrame || irReplied || irTries++ > 80) { clearInterval(irTimer); return; }
+    try { calFrame.contentWindow.postMessage('[iFrameSizer]' + calFrame.id + IR_INIT, '*'); } catch (e) {}
   }
 
   /* Size the frame from the widget's own messages. Seen in the wild:
@@ -746,7 +768,10 @@ alt=""/></noscript>
     try { log('message from calendar: ' + JSON.stringify(d).slice(0, 140)); } catch (x) { log('message from calendar (unserialisable)'); }
     if (typeof d === 'string' && d.indexOf('[iFrameSizer]') === 0) {
       var parts = d.slice(13).split(':');
-      if (parts[0] === calFrame.id) h = parseInt(parts[1], 10);
+      if (parts[0] === calFrame.id) {
+        h = parseInt(parts[1], 10);
+        if (!irReplied) { irReplied = true; clearInterval(irTimer); log('handshake done: widget now reports its size'); }
+      }
     } else if (Array.isArray(d) && d[0] === 'highlevel.setHeight' && d[1] && typeof d[1] === 'object') {
       h = parseInt(d[1].height, 10);
     } else if (d && typeof d === 'object' && typeof d.height === 'number') {
