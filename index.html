@@ -178,7 +178,13 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .booking{text-align:center;padding:4px 0 0}
 .booking h2{font-size:clamp(18px,4vw,23px);font-weight:800;line-height:1.3;margin:0 0 16px;color:var(--ink);text-wrap:balance}
 .booking h2 em{font-style:normal;color:var(--red)}
-.cal iframe{width:100%;border:0;overflow:hidden;display:block;min-height:640px}
+/* The frame starts tall enough for the whole widget (month grid, slot list and the
+   contact form that follows) so nothing is ever cut off; once GoHighLevel reports
+   its real height the frame snaps to that. The card also loses most of its side
+   padding in this state, so the widget gets the full width on phones. */
+.cal iframe{width:100%;border:0;overflow:hidden;display:block;min-height:1150px}
+.card.booked{padding-left:8px;padding-right:8px}
+@media(min-width:520px){.card.booked{padding-left:16px;padding-right:16px}}
 .cal-warm{position:absolute;left:-9999px;top:0;width:600px;height:700px;overflow:hidden;visibility:hidden;pointer-events:none}
 .cal-warm iframe{width:100%;height:100%;border:0}
 .cal-note{font-size:13.5px;color:var(--ink-3);margin:12px 0 0}
@@ -476,7 +482,7 @@ alt=""/></noscript>
   <button type="button" id="sticky-cta">Check If Your Area Is Available</button>
 </div>
 
-<span class="ver">v2.6-2</span>
+<span class="ver">v2.6-3</span>
 
 <script>
 (function () {
@@ -656,16 +662,34 @@ alt=""/></noscript>
     warm.setAttribute('aria-hidden', 'true');
     warm.appendChild(calendarFrame(''));
     document.body.appendChild(warm);
+  }
+
+  var calFrame = null;
+  function mountCalendar(qs) {
+    if (warm) { warm.parentNode.removeChild(warm); warm = null; }
+    calFrame = calendarFrame(qs);
+    document.getElementById('cal').appendChild(calFrame);
+    /* GoHighLevel's embed script sizes the frame to its content. It is loaded
+       only now, after the frame is in the page, which is the arrangement its
+       own embed code assumes. */
     var s = document.createElement('script');
     s.src = 'https://api.clutchclicks.com/js/form_embed.js';
     s.async = true;
     document.head.appendChild(s);
   }
 
-  function mountCalendar(qs) {
-    if (warm) { warm.parentNode.removeChild(warm); warm = null; }
-    document.getElementById('cal').appendChild(calendarFrame(qs));
-  }
+  /* Belt and braces: whatever shape GoHighLevel's height message takes, if it
+     comes from our calendar frame and carries a plausible pixel height, apply
+     it. This works even if the embed script never picks the frame up. */
+  window.addEventListener('message', function (e) {
+    if (!calFrame || e.source !== calFrame.contentWindow) return;
+    var d = e.data, h = 0;
+    function pick(v) { var n = typeof v === 'string' ? parseFloat(v) : v; if (typeof n === 'number' && n > 300 && n < 8000) h = n; }
+    if (Array.isArray(d)) d.forEach(pick);
+    else if (d && typeof d === 'object') { pick(d.height); if (!h && d.data && typeof d.data === 'object') pick(d.data.height); }
+    else if (typeof d === 'string' && d.charAt(0) === '{') { try { var o = JSON.parse(d); pick(o.height); } catch (x) {} }
+    if (h) { calFrame.style.minHeight = '0'; calFrame.style.height = Math.ceil(h) + 'px'; }
+  });
 
   function showBooking() {
     var lead = {};
@@ -684,6 +708,7 @@ alt=""/></noscript>
     back.hidden = true;
     bar.hidden = true;
     booking.hidden = false;
+    card.classList.add('booked');
     sticky.dataset.hidden = 'true';
     card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     var h = booking.querySelector('h2');
